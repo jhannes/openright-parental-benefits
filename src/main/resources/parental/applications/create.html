@@ -2,295 +2,287 @@
 <head>
     <meta charset="UTF-8">
     <title>Søknad om foreldrepenger | NAV</title>
-    <style>
-* {
-  font-family: sans-serif;
-}
-
-#personalInformation {
-  background: #ccc;
-}
-#personalInformation h2 {
-  text-transform: uppercase;
-  font-size: 1em;
-}
-
-#personalInformation div {
-  padding: 0em 1em;
-  display: inline-block;
-  vertical-align: top;
-  line-height: 0.8em;
-  width: 9em;
-}
-
-h2 {
-  font-size: 1em;
-  font-weight: normal;
-}
-
-label {
-  display: block;
-  line-height: 1.5em;
-}
-
-input[type=number] {
-  width: 5em;
-  text-align: right;
-}
-
-button {
-  background: #333388;
-  border-color: #333388;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  color: white;
-  padding: 0.5em 1em;
-  font-weight: bold;
-  vertical-align: center;
-  text-align: center;
-}
-
-.application-gender-male .gender-female {
-  display:none;
-}
-
-.application-gender-female .gender-male {
-  display:none;
-}
-
-select {
-  width: 80%;
-  background: #333388;
-  color: white;
-  padding: 0.5em 1em;
-  border: 1px solid transparent;
-  border-radius: 4px;
-}
-    </style>
+    <link rel="stylesheet" href="../styles/parental.css"/>
 </head>
 <body class="application-gender-female">
 
     <header>
         <h1>Søknad om foreldrepenger i forbindelse med fødsel</h1>
+
+        <h2>Hei Kari Normann</h2>
     </header>
 
-    <section>
-        <h2>Hei Kari Normann</h2>
-
-        <div>
-            <label>Kjønn (For testformål):
-                <select id="applicationGender">
-                    <option value="application-gender-female">Kvinne</option>
-                    <option value="application-gender-male">Mann</option>
-                </select>
-            </label>
-        </div>
-    </section>
-
     <main>
-        <section id="personalInformation">
-            <div>
-                <h2>Addresse</h2>
-                <p>Gateveien 1</p>
-                <p>0123 Oslo</p>
-            </div>
+        <form id="applicationForm">
+            <section>
+                <div>
+                    <label>Kjønn (For testformål):
+                        <select name="application[gender]" id="applicationGender">
+                            <option value="application-gender-female">Kvinne</option>
+                            <option value="application-gender-male">Mann</option>
+                        </select>
+                    </label>
+                </div>
+            </section>
 
-            <div>
-                <h2>Telefon</h2>
-                <p>999 00 999</p>
-                <h2>E-post</h2>
-                <p>kari.norman@gmail.com</p>
-            </div>
-
-            <div>
-                <h2>Kontonummer</h2>
-                <p>1234 56 78901</p>
-            </div>
-
-            <div><button>Endre</button></div>
-        </section>
-
-        <section id="applicationCategory">
-            <h2>Hva søker du om?</h2>
-            <select id="applicationType">
-                <option class="gender-female" value="application-maternity-benefits">Foreldrepenger og mødrekvote til mor</option>
-                <option class="gender-female" value="application-maternity-benefits-single">Foreldrepenger til mor med aleneomsorg</option>
-                <option class="gender-female" value="application-co-maternity-benefits">Foreldrepenger til medmor</option>
-                <option class="gender-female" value="application-co-maternity-benefits-single">Foreldrepenger til medmor med aleneomsorg</option>
-                <option class="gender-female" value="application-co-maternity-leave">Fedrekvote til medmor</option>
-                <option class="gender-male" value="application-paternity-benefits">Foreldrepenger og fedrekvote til far</option>
-                <option class="gender-male" value="application-paternity-benefits-single">Foreldrepenger og fedrekvote til far med aleneomsorg</option>
-                <option value="application-one-time-benefits">Engangsstønad</option>
-            </select>
-        </section>
-
-        <section id="residency">
-            <h1>Oppholdsted</h1>
-
-            <h2>Oppholder du deg i Norge?</h2>
-            <label><input type="radio">Ja</label>
-            <label><input type="radio">Nei</label>
-
-            <h2>Har du oppholdt deg sammenhengende i Norge de siste 12 månedene? <a class="explanation"></a></h2>
-            <label><input type="radio">Ja</label>
-            <label><input type="radio">Nei</label>
-
-            <label>
-                <p>Hvilket land har du opphold deg i?</p>
-                <textarea></textarea>
-            </label>
-
-            <h2>Kommer du til å oppholde deg sammenhengende i Norge de neste 12 månedene eller mer? <a class="explanation"></a></h2>
-            <label><input type="radio">Ja</label>
-            <label><input type="radio">Nei</label>
-
-            <label>
-                <p>Hvilket land skal du oppholde deg i?</p>
-                <textarea></textarea>
-            </label>
-        </section>
-
-        <section id="income">
-            <h1>Arbeid og/eller annen inntekt</h1>
-
-            <h2>Har du vært i arbeid de siste 10 månedene før du starter uttaket av feriepengene? <a class="explanation"></a></h2>
-            <label><input type="radio">Ja</label>
-            <label><input type="radio">Nei</label>
-
-            <h2>Har du hatt andre inntektskilder de siste 10 månedene før du starter uttaket av ferienepengene?</h2>
-            <label><input type="checkbox">Syke-, pleie- og omsorgspenger, arbeidsavklaringspenger, svangerskap- eller foreldrepenger</label>
-            <label><input type="checkbox">Dagpenger under arbeidsløshet</label>
-            <label><input type="checkbox">Lønn under utdanning</label>
-            <label><input type="checkbox">Etterlønn fra arbeidsgiver</label>
-            <label><input type="checkbox">Militær- eller siviltjeneste</label>
-            <label><input type="checkbox">Ventelønn eller vartpenger</label>
-
-            <div style="background-color: silver; padding: 0.2em 1em; margin: 1em">
-                <h2>Arbeidsforhold 1</h2>
-                <label><input type="radio">Arbeidstaker</label>
-                <label><input type="radio">Selvstendig næringsdrivende</label>
-
-                <label>
-                    <div>Arbeidsgiver eller næringsvirksomhet</div>
-                    <p><input type="text" /></p>
-                </label>
-
-                <label>
-                    <div>Stillingsprosent</div>
-                    <p><input type="number" min="1" max="100" /></p>
-                </label>
-
-                <label>
-                    <h2>Arbeidsinntekt</h2>
-                    <label><input type="radio">Ukentlig</label>
-                    <label><input type="radio">Hver 14. dag</label>
-                    <label><input type="radio">Månedlig</label>
-                </label>
-
-                <label>
-                    <div>Siste arbeidsinntekt</div>
-                    <p><input type="number" /></p>
-                </label>
-
-
-                <label>
-                    <div>Startdato</div>
-                    <p><input type="date" required /></p>
-                </label>
-
-                <label>
-                    <div>Sluttdato (kun hvis arbeidsforholdet er avsluttet)</div>
-                    <p><input type="date" /></p>
-                </label>
-
-                <p>PS! Husk at arbeidsgiver må sende inn inntekstopplysninger</p>
-            </div>
-
-            <div>
-                <button>Legg til arbeidsforhold</button>
-            </div>
-        </section>
-
-        <section id="permissionPeriod">
-            <h1>Permisjonsperiode</h1>
-
-            <div class="gender-female">
-                <h2>Når har du termin</h2>
-                <p><input type="date" required /></p>
-
-                <div>Du kan tidligst starte uttaket av foreldrepenger 19. februar (12 uker før termin) og senest 23. april (3 uker før termin)</div>
-
-                <h2>Hvor mange barn venter du?</h2>
-                <p><input width="1" value="1" type="number" min="1" /></p>
-            </div>
-
-            <h2>Hvilken dekningsgrad ønsker du? <a class="explanation" data-helptext="Foreldrene må velge lik dekningsgrad. Denne vil gjelde for hele stønadsperioden og kan ikke endres. Dekningsgrad på 100% gir en høyere samlet utbetaling enn 80%"></a></h2>
-            <p>
-                <select>
-                    <option value="">80% dekningsgrad i 59 uker</option>
-                    <option value="">100% dekningsgrad i 46 uker</option>
-                </select>
-            </p>
-
-            <h2>Når vil du starte uttaket av foreldrepenger?</h2>
-            <p><input type="date" /></p>
-
-            <div class="gender-female">
-                <h2>Skal du ta ut hele mødrekvoten (10 uker) umiddelbart etter fødsel?</h2>
-                <label><input type="radio">Ja</label>
-                <label><input type="radio">Nei</label>
-
-                <h2>Skal du ta ut hele fellesperioden umiddelbart etter mødrekvoten?</h2>
-                <label><input type="radio">Ja</label>
-                <label><input type="radio">Nei</label>
-
-                <h2>Søker du om overføring av fedrekvoten (10 uker) til deg?</h2>
-                <label><input type="radio">Ja</label>
-                <label><input type="radio">Nei</label>
+            <section id="personalInformation">
+                <div>
+                    <h2>Addresse</h2>
+                    <p>Gateveien 1</p>
+                    <p>0123 Oslo</p>
+                </div>
 
                 <div>
-                    <label><input type="radio">Aleneomsorg for barnet/barna</label>
-                    <label><input type="radio">Far har ikke rett til foreldrepenger</label>
-                    <label><input type="radio">Far er innlagt på helseinstitusjon</label>
-                    <label><input type="radio">Far er på grunn av sykdom helt avhengig av hjelp for å ta seg av barnet/barna</label>
+                    <h2>Telefon</h2>
+                    <p>999 00 999</p>
+                    <h2>E-post</h2>
+                    <p>kari.norman@gmail.com</p>
                 </div>
-            </div>
-        </section>
 
-        <section id="otherParent">
-            <h1>Den andre forelderen</h1>
+                <div>
+                    <h2>Kontonummer</h2>
+                    <p>1234 56 78901</p>
+                </div>
 
-            <h2>Navn</h2>
-            <p><input type="text" /></p>
+                <div><button>Endre</button></div>
+            </section>
 
-            <h2>Fødselsnummer</h2>
-            <p><input type="text" pattern="[0-9]{12}" /></p>
+            <section id="applicationCategory">
+                <h2>Hva søker du om?</h2>
+                <select name="application[applicationType]" id="applicationType">
+                    <option class="gender-female" value="application-maternity-benefits">Foreldrepenger og mødrekvote til mor</option>
+                    <option class="gender-female" value="application-maternity-benefits-single">Foreldrepenger til mor med aleneomsorg</option>
+                    <option class="gender-female" value="application-co-maternity-benefits">Foreldrepenger til medmor</option>
+                    <option class="gender-female" value="application-co-maternity-benefits-single">Foreldrepenger til medmor med aleneomsorg</option>
+                    <option class="gender-female" value="application-co-maternity-leave">Fedrekvote til medmor</option>
+                    <option class="gender-male" value="application-paternity-benefits">Foreldrepenger og fedrekvote til far</option>
+                    <option class="gender-male" value="application-paternity-benefits-single">Foreldrepenger og fedrekvote til far med aleneomsorg</option>
+                    <option value="application-one-time-benefits">Engangsstønad</option>
+                </select>
+            </section>
 
-            <h2>Er den andre forelderen gjort kjent med hvilke perioder med foreldrepenger du har søkt om?</h2>
-            <label><input type="radio">Ja</label>
-            <label><input type="radio">Nei</label>
-        </section>
+            <section id="residency">
+                <h1>Oppholdsted</h1>
 
-        <section id="additionalInformation">
-            <h1>Eventuelle tilleggsopplysninger</h1>
+                <h2>Oppholder du deg i Norge?</h2>
+                <label><input type="radio" required name="application[domesticResidency]" value="true">Ja</label>
+                <label><input type="radio" required name="application[domesticResidency]" value="false">Nei</label>
 
-            <h2>Er det noe som ikke er gjort rede for i skjemaet som du mener NAV burde være klar over?</h2>
-            <p><textarea cols=60 rows=6></textarea></p>
-        </section>
+                <div>
+                    <h2>Har du oppholdt deg sammenhengende i Norge de siste 12 månedene? <a class="explanation"></a></h2>
+                    <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][pastStay]" value="true">Ja</label>
+                    <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][pastStay]" value="false">Nei</label>
 
-        <section id="submit">
-            <button>Send søknad</button>
-        </section>
+                    <div class="optionalInformation">
+                        <label for="country-past-location">Hvilket land har du opphold deg i?</label>
+                        <textarea id="country-past-location" name="application[nonDomestic][pastLocation]"></textarea>
+                    </div>
+                </div>
+
+
+                <div>
+                    <h2>Kommer du til å oppholde deg sammenhengende i Norge de neste 12 månedene eller mer? <a class="explanation"></a></h2>
+                    <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][plannedStay]" value="true">Ja</label>
+                    <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][plannedStay]" value="false">Nei</label>
+
+                    <div class="optionalInformation">
+                        <label for="country-future-location">Hvilket land skal du oppholde deg i?</label>
+                        <textarea id="country-future-location" name="application[nonDomestic][plannedLocation]"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <section id="income">
+                <h1>Arbeid og/eller annen inntekt</h1>
+
+                <div>
+
+                    <h2>Har du vært i arbeid de siste 10 månedene før du starter uttaket av feriepengene? <a class="explanation"></a></h2>
+                    <label><input type="radio" required class="optionalToggle" name="application[workedLast10Months]" value="true">Ja</label>
+                    <label><input type="radio" required class="optionalToggle" name="application[workedLast10Months]" value="false">Nei</label>
+
+                    <div class="subform-container optionalInformation">
+                        <h2>Arbeidsforhold 1</h2>
+                        <label><input type="radio" name="application[income][][employerType]" value="employer">Arbeidstaker</label>
+                        <label><input type="radio" name="application[income][][employerType]" value="selfEmployed">Selvstendig næringsdrivende</label>
+
+                        <div>
+                            <label for="employer-name">Arbeidsgiver eller næringsvirksomhet</label>
+                            <p><input id="employer-name" type="text" name="application[income][][employerName]"/></p>
+                        </div>
+
+                        <div>
+                            <label for="employment-percentage">Stilingsprosent</label>
+                            <p><input id="employment-percentage" type="number" min="1" max="100" value="100" name="application[income][][employmentPercent]" /></p>
+                        </div>
+
+                        <div>
+                            <h2>Arbeidsinntekt</h2>
+                            <label><input type="radio" name="application[income][][paySchedule]" value="weekly">Ukentlig</label>
+                            <label><input type="radio" name="application[income][][paySchedule]" value="biweekly">Hver 14. dag</label>
+                            <label><input type="radio" name="application[income][][paySchedule]" value="monthly">Månedlig</label>
+                        </div>
+
+                        <div>
+                            <label for="employment-salary">Siste arbeidsinntekt</label>
+                            <p><input id="employment-salary" type="number" name="application[income][][salary]" /></p>
+                        </div>
+
+                        <div>
+                            <label for="employment-start-date">Startdato</label>
+                            <p><input id="employment-start-date" type="date" required name="application[income][][startDate]" /></p>
+                        </div>
+
+                        <div>
+                            <label for="employment-end-date">Sluttdato (kun hvis arbeidsforholdet er avsluttet)</label>
+                            <p><input id="employment-end-date" type="date" required name="application[income][][endDate]" /></p>
+                        </div>
+
+                        <p>PS! Husk at arbeidsgiver må sende inn inntektopplysninger</p>
+                    </div>
+
+                    <div class="optionalInformation">
+                        <button>Legg til arbeidsforhold</button>
+                    </div>
+
+                    <div class="optionalInformation">
+                        <h2>Har du hatt andre inntektskilder de siste 10 månedene før du starter uttaket av ferienepengene?</h2>
+                        <label><input type="checkbox" name="application[otherIncome][]" value="benefits">Syke-, pleie- og omsorgspenger, arbeidsavklaringspenger, svangerskap- eller foreldrepenger</label>
+                        <label><input type="checkbox" name="application[otherIncome][]" value="unemployment">Dagpenger under arbeidsløshet</label>
+                        <label><input type="checkbox" name="application[otherIncome][]" value="studentIncome">Lønn under utdanning</label>
+                        <label><input type="checkbox" name="application[otherIncome][]" value="afterPay">Etterlønn fra arbeidsgiver</label>
+                        <label><input type="checkbox" name="application[otherIncome][]" value="militaryService">Militær- eller siviltjeneste</label>
+                        <label><input type="checkbox" name="application[otherIncome][]" value="waitPay">Ventelønn eller vartpenger</label>
+                    </div>
+                </div>
+            </section>
+
+            <section id="permissionPeriod">
+                <h1>Permisjonsperiode</h1>
+
+                <div class="gender-female">
+                    <h2>Når har du termin</h2>
+                    <p><input type="date" required  name="application[dueDate]" value="2015/05/14" /></p>
+
+                    <div>Du kan tidligst starte uttaket av foreldrepenger 19. februar (12 uker før termin) og senest 23. april (3 uker før termin)</div>
+
+                    <h2>Hvor mange barn venter du?</h2>
+                    <p><input width="1" value="1" type="number" min="1"  name="application[expectedChildren]" /></p>
+                </div>
+
+                <h2>Hvilken dekningsgrad ønsker du? <a class="explanation" data-helptext="Foreldrene må velge lik dekningsgrad. Denne vil gjelde for hele stønadsperioden og kan ikke endres. Dekningsgrad på 100% gir en høyere samlet utbetaling enn 80%"></a></h2>
+                <p>
+                    <select name="application[coveragePercentage]">
+                        <option value="80">80% dekningsgrad i 59 uker</option>
+                        <option value="100">100% dekningsgrad i 46 uker</option>
+                    </select>
+                </p>
+
+                <h2>Når vil du starte uttaket av foreldrepenger?</h2>
+                <p><input type="date"  name="application[startDate]" /></p>
+
+                <div class="gender-female">
+                    <div>
+                        <h2>Skal du ta ut hele mødrekvoten (10 uker) umiddelbart etter fødsel?</h2>
+                        <label><input type="radio" required class="optionalToggle" name="application[leavePeriod][changeMaternityDefault]" value="false">Ja</label>
+                        <label><input type="radio" required class="optionalToggle" name="application[leavePeriod][changeMaternityDefault]" value="true">Nei</label>
+
+                        <div class="optionalInformation">
+                            <p>De neste seks ukene fram til 25. juni må tas rett etter fødselen</p>
+                            <h2>Når ønsker du å starte øvrige fire ukene av mødrekvoten?</h2>
+                            <p><input type="date" value="2015-06-25" name="application[leavePeriod][maternity][][start]" /></p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h2>Skal du ta ut hele fellesperioden umiddelbart etter mødrekvoten?</h2>
+                        <label><input type="radio" required class="optionalToggle" name="application[leavePeriod][changeSharedLeaveDefault]" value="false">Ja</label>
+                        <label><input type="radio" required class="optionalToggle" name="application[leavePeriod][changeSharedLeaveDefault]" value="true">Nei</label>
+
+                        <div class="optionalInformation">
+                            <h2>Hvilke perioder ønsker du å ta ut fra felleskvoten?</h2>
+                            <div>
+                                <label>Fra og med</label>
+                                <p><input type="date" value="2015-07-09" name="application[leavePeriod][shared][][start]" /></p>
+                                <label>Til og med</label>
+                                <p><input type="date" name="application[leavePeriod][shared][][end]" /></p>
+                            </div>
+                            <button>Legg til periode</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h2>Søker du om overføring av fedrekvoten (10 uker) til deg?</h2>
+                        <label><input type="radio" required class="optionalToggle" name="application[leavePeriod][convertPaternity][convertPaternityLeaveToMaternityLeave]" value="true">Ja</label>
+                        <label><input type="radio" required class="optionalToggle" name="application[leavePeriod][convertPaternity][convertPaternityLeaveToMaternityLeave]" value="false">Nei</label>
+
+                        <div class="optionalInformation">
+                            <h2>Årsak til overføring av fedrekvote</h2>
+                            <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="singleParent">Aleneomsorg for barnet/barna</label>
+                            <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="fatherNotEligible">Far har ikke rett til foreldrepenger</label>
+                            <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="fatherInstitutionalized">Far er innlagt på helseinstitusjon</label>
+                            <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="fatherIllness">Far er på grunn av sykdom helt avhengig av hjelp for å ta seg av barnet/barna</label>
+                        </div>
+
+
+                        <div class="optionalInformation">
+                            <h2>Hvilke perioder ønsker du å ta ut fedrekvoten?</h2>
+                            <div>
+                                <label>Fra og med</label>
+                                <p><input type="date" value="2015-07-09" name="application[leavePeriod][paternity][][start]" /></p>
+                                <label>Til og med</label>
+                                <p><input type="date" name="application[leavePeriod][paternity][][end]" /></p>
+                            </div>
+                            <button>Legg til periode</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="otherParent">
+                <h1>Den andre forelderen</h1>
+
+                <h2>Navn</h2>
+                <p><input type="text" name="application[otherParent][name]" /></p>
+
+                <h2>Fødselsnummer</h2>
+                <p><input type="text" pattern="[0-9]{12}" name="application[otherParent][personNumber]" /></p>
+
+                <h2>Er den andre forelderen gjort kjent med hvilke perioder med foreldrepenger du har søkt om?</h2>
+                <label><input type="radio" name="application[otherParent][isInformed]" value="true">Ja</label>
+                <label><input type="radio" name="application[otherParent][isInformed]" value="false">Nei</label>
+            </section>
+
+            <section id="additionalInformation">
+                <h1>Eventuelle tilleggsopplysninger</h1>
+
+                <h2>Er det noe som ikke er gjort rede for i skjemaet som du mener NAV burde være klar over?</h2>
+                <p><textarea cols=60 rows=6 name="application[otherInformation]"></textarea></p>
+            </section>
+
+            <section id="submit">
+                <button>Send søknad</button>
+            </section>
+        </form>
     </main>
 
 <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+<script src="../scripts/vendor/jquery.serialize-object.min.js"></script>
 <script>
 $(function() {
-    $("#applicationGender").change(function() {
-        $("body").removeClass("application-gender-male");
-        $("body").removeClass("application-gender-female");
-        $("body").addClass($(this).val());
-    });
+  $("#applicationGender").change(function() {
+     $("body").removeClass("application-gender-male");
+     $("body").removeClass("application-gender-female");
+     $("body").addClass($(this).val());
+  });
+
+  $(".optionalToggle").change(function() {
+    if ($(this).val() === "true") {
+      $(this).closest("div").find(".optionalInformation").show(500);
+    } else {
+      $(this).closest("div").find(".optionalInformation").hide(500);
+    }
+  });
 });
 </script>
 </body>

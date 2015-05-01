@@ -1,0 +1,73 @@
+* {
+  font-family: sans-serif;
+}
+
+#personalInformation {
+  background: #ccc;
+}
+#personalInformation h2 {
+  text-transform: uppercase;
+  font-size: 1em;
+}
+
+#personalInformation div {
+  padding: 0em 1em;
+  display: inline-block;
+  vertical-align: top;
+  line-height: 0.8em;
+  width: 9em;
+}
+
+h2 {
+  font-size: 1em;
+  font-weight: normal;
+}
+
+label {
+  display: block;
+  line-height: 1.5em;
+}
+
+input[type=number] {
+  width: 5em;
+  text-align: right;
+}
+
+button {
+  background: #333388;
+  border-color: #333388;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: white;
+  padding: 0.5em 1em;
+  font-weight: bold;
+  vertical-align: center;
+  text-align: center;
+}
+
+.application-gender-male .gender-female {
+  display:none;
+}
+
+.application-gender-female .gender-male {
+  display:none;
+}
+
+select {
+  width: 80%;
+  background: #333388;
+  color: white;
+  padding: 0.5em 1em;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.subform-container {
+  background-color: silver;
+  padding: 0.2 1em;
+  margin: 1em;
+}
+
+.optionalInformation {
+  display: none;
+}
