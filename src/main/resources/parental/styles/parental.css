@@ -93,5 +93,12 @@ footer#submit {
   left: 0;
   right: 0;
   bottom: 0;
-  background: red;
+  text-align: center;
+  background: silver;
+  opacity: 0.5;
+  padding: 2em;
 }
+.progressBlock:before {
+  content: url("../images/spinner.gif");
+}
+
