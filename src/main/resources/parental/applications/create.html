@@ -30,7 +30,7 @@
             <section>
                 <div>
                     <label>Kjønn (For testformål):
-                        <select name="application[gender]" id="applicationGender">
+                        <select name="application[gender]" id="applicationGender" data-current-value="{{gender}}">
                             <option value="application-gender-female">Kvinne</option>
                             <option value="application-gender-male">Mann</option>
                         </select>
@@ -62,7 +62,7 @@
 
             <section id="applicationCategory">
                 <h2>Hva søker du om?</h2>
-                <select name="application[applicationType]" id="applicationType">
+                <select name="application[applicationType]" id="applicationType" data-current-value="{{applicationType}}">
                     <option class="gender-female" value="application-maternity-benefits">Foreldrepenger og mødrekvote til mor</option>
                     <option class="gender-female" value="application-maternity-benefits-single">Foreldrepenger til mor med aleneomsorg</option>
                     <option class="gender-female" value="application-co-maternity-benefits">Foreldrepenger til medmor</option>
@@ -169,12 +169,12 @@
 
                     <div class="optionalInformation">
                         <h2>Har du hatt andre inntektskilder de siste 10 månedene før du starter uttaket av ferienepengene?</h2>
-                        <label><input type="checkbox" name="application[otherIncome][]" value="benefits">Syke-, pleie- og omsorgspenger, arbeidsavklaringspenger, svangerskap- eller foreldrepenger</label>
-                        <label><input type="checkbox" name="application[otherIncome][]" value="unemployment">Dagpenger under arbeidsløshet</label>
-                        <label><input type="checkbox" name="application[otherIncome][]" value="studentIncome">Lønn under utdanning</label>
-                        <label><input type="checkbox" name="application[otherIncome][]" value="afterPay">Etterlønn fra arbeidsgiver</label>
-                        <label><input type="checkbox" name="application[otherIncome][]" value="militaryService">Militær- eller siviltjeneste</label>
-                        <label><input type="checkbox" name="application[otherIncome][]" value="waitPay">Ventelønn eller vartpenger</label>
+                        <label><input type="checkbox" name="application[otherIncome][]" value="benefits" data-current-value="{{otherIncome}}">Syke-, pleie- og omsorgspenger, arbeidsavklaringspenger, svangerskap- eller foreldrepenger</label>
+                        <label><input type="checkbox" name="application[otherIncome][]" value="unemployment" data-current-value="{{otherIncome}}">Dagpenger under arbeidsløshet</label>
+                        <label><input type="checkbox" name="application[otherIncome][]" value="studentIncome" data-current-value="{{otherIncome}}">Lønn under utdanning</label>
+                        <label><input type="checkbox" name="application[otherIncome][]" value="afterPay" data-current-value="{{otherIncome}}">Etterlønn fra arbeidsgiver</label>
+                        <label><input type="checkbox" name="application[otherIncome][]" value="militaryService" data-current-value="{{otherIncome}}">Militær- eller siviltjeneste</label>
+                        <label><input type="checkbox" name="application[otherIncome][]" value="waitPay" data-current-value="{{otherIncome}}">Ventelønn eller vartpenger</label>
                     </div>
                 </div>
             </section>
@@ -184,7 +184,7 @@
 
                 <div class="gender-female">
                     <h2>Når har du termin</h2>
-                    <p><input type="date" required  name="application[dueDate]" id="dueDate" value="2015-05-14" min="2015-05-10" /></p>
+                    <p><input type="date" required  name="application[dueDate]" id="dueDate" value="{{dueDate}}" min="2015-05-10" /></p>
 
 
                     <h2>Hvor mange barn venter du?</h2>
@@ -194,21 +194,23 @@
 
                 <h2>Hvilken dekningsgrad ønsker du? <a class="explanation" data-helptext="Foreldrene må velge lik dekningsgrad. Denne vil gjelde for hele stønadsperioden og kan ikke endres. Dekningsgrad på 100% gir en høyere samlet utbetaling enn 80%"></a></h2>
                 <p>
-                    <select name="application[coveragePercentage]">
+                    <select name="application[coveragePercentage]" data-current-value="{{coveragePercentage}}">
                         <option value="80">80% dekningsgrad i 59 uker</option>
                         <option value="100">100% dekningsgrad i 46 uker</option>
                     </select>
                 </p>
 
                 <h2>Når vil du starte uttaket av foreldrepenger?</h2>
-                <p><input type="date"  name="application[startDate]" id="leaveStartDate" /></p>
+                <p><input type="date"  name="application[startDate]" id="leaveStartDate" value="{{startDate}}" /></p>
                 <div id="leaveStartInfo"></div>
 
                 <div class="gender-female">
                     <div>
                         <h2>Skal du ta ut hele mødrekvoten (10 uker) umiddelbart etter fødsel?</h2>
-                        <label><input type="radio" required class="optionalToggle" name="application[leavePeriod][changeMaternityDefault]" value="false">Ja</label>
-                        <label><input type="radio" required class="optionalToggle" name="application[leavePeriod][changeMaternityDefault]" value="true">Nei</label>
+                        <label><input type="radio" required class="optionalToggle" name="application[leavePeriod][changeMaternityDefault]" value="false"
+                                data-current-value="{{leavePeriod.changeMaternityDefault}}">Ja</label>
+                        <label><input type="radio" required class="optionalToggle" name="application[leavePeriod][changeMaternityDefault]" value="true"
+                                data-current-value="{{leavePeriod.changeMaternityDefault}}">Nei</label>
 
                         <div class="optionalInformation">
                             <p>De neste seks ukene fram til 25. juni må tas rett etter fødselen</p>
@@ -219,8 +221,10 @@
 
                     <div>
                         <h2>Skal du ta ut hele fellesperioden umiddelbart etter mødrekvoten?</h2>
-                        <label><input type="radio" required class="optionalToggle" name="application[leavePeriod][changeSharedLeaveDefault]" value="false">Ja</label>
-                        <label><input type="radio" required class="optionalToggle" name="application[leavePeriod][changeSharedLeaveDefault]" value="true">Nei</label>
+                        <label><input type="radio" required class="optionalToggle" name="application[leavePeriod][changeSharedLeaveDefault]" value="false"
+                                data-current-value="{{leavePeriod.changeSharedLeaveDefault}}">Ja</label>
+                        <label><input type="radio" required class="optionalToggle" name="application[leavePeriod][changeSharedLeaveDefault]" value="true"
+                                data-current-value="{{leavePeriod.changeSharedLeaveDefault}}">Nei</label>
 
                         <div class="optionalInformation">
                             <h2>Hvilke perioder ønsker du å ta ut fra felleskvoten?</h2>
@@ -235,15 +239,21 @@
 
                     <div>
                         <h2>Søker du om overføring av fedrekvoten (10 uker) til deg?</h2>
-                        <label><input type="radio" required class="optionalToggle" name="application[leavePeriod][convertPaternity][convertPaternityLeaveToMaternityLeave]" value="true">Ja</label>
-                        <label><input type="radio" required class="optionalToggle" name="application[leavePeriod][convertPaternity][convertPaternityLeaveToMaternityLeave]" value="false">Nei</label>
+                        <label><input type="radio" required class="optionalToggle" name="application[leavePeriod][convertPaternity][convertPaternityLeaveToMaternityLeave]" value="true"
+                                      data-current-value="{{leavePeriod.convertPaternity.convertPaternityLeaveToMaternityLeave}}">Ja</label>
+                        <label><input type="radio" required class="optionalToggle" name="application[leavePeriod][convertPaternity][convertPaternityLeaveToMaternityLeave]" value="false"
+                                      data-current-value="{{leavePeriod.convertPaternity.convertPaternityLeaveToMaternityLeave}}">Nei</label>
 
                         <div class="optionalInformation">
                             <h2>Årsak til overføring av fedrekvote</h2>
-                            <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="singleParent">Aleneomsorg for barnet/barna</label>
-                            <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="fatherNotEligible">Far har ikke rett til foreldrepenger</label>
-                            <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="fatherInstitutionalized">Far er innlagt på helseinstitusjon</label>
-                            <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="fatherIllness">Far er på grunn av sykdom helt avhengig av hjelp for å ta seg av barnet/barna</label>
+                            <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="singleParent"
+                                          data-current-value="{{leavePeriod.convertPaternity.reason}}">Aleneomsorg for barnet/barna</label>
+                            <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="fatherNotEligible"
+                                          data-current-value="{{leavePeriod.convertPaternity.reason}}">Far har ikke rett til foreldrepenger</label>
+                            <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="fatherInstitutionalized"
+                                          data-current-value="{{leavePeriod.convertPaternity.reason}}">Far er innlagt på helseinstitusjon</label>
+                            <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="fatherIllness"
+                                          data-current-value="{{leavePeriod.convertPaternity.reason}}">Far er på grunn av sykdom helt avhengig av hjelp for å ta seg av barnet/barna</label>
                         </div>
 
 
@@ -265,21 +275,23 @@
                 <h1>Den andre forelderen</h1>
 
                 <h2>Navn</h2>
-                <p><input type="text" name="application[otherParent][name]" /></p>
+                <p><input type="text" name="application[otherParent][name]" value="{{otherParent.name}}" /></p>
 
                 <h2>Fødselsnummer</h2>
-                <p><input type="text" pattern="[0-9]{12}" name="application[otherParent][personNumber]" /></p>
+                <p><input type="text" pattern="[0-9]{12}" name="application[otherParent][personNumber]" value="{{otherParent.personNumber}}" /></p>
 
                 <h2>Er den andre forelderen gjort kjent med hvilke perioder med foreldrepenger du har søkt om?</h2>
-                <label><input type="radio" name="application[otherParent][isInformed]" value="true">Ja</label>
-                <label><input type="radio" name="application[otherParent][isInformed]" value="false">Nei</label>
+                <label><input type="radio" name="application[otherParent][isInformed]" value="true"
+                        data-current-value="{{otherParent.isInformed}}">Ja</label>
+                <label><input type="radio" name="application[otherParent][isInformed]" value="false"
+                        data-current-value="{{otherParent.isInformed}}">Nei</label>
             </section>
 
             <section id="additionalInformation">
                 <h1>Eventuelle tilleggsopplysninger</h1>
 
                 <h2>Er det noe som ikke er gjort rede for i skjemaet som du mener NAV burde være klar over?</h2>
-                <p><textarea cols=60 rows=6 name="application[otherInformation]"></textarea></p>
+                <p><textarea cols=60 rows=6 name="application[otherInformation]">{{otherInformation}}</textarea></p>
             </section>
 
         </form>
@@ -379,16 +391,22 @@ $(function() {
       window.application = data.application;
       application.expectedChildren = application.expectedChildren || 1;
       $("main").html(applicationFormTemplate(application));
+
+      $("input[type=checkbox][data-current-value]").each(function(index, element) {
+        var e = $(element);
+        var checked = e.data("current-value").split(",");
+        e.attr("checked", checked.indexOf(e.val()) >= 0);
+      });
       $("input[type=radio][data-current-value]").each(function(index, element) {
         var e = $(element);
         e.attr("checked", e.val() == e.data("current-value").toString());
       });
+      $("select[data-current-value]").each(function(index, element) {
+        var e = $(element);
+        e.find("option[value='" + e.data("current-value") + "']").attr("selected", "selected");
+      });
       $(".optionalToggle").each(function() {
-        if ($(this).val() === "true") {
-          $(this).closest("div").find(".optionalInformation").show(500);
-        } else {
-          $(this).closest("div").find(".optionalInformation").hide(500);
-        }
+        $(this).closest("div").find(".optionalInformation").show($(this).val() === "true");
       });
   });
 });
