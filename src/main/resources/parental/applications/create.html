@@ -272,17 +272,21 @@
                 <p><textarea cols=60 rows=6 name="application[otherInformation]"></textarea></p>
             </section>
 
-            <section id="submit">
-                <button>Send søknad</button>
-            </section>
         </form>
     </script>
+
+
     </main>
+    <footer id="submit">
+        <button id="saveApplication">Lagre søknad</button>
+        <button>Fuilfør søknad</button>
+    </footer>
 
 <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datejs/1.0/date.min.js"></script>
 <script src="../scripts/vendor/jquery.serialize-object.min.js"></script>
+<script src="../scripts/parental.js"></script>
 <script>
 function plusWeeksIso(date, weeks) {
   return new Date(date).addWeeks(weeks).toISODate();
@@ -345,6 +349,13 @@ $(function() {
         $(this).closest(".periodDateRange").find(".endSharedPeriod").attr("min",
             new Date($(this).val()).addDays(1).toISODate());
     }
+  });
+
+  $("body").on("click", "#saveApplication", function(e) {
+    e.preventDefault();
+    serverAPI.postJSON("application", $("#applicationForm").serializeObject())
+        .then(function() { alert("ok"); })
+        .fail(function() { alert("error"); });
   });
 
 
