@@ -15,12 +15,13 @@
 
     <main>
         <script id="sharedLeavePeriodPartial" type="text/x-handlebars-template">
-            <div>
+            <div class="periodDateRange">
                 <label>Fra og med</label>
                 <p><input type="date" class="startSharedPeriod"
                           name="application[leavePeriod][shared][][start]" value="{{start}}"/></p>
                 <label>Til og med</label>
-                <p><input type="date" class="endSharedPeriod" name="application[leavePeriod][shared][][end]" value="{{end}}" /></p>
+                <p><input type="date" class="endSharedPeriod" name="application[leavePeriod][shared][][end]" value="{{end}}"
+                        min="{{start}}"/></p>
             </div>
         </script>
         <script id="applicationFormTemplate" type="text/x-handlebars-template">
@@ -336,6 +337,13 @@ $(function() {
       var d = new Date($(".endSharedPeriod:last").val());
       $("#sharedLeavePeriods").append(sharedLeavePeriod());
       $(".startSharedPeriod:last").attr("min", d.addDays(1).toISODate());
+    }
+  });
+
+  $("body").on("change", ".startSharedPeriod", function(e) {
+    if ($(this).val()) {
+        $(this).closest(".periodDateRange").find(".endSharedPeriod").attr("min",
+            new Date($(this).val()).addDays(1).toISODate());
     }
   });
 
