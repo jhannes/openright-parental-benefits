@@ -5,6 +5,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.MovedContextHandler;
 import org.eclipse.jetty.server.handler.ShutdownHandler;
+import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -21,9 +22,16 @@ public class ParentalBenefitsServer {
     private Handler createHandlers() {
         HandlerList handlers = new HandlerList();
         handlers.addHandler(new ShutdownHandler("dsgsdglsdgsdgnk", false, true));
+        handlers.addHandler(createWebApi());
         handlers.addHandler(createWebApp());
         handlers.addHandler(new MovedContextHandler(null, "/", "/parental"));
         return handlers;
+    }
+
+    private ServletContextHandler createWebApi() {
+        ServletContextHandler context = new ServletContextHandler(null, "/parental/api");
+        context.addServlet(ParentalBenefitsFrontController.class, "/*");
+        return context;
     }
 
     private WebAppContext createWebApp() {
