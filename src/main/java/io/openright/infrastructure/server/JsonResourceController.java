@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.Writer;
 
 public class JsonResourceController implements Controller {
     private ResourceApi resourceApi;
@@ -20,8 +21,29 @@ public class JsonResourceController implements Controller {
     public void handle(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         if (req.getMethod().equals("POST")) {
             createResource(req, resp);
+        } else if (req.getMethod().equals("GET")) {
+            getResource(req, resp);
         } else {
             resp.sendError(400);
+        }
+    }
+
+    private void getResource(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String[] parts = req.getPathInfo().split("/");
+        if (parts.length > 2) {
+            sendResponse(resp, resourceApi.getJSON(parts[2]));
+        }
+    }
+
+    private void sendResponse(HttpServletResponse resp, JSONObject response) throws IOException {
+        resp.setHeader("Expires", "-1");
+        if (response == null) {
+            resp.setStatus(204);
+            return;
+        }
+        resp.setContentType("application/json");
+        try (Writer writer = resp.getWriter()) {
+            writer.write(response.toString());
         }
     }
 

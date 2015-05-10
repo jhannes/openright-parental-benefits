@@ -7,7 +7,6 @@ function postJSON(localUrl, object) {
       url : '/parental/api/' + localUrl,
       type : 'POST',
       data : JSON.stringify(object),
-      async : false,
       contentType : "application/json; charset=utf-8"
     }).always(function() {
         $("main").show();
@@ -16,7 +15,12 @@ function postJSON(localUrl, object) {
     });
 }
 
+function getJSON(localUrl) {
+    return $.get('/parental/api/' + localUrl);
+}
+
 
 var serverAPI = {
-    postJSON: postJSON
+    postJSON: postJSON,
+    getJSON: getJSON
 };

@@ -78,29 +78,36 @@
                 <h1>Oppholdsted</h1>
 
                 <h2>Oppholder du deg i Norge?</h2>
-                <label><input type="radio" required name="application[domesticResidency]" value="true">Ja</label>
-                <label><input type="radio" required name="application[domesticResidency]" value="false">Nei</label>
+                <label><input type="radio" required name="application[domesticResidency]" value="true"
+                              data-current-value="{{domesticResidency}}">Ja</label>
+                <label><input type="radio" required name="application[domesticResidency]" value="false"
+                              data-current-value="{{domesticResidency}}">Nei</label>
 
                 <div>
                     <h2>Har du oppholdt deg sammenhengende i Norge de siste 12 månedene? <a class="explanation"></a></h2>
-                    <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][pastStay]" value="false">Ja</label>
-                    <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][pastStay]" value="true">Nei</label>
+                    <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][pastStay]" value="false"
+                                  data-current-value="{{nonDomestic.pastStay}}">Ja</label>
+                    <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][pastStay]" value="true"
+                                  data-current-value="{{nonDomestic.pastStay}}">Nei</label>
 
                     <div class="optionalInformation">
                         <label for="country-past-location">Hvilket land har du opphold deg i?</label>
-                        <textarea id="country-past-location" name="application[nonDomestic][pastLocation]"></textarea>
+                        <textarea id="country-past-location" name="application[nonDomestic][pastLocation]">{{nonDomestic.pastLocation}}</textarea>
                     </div>
                 </div>
 
 
                 <div>
                     <h2>Kommer du til å oppholde deg sammenhengende i Norge de neste 12 månedene eller mer? <a class="explanation"></a></h2>
-                    <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][plannedStay]" value="false">Ja</label>
-                    <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][plannedStay]" value="true">Nei</label>
+                    <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][plannedStay]" value="false"
+                                  data-current-value="{{nonDomestic.plannedStay}}">Ja</label>
+                    <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][plannedStay]" value="true"
+                                  data-current-value="{{nonDomestic.plannedStay}}">Nei</label>
 
                     <div class="optionalInformation">
                         <label for="country-future-location">Hvilket land skal du oppholde deg i?</label>
-                        <textarea id="country-future-location" name="application[nonDomestic][plannedLocation]"></textarea>
+                        <textarea id="country-future-location" name="application[nonDomestic][plannedLocation]"
+                                >{{nonDomestic.plannedLocation}}</textarea>
                     </div>
                 </div>
             </section>
@@ -111,8 +118,10 @@
                 <div>
 
                     <h2>Har du vært i arbeid de siste 10 månedene før du starter uttaket av feriepengene? <a class="explanation"></a></h2>
-                    <label><input type="radio" required class="optionalToggle" name="application[workedLast10Months]" value="true">Ja</label>
-                    <label><input type="radio" required class="optionalToggle" name="application[workedLast10Months]" value="false">Nei</label>
+                    <label><input type="radio" required class="optionalToggle" name="application[workedLast10Months]" value="true"
+                            data-current-value="{{workedLast10Months}}">Ja</label>
+                    <label><input type="radio" required class="optionalToggle" name="application[workedLast10Months]" value="false"
+                            data-current-value="{{workedLast10Months}}">Nei</label>
 
                     <div class="subform-container optionalInformation">
                         <h2>Arbeidsforhold 1</h2>
@@ -179,7 +188,8 @@
 
 
                     <h2>Hvor mange barn venter du?</h2>
-                    <p><input width="1" value="1" type="number" min="1"  name="application[expectedChildren]" /></p>
+                    <p><input width="1" type="number" min="1" name="application[expectedChildren]"
+                            value="{{expectedChildren}}"/></p>
                 </div>
 
                 <h2>Hvilken dekningsgrad ønsker du? <a class="explanation" data-helptext="Foreldrene må velge lik dekningsgrad. Denne vil gjelde for hele stønadsperioden og kan ikke endres. Dekningsgrad på 100% gir en høyere samlet utbetaling enn 80%"></a></h2>
@@ -353,8 +363,8 @@ $(function() {
 
   $("body").on("click", "#saveApplication", function(e) {
     e.preventDefault();
-    serverAPI.postJSON("application", $("#applicationForm").serializeObject())
-        .then(function() { alert("ok"); })
+    serverAPI.postJSON("applications/", $("#applicationForm").serializeObject())
+        .then(function() { console.log("ok"); })
         .fail(function() { alert("error"); });
   });
 
@@ -362,14 +372,25 @@ $(function() {
   var sharedLeavePeriod = Handlebars.compile($("#sharedLeavePeriodPartial").html());
   Handlebars.registerPartial("sharedLeave", $("#sharedLeavePeriodPartial").html());
 
-  var applicationFormTemplate = Handlebars.compile($("#applicationFormTemplate").html());
+  window.applicationFormTemplate = Handlebars.compile($("#applicationFormTemplate").html());
 
-  var application = {
-    leavePeriod: {
-        shared: [ {} ]
-    }
-  };
-  $("main").html(applicationFormTemplate(application));
+  var id = undefined;
+  serverAPI.getJSON("applications/" + id).then(function(data) {
+      window.application = data.application;
+      application.expectedChildren = application.expectedChildren || 1;
+      $("main").html(applicationFormTemplate(application));
+      $("input[type=radio][data-current-value]").each(function(index, element) {
+        var e = $(element);
+        e.attr("checked", e.val() == e.data("current-value").toString());
+      });
+      $(".optionalToggle").each(function() {
+        if ($(this).val() === "true") {
+          $(this).closest("div").find(".optionalInformation").show(500);
+        } else {
+          $(this).closest("div").find(".optionalInformation").hide(500);
+        }
+      });
+  });
 });
 </script>
 </body>

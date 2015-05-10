@@ -4,4 +4,6 @@ import org.json.JSONObject;
 
 public interface ResourceApi {
     String createResource(JSONObject jsonObject);
+
+    JSONObject getJSON(String id);
 }
