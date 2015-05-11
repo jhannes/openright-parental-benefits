@@ -1,0 +1,15 @@
+<button id="createApplication">Send søknad om foreldrepenger</button>
+
+<script src="../scripts/parental.js"></script>
+<script>
+$(function() {
+  $("#createApplication").click(function() {
+    serverAPI.postJSON("applications/", {}).then(function(data, textStatus, request) {
+        var location = request.getResponseHeader("Location");
+        var id = location.substring(location.lastIndexOf("/")+1);
+        console.log(id);
+        window.location.hash = "applications/edit/" + id;
+    });
+  });
+});
+</script>

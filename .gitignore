@@ -1,3 +1,5 @@
 /openright-parental-benefits.iml
 /.idea
 /target
+/*.properties
+/logging-parental-benefits.xml

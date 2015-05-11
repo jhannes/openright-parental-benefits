@@ -4,9 +4,89 @@
     <title>Foreldrepenger</title>
 </head>
 <body>
-    <h1>Foreldrepenger</h1>
+    <section id="main">
+        <section id="notifications">
+        </section>
 
-    <p><a href="applications/create.html">Send søknad om foreldrepenger</a></p>
+        <section id="content">
+            Loading contents...
+        </section>
+    </section>
+    <script type="text/x-handlebars-template" id="loading-template">
+        <div>Loading...</div>
+    </script>
+
+    <script type="text/x-handlebars-template" id="notification-template">
+        <div class="notify {{type}}">
+            <h1>{{title}}</h1>
+            <span class="alerticon fa fa-3x"></span>
+            <p>{{message}}</p>
+        </div>
+    </script>
+
 
 </body>
+<script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.js"></script>
+<script src="scripts/vendor/jquery.serialize-object.min.js"></script>
+<script src="scripts/parental.js"></script>
+<script type="text/javascript">
+var loadingTemplate = Handlebars.compile($("#loading-template").html());
+
+$(function() {
+    $(window).bind('hashchange', displayCurrentLocation);
+    if (!window.location.hash) {
+        window.location.hash = "applications";
+    }
+    displayCurrentLocation();
+
+    $('#notifications').on('click', '.notify', function() {
+      $(this).fadeOut(350, function() {
+        $(this).remove();
+      });
+    });
+});
+
+var currentId = function() {
+  var parts = window.location.hash.substring(1).split(/\//);
+  if (parts[2] && parts[2].match(/\d+/)) {
+    return parts[2];
+  } else {
+    return null;
+  }
+}
+
+var displayCurrentLocation = function() {
+  $("#notifications .notify").fadeOut().empty();
+  $("#content").html(loadingTemplate());
+
+  var parts = window.location.hash.substring(1).split(/\//);
+
+  var partial = "/parental/" + parts[0] + "/";
+  if (parts[1]) partial += ("_" + parts[1] + ".html");
+
+  $.get(partial).always(function() {
+    $("#content").empty();
+  }).then(function(html) {
+    $("#content").html(html);
+  }).always(function() {
+    $("nav li").removeClass("active");
+    $("nav a[href='#" + parts[0] + "']").closest("li").addClass("active");
+  });
+}
+
+
+  var notificationTemplate = Handlebars.compile($("#notification-template")
+      .html());
+  var notify = function(type, title, message) {
+    var notification = notificationTemplate({
+      type : type || 'error',
+      title : title,
+      message : message
+    });
+    $("#notifications").prepend(notification);
+    var elem = $("#notifications .notify:first");
+    elem.hide().slideDown(1000);
+  }
+</script>
 </html>

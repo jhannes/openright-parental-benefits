@@ -1,5 +1,9 @@
 package io.openright.parental.server;
 
+import io.openright.infrastructure.util.IOUtil;
+import io.openright.infrastructure.util.LogUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.eclipse.jetty.plus.jndi.EnvEntry;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -9,13 +13,15 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+@Slf4j
 public class ParentalBenefitsServer {
 
     private Server server;
+    private ParentalBenefitsConfig config;
 
-    public ParentalBenefitsServer() {
+    public ParentalBenefitsServer(ParentalBenefitsConfig config) {
+        this.config = config;
         this.server = new Server(8080);
-
         server.setHandler(createHandlers());
     }
 
@@ -42,10 +48,15 @@ public class ParentalBenefitsServer {
     }
 
     public static void main(String[] args) throws Exception {
-        new ParentalBenefitsServer().start();
+        LogUtil.setupLogging("logging-parental-benefits.xml");
+        ParentalBenefitsConfig config = new ParentalBenefitsConfigFile(IOUtil.extractResourceFile("parental-benefits.properties"));
+
+        new ParentalBenefitsServer(config).start();
     }
 
     private void start() throws Exception {
+        new EnvEntry("parental/config", config);
         this.server.start();
+        log.info("Started {}", server.getURI());
     }
 }

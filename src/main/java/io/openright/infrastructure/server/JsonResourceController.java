@@ -21,6 +21,8 @@ public class JsonResourceController implements Controller {
     public void handle(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         if (req.getMethod().equals("POST")) {
             createResource(req, resp);
+        } else if (req.getMethod().equals("PUT")) {
+            updateResource(req, resp);
         } else if (req.getMethod().equals("GET")) {
             getResource(req, resp);
         } else {
@@ -32,6 +34,15 @@ public class JsonResourceController implements Controller {
         String[] parts = req.getPathInfo().split("/");
         if (parts.length > 2) {
             sendResponse(resp, resourceApi.getJSON(parts[2]));
+        }
+    }
+
+    private void updateResource(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String[] parts = req.getPathInfo().split("/");
+        try (BufferedReader reader = req.getReader()) {
+            JSONObject jsonObject = new JSONObject(new JSONTokener(reader));
+            resourceApi.updateResource(parts[2], jsonObject);
+            resp.setStatus(HttpServletResponse.SC_OK);
         }
     }
 
@@ -52,7 +63,7 @@ public class JsonResourceController implements Controller {
             JSONObject jsonObject = new JSONObject(new JSONTokener(reader));
             String id = resourceApi.createResource(jsonObject);
             resp.setStatus(HttpServletResponse.SC_CREATED);
-            resp.setHeader("Location", req.getRequestURL() + "/" + id);
+            resp.setHeader("Location", req.getRequestURL() + id);
         }
     }
 }

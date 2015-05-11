@@ -304,11 +304,6 @@
         <button>Fuilfør søknad</button>
     </footer>
 
-<script src="https://code.jquery.com/jquery-2.1.4.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/datejs/1.0/date.min.js"></script>
-<script src="../scripts/vendor/jquery.serialize-object.min.js"></script>
-<script src="../scripts/parental.js"></script>
 <script>
 function plusWeeksIso(date, weeks) {
   return new Date(date).addWeeks(weeks).toISODate();
@@ -375,7 +370,7 @@ $(function() {
 
   $("body").on("click", "#saveApplication", function(e) {
     e.preventDefault();
-    serverAPI.postJSON("applications/", $("#applicationForm").serializeObject())
+    serverAPI.putJSON("applications/", id, $("#applicationForm").serializeObject())
         .then(function() { console.log("ok"); })
         .fail(function() { alert("error"); });
   });
@@ -384,25 +379,25 @@ $(function() {
   var sharedLeavePeriod = Handlebars.compile($("#sharedLeavePeriodPartial").html());
   Handlebars.registerPartial("sharedLeave", $("#sharedLeavePeriodPartial").html());
 
-  window.applicationFormTemplate = Handlebars.compile($("#applicationFormTemplate").html());
+  var applicationFormTemplate = Handlebars.compile($("#applicationFormTemplate").html());
 
-  var id = undefined;
+  var id = currentId();
   serverAPI.getJSON("applications/" + id).then(function(data) {
-      window.application = data.application;
+      var application = data.application;
       application.expectedChildren = application.expectedChildren || 1;
       $("main").html(applicationFormTemplate(application));
 
-      $("input[type=checkbox][data-current-value]").each(function(index, element) {
-        var e = $(element);
+      $("input[type=checkbox][data-current-value]").each(function() {
+        var e = $(this);
         var checked = e.data("current-value").split(",");
         e.attr("checked", checked.indexOf(e.val()) >= 0);
       });
-      $("input[type=radio][data-current-value]").each(function(index, element) {
-        var e = $(element);
+      $("input[type=radio][data-current-value]").each(function() {
+        var e = $(this);
         e.attr("checked", e.val() == e.data("current-value").toString());
       });
-      $("select[data-current-value]").each(function(index, element) {
-        var e = $(element);
+      $("select[data-current-value]").each(function() {
+        var e = $(this);
         e.find("option[value='" + e.data("current-value") + "']").attr("selected", "selected");
       });
       $(".optionalToggle").each(function() {
