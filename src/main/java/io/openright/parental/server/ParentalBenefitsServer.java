@@ -59,6 +59,6 @@ public class ParentalBenefitsServer {
     private void start() throws Exception {
         new EnvEntry("parental/config", config);
         this.server.start();
-        log.info("Started {}", server.getURI());
+        log.info("Started {}", server.getURI().resolve("/"));
     }
 }

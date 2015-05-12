@@ -5,72 +5,53 @@ function getParameterByName(name) {
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
-function loginHandler(jqXHR, textStatus, errorThrown) {
+function loginHandler(jqXHR) {
     if( jqXHR.status === 401 ) {
         window.location = "login/?targetURL=" + encodeURIComponent(window.location);
     }
 }
 
-function postJSON(localUrl, object) {
-    $("main").hide();
-    $("footer").hide();
-    $("body").prepend("<div class='progressBlock'></div>");
+function ajax(serverUrl) {
+    function ajax(type, url, object) {
+        $("main").hide();
+        $("footer").hide();
+        $("body").prepend("<div class='progressBlock'></div>");
 
-    return $.ajax({
-      url : '/parental/api/' + localUrl,
-      type : 'POST',
-      data : JSON.stringify(object),
-      contentType : "application/json; charset=utf-8"
-    }).always(function() {
-        $("main").show();
-        $("footer").show();
-        $(".progressBlock").remove();
-    }).fail(loginHandler);
-}
+        return $.ajax({
+            url: url,
+            type: type,
+            data: JSON.stringify(object),
+            contentType: "application/json; charset=utf-8"
+        }).always(function () {
+            $("main").show();
+            $("footer").show();
+            $(".progressBlock").remove();
+        }).fail(loginHandler);
+    }
 
-function putJSON(localUrl, id, object) {
-    $("main").hide();
-    $("footer").hide();
-    $("body").prepend("<div class='progressBlock'></div>");
+    function postJSON(localUrl, object) {
+        return ajax('POST', serverUrl + localUrl, object);
+    }
 
-    return $.ajax({
-      url : '/parental/api/' + localUrl + id,
-      type : 'PUT',
-      data : JSON.stringify(object),
-      contentType : "application/json; charset=utf-8"
-    }).always(function() {
-        $("main").show();
-        $("footer").show();
-        $(".progressBlock").remove();
-    }).fail(loginHandler);
-}
+    function putJSON(localUrl, id, object) {
+        return ajax('PUT', serverUrl + localUrl + id, object);
+    }
 
-function deleteJSON(localUrl, object) {
-    $("main").hide();
-    $("footer").hide();
-    $("body").prepend("<div class='progressBlock'></div>");
+    function deleteJSON(localUrl, object) {
+        return ajax('DELETE', serverUrl + localUrl, object);
+    }
 
-    return $.ajax({
-      url : '/parental/api/' + localUrl,
-      type : 'DELETE',
-      data : JSON.stringify(object),
-      contentType : "application/json; charset=utf-8"
-    }).always(function() {
-        $("main").show();
-        $("footer").show();
-        $(".progressBlock").remove();
-    }).fail(loginHandler);
+    function getJSON(localUrl) {
+        return $.get(serverUrl + localUrl).fail(loginHandler);
+    }
+
+    return {
+        postJSON: postJSON,
+        putJSON: putJSON,
+        deleteJSON: deleteJSON,
+        getJSON: getJSON
+    };
 }
 
 
-function getJSON(localUrl) {
-    return $.get('/parental/api/' + localUrl).fail(loginHandler);
-}
-
-
-var serverAPI = {
-    postJSON: postJSON,
-    putJSON: putJSON,
-    deleteJSON: deleteJSON,
-    getJSON: getJSON
-};
+var serverAPI = ajax('/parental/api/');
