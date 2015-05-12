@@ -14,6 +14,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -87,6 +89,10 @@ public class Database {
         public JSONObject getJSON(String columnName) throws SQLException {
             PGobject object = (PGobject) rs.getObject(columnName);
             return new JSONObject(new JSONTokener(object.getValue()));
+        }
+
+        public Instant getInstant(String columnName) throws SQLException {
+            return rs.getTimestamp(columnName).toInstant();
         }
     }
 
@@ -163,6 +169,8 @@ public class Database {
                 o.setType("json");
                 o.setValue(object.toString());
                 statement.setObject(index++, o);
+            } else if (object instanceof Instant) {
+                statement.setTimestamp(index++, new Timestamp(((Instant) object).toEpochMilli()));
             } else {
                 statement.setObject(index++, object);
             }

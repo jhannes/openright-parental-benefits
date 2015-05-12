@@ -1,5 +1,6 @@
-package io.openright.infrastructure.rest;
+package io.openright.parental.domain.users;
 
+import io.openright.infrastructure.rest.RequestException;
 import io.openright.infrastructure.server.Controller;
 
 import javax.servlet.ServletException;
@@ -29,6 +30,6 @@ public class AuthenticatedController implements Controller {
         if (personId == null) {
             throw new RequestException(401, "Unauthorized");
         }
-        return new ApplicationUser(personId);
+        return new ApplicationUser(personId, null);
     }
 }

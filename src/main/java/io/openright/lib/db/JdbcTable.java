@@ -69,6 +69,7 @@ public class JdbcTable implements Selectable {
                 + getWhereClause();
     }
 
+    @Override
     public <T> List<T> list(Database.RowMapper<T> mapper) {
         return database.queryForList(getQuery(), parameterMap.values(), mapper);
     }
@@ -116,12 +117,14 @@ public class JdbcTable implements Selectable {
      * @param field is the name of the database column
      * @return new instance of self with added set of query parameter and value
      */
+    @Override
     public JdbcTable where(String field, Object value) {
         JdbcTable newTable = new JdbcTable(database, tableName, parameterMap);
         newTable.parameterMap.put(field, value);
         return newTable;
     }
 
+    @Override
     public Selectable orderBy(String string) {
         JdbcTable table = new JdbcTable(database, tableName, parameterMap);
         table.orderBy.add(string);

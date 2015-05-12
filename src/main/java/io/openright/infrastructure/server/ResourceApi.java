@@ -8,4 +8,6 @@ public interface ResourceApi {
     JSONObject getJSON(String id);
 
     void updateResource(String id, JSONObject jsonObject);
+
+    JSONObject listJSON();
 }

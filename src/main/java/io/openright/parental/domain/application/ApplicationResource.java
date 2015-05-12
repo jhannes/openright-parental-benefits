@@ -1,8 +1,13 @@
 package io.openright.parental.domain.application;
 
+import io.openright.parental.domain.users.ApplicationUser;
 import io.openright.infrastructure.rest.RequestException;
 import io.openright.infrastructure.server.ResourceApi;
 import org.json.JSONObject;
+
+import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ApplicationResource implements ResourceApi {
 
@@ -13,18 +18,10 @@ public class ApplicationResource implements ResourceApi {
     }
 
     @Override
-    public String createResource(JSONObject jsonObject) {
-        Application application = toApplication(jsonObject);
-        applicationRepository.insert(application);
-        return application.getId().toString();
-    }
-
-    private Application toApplication(JSONObject jsonObject) {
-        JSONObject form = jsonObject.optJSONObject("application");
-        if (form == null) {
-            form = new JSONObject();
-        }
-        return new Application(form);
+    public JSONObject listJSON() {
+        List<JSONObject> applications = applicationRepository.list()
+                .stream().map(Application::toJSON).collect(Collectors.toList());
+        return new JSONObject().put("applications", applications);
     }
 
     @Override
@@ -35,7 +32,23 @@ public class ApplicationResource implements ResourceApi {
     }
 
     @Override
+    public String createResource(JSONObject jsonObject) {
+        Application application = toApplication(jsonObject);
+        applicationRepository.insert(application);
+        return application.getId().toString();
+    }
+
+    @Override
     public void updateResource(String id, JSONObject jsonObject) {
         applicationRepository.update(Long.valueOf(id), toApplication(jsonObject));
+    }
+
+    private Application toApplication(JSONObject jsonObject) {
+        JSONObject form = jsonObject.optJSONObject("application");
+        if (form == null) {
+            form = new JSONObject();
+        }
+        Instant now = Instant.now();
+        return new Application(ApplicationUser.getCurrent().getPersonId(), now, now, form);
     }
 }

@@ -34,6 +34,8 @@ public class JsonResourceController implements Controller {
         String[] parts = req.getPathInfo().split("/");
         if (parts.length > 2) {
             sendResponse(resp, resourceApi.getJSON(parts[2]));
+        } else {
+            sendResponse(resp, resourceApi.listJSON());
         }
     }
 

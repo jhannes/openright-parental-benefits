@@ -1,6 +1,6 @@
 package io.openright.parental.server;
 
-import io.openright.infrastructure.rest.AuthenticatedController;
+import io.openright.parental.domain.users.AuthenticatedController;
 import io.openright.infrastructure.server.Controller;
 import io.openright.infrastructure.server.JsonResourceController;
 import io.openright.parental.domain.application.ApplicationRepository;

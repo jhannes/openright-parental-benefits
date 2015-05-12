@@ -5,22 +5,40 @@ import lombok.Setter;
 import lombok.ToString;
 import org.json.JSONObject;
 
+import java.time.Instant;
 import java.util.Objects;
 
 @ToString
 public class Application {
-    @Getter
-    private final JSONObject applicationForm;
-
     @Getter @Setter
     private Long id;
 
-    public Application(JSONObject applicationForm) {
+    @Getter
+    private final Instant createdAt;
+
+    @Getter
+    private final Instant updatedAt;
+
+    @Getter
+    private final String applicantId;
+
+    @Getter
+    private final JSONObject applicationForm;
+
+    public Application(String applicantId, Instant createdAt, Instant updatedAt, JSONObject applicationForm) {
+        this.applicantId = applicantId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.applicationForm = applicationForm;
     }
 
     public JSONObject toJSON() {
-        return new JSONObject().put("application", applicationForm);
+        return new JSONObject()
+                .put("id", id)
+                .put("applicant", applicantId)
+                .put("createdAt", createdAt)
+                .put("updatedAt", updatedAt)
+                .put("application", applicationForm);
     }
 
     @Override
@@ -29,6 +47,9 @@ public class Application {
         if (o == null || getClass() != o.getClass()) return false;
         Application that = (Application) o;
         return Objects.equals(applicationForm.toString(), that.applicationForm.toString()) &&
+                Objects.equals(applicantId, that.applicantId) &&
+                Objects.equals(createdAt, that.createdAt) &&
+                Objects.equals(updatedAt, that.updatedAt) &&
                 Objects.equals(id, that.id);
     }
 
