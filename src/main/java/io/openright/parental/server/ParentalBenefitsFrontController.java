@@ -1,10 +1,12 @@
 package io.openright.parental.server;
 
+import io.openright.infrastructure.rest.AuthenticatedController;
 import io.openright.infrastructure.server.Controller;
 import io.openright.infrastructure.server.JsonResourceController;
 import io.openright.parental.domain.application.ApplicationRepository;
 import io.openright.parental.domain.application.ApplicationResource;
 import io.openright.parental.domain.application.JdbcApplicationRepository;
+import io.openright.parental.domain.users.LoginController;
 import lombok.SneakyThrows;
 
 import javax.naming.InitialContext;
@@ -26,10 +28,16 @@ public class ParentalBenefitsFrontController extends io.openright.infrastructure
     @Override
     protected Controller getControllerForPath(String prefix) {
         switch (prefix) {
-            case "applications":
-                return new JsonResourceController(new ApplicationResource(applicationRepository));
+            case "applications": return createApplicationController();
+            case "login":
+                return new LoginController();
             default: return null;
         }
+    }
+
+    private Controller createApplicationController() {
+        return new AuthenticatedController(
+                new JsonResourceController(new ApplicationResource(applicationRepository)));
     }
 
 }

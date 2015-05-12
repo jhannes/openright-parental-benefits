@@ -1,5 +1,7 @@
 package io.openright.infrastructure.server;
 
+import io.openright.infrastructure.rest.RequestException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,7 +11,11 @@ import java.io.IOException;
 public abstract class ApiFrontController extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        getController(req).handle(req, resp);
+        try {
+            getController(req).handle(req, resp);
+        } catch (RequestException e) {
+            resp.sendError(e.getStatusCode(), e.getMessage());
+        }
     }
 
     private Controller getController(HttpServletRequest req) {

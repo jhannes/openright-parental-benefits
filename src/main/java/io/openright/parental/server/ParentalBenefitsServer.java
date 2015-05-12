@@ -9,6 +9,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.MovedContextHandler;
 import org.eclipse.jetty.server.handler.ShutdownHandler;
+import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -36,6 +37,7 @@ public class ParentalBenefitsServer {
 
     private ServletContextHandler createWebApi() {
         ServletContextHandler context = new ServletContextHandler(null, "/parental/api");
+        context.setSessionHandler(new SessionHandler());
         context.addServlet(ParentalBenefitsFrontController.class, "/*");
         return context;
     }
