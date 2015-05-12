@@ -12,6 +12,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Dictionary;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AppConfigFile {
     private static Logger log = LoggerFactory.getLogger(AppConfigFile.class);
@@ -34,13 +36,14 @@ public class AppConfigFile {
     }
 
     protected DataSource createDataSource(String prefix) {
-        DataSource dataSource = createDataSource(prefix, prefix);
+        return migrateDataSource(prefix, createDataSource(prefix, prefix));
+    }
 
+    protected DataSource migrateDataSource(String prefix, DataSource dataSource) {
         Flyway flyway = new Flyway();
         flyway.setDataSource(dataSource);
         flyway.setLocations("classpath:db/" + prefix);
         flyway.migrate();
-
         return dataSource;
     }
 
@@ -56,6 +59,33 @@ public class AppConfigFile {
         flyway.migrate();
 
         return dataSource;
+    }
+
+    protected DataSource createDataSourceFromEnv(String databaseUrl) {
+        return parseDataSource(databaseUrl);
+    }
+
+    static DataSource parseDataSource(String databaseUrl) {
+        Matcher matcher = parseDatabaseUrl(databaseUrl);
+
+        HikariDataSource dataSource = new HikariDataSource();
+        if (matcher.group(1).equals("postgres")) {
+            dataSource.setJdbcUrl("jdbc:postgresql://" + matcher.group(4));
+        } else {
+            throw new RuntimeException("Unexpected database type " + databaseUrl);
+        }
+        dataSource.setUsername(matcher.group(2));
+        dataSource.setPassword(matcher.group(3));
+        return dataSource;
+    }
+
+    static Matcher parseDatabaseUrl(String databaseUrl) {
+        Pattern pattern = Pattern.compile("^(\\w+)://(\\w+):(\\w+)@(([-a-z0-9.]+):(\\d+)/(\\w+))$");
+        Matcher matcher = pattern.matcher(databaseUrl);
+        if (!matcher.matches()) {
+            throw new RuntimeException("Unexpected database URL " + databaseUrl);
+        }
+        return matcher;
     }
 
     private DataSource createDataSource(String prefix, String defaultName) {

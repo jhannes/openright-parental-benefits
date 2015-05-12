@@ -22,6 +22,9 @@ public class ParentalBenefitsConfigFile extends AppConfigFile implements Parenta
     }
 
     protected DataSource createDataSource() {
+        if (System.getenv("DATABASE_URL") != null) {
+            return migrateDataSource("parental", createDataSourceFromEnv(System.getenv("DATABASE_URL")));
+        }
         return createDataSource("parental");
     }
 
@@ -31,5 +34,13 @@ public class ParentalBenefitsConfigFile extends AppConfigFile implements Parenta
             return new Database("jdbc/parentalBenefitsDb");
         }
         return database;
+    }
+
+    @Override
+    public int getHttpPort() {
+        if (System.getenv("PORT") != null) {
+            return Integer.parseInt(System.getenv("PORT"));
+        }
+        return Integer.parseInt(getProperty("parental.http.port", "8080"));
     }
 }

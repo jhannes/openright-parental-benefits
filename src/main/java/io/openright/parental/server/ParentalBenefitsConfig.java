@@ -4,4 +4,6 @@ import io.openright.infrastructure.db.Database;
 
 public interface ParentalBenefitsConfig {
     Database getDatabase();
+
+    int getHttpPort();
 }

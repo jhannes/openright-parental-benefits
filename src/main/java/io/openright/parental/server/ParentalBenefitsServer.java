@@ -22,7 +22,7 @@ public class ParentalBenefitsServer {
 
     public ParentalBenefitsServer(ParentalBenefitsConfig config) {
         this.config = config;
-        this.server = new Server(8080);
+        this.server = new Server(config.getHttpPort());
         server.setHandler(createHandlers());
     }
 
