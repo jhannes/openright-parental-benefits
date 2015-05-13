@@ -4,6 +4,7 @@ import io.openright.parental.domain.users.ApplicationUser;
 import io.openright.parental.domain.users.ApplicationUserRole;
 import io.openright.parental.server.ParentalBenefitsTestConfig;
 import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.time.Instant;
@@ -21,13 +22,18 @@ public class JdbcApplicationRepositoryTest {
     private final ApplicationUser caseWorker = new ApplicationUser(samplePersonId(), ApplicationUserRole.CASE_WORKER);
     private final ApplicationUser user = new ApplicationUser(samplePersonId(), null);
 
+    @Before
+    public void clearUser() {
+        ApplicationUser.setCurrent(null);
+    }
+
     @Test
     public void shouldFindSavedApplication() throws Exception {
         Application application = sampleApplication(user);
         repository.insert(application);
 
         ApplicationUser.setCurrent(user);
-        assertThat(repository.retrieve(application.getId())).contains(application);
+        assertThat(repository.retrieve(application.getId()).get()).isEqualTo(application);
         assertThat(repository.retrieve(13243L)).isEmpty();
     }
 
@@ -51,6 +57,23 @@ public class JdbcApplicationRepositoryTest {
         assertThat(repository.list())
                 .contains(mine)
                 .doesNotContain(theirs);
+    }
+
+    @Test
+    public void shouldUpdateApplication() throws Exception {
+        ApplicationUser.setCurrent(user);
+        Application application = sampleApplication(user);
+        Instant updatedAt = Instant.now().minusSeconds(100);
+        application.setUpdatedAt(updatedAt);
+        insert(application);
+
+        application.setStatus("approved");
+        repository.update(application.getId(), application);
+
+        Application saved = repository.retrieve(application.getId()).get();
+        assertThat(saved.getStatus())
+                .isEqualTo(application.getStatus());
+        assertThat(saved.getCreatedAt()).isGreaterThan(updatedAt);
     }
 
     private static String samplePersonId() {

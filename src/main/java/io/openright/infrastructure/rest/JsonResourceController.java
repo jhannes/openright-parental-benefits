@@ -1,4 +1,4 @@
-package io.openright.infrastructure.server;
+package io.openright.infrastructure.rest;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -33,9 +33,9 @@ public class JsonResourceController implements Controller {
     private void getResource(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String[] parts = req.getPathInfo().split("/");
         if (parts.length > 2) {
-            sendResponse(resp, resourceApi.getJSON(parts[2]));
+            sendResponse(resp, resourceApi.getResource(parts[2]));
         } else {
-            sendResponse(resp, resourceApi.listJSON());
+            sendResponse(resp, resourceApi.listResources());
         }
     }
 

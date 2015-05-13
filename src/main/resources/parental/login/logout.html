@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta charset="UTF-8">
-    <title>Logg ut | Foreldrepenger</title>
+  <meta charset="UTF-8">
+  <title>Logg ut | Foreldrepenger</title>
 </head>
 <body>
-
-    <form id="logoutForm">
-        <button>Logg ut</button>
-    </form>
+<form id="logoutForm">
+  <button>Logg ut</button>
+</form>
 </body>
 <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
 <script src="../scripts/parental.js"></script>
 <script>
-$(function() {
-    $("#logoutForm button").click(function(e) {
-        e.preventDefault();
-        serverAPI.deleteJSON("login", {})
-            .then(function() { window.location = getParameterByName("targetURL"); });
+  $(function () {
+    $("#logoutForm button").click(function (e) {
+      e.preventDefault();
+      serverAPI.deleteJSON("login", {})
+              .then(function () {
+                window.location = getParameterByName("targetURL");
+              });
     });
-});
+  });
 </script>
 </html>

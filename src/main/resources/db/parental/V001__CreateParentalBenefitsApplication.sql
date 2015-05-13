@@ -1,6 +1,7 @@
 create table Parental_Applications (
   id serial primary key,
   applicant_id varchar(20) not null,
+  status varchar(20) not null,
   created_at timestamp not null,
   updated_at timestamp not null,
   form json not null

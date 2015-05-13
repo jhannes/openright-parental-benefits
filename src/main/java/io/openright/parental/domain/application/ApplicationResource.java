@@ -1,8 +1,8 @@
 package io.openright.parental.domain.application;
 
-import io.openright.parental.domain.users.ApplicationUser;
 import io.openright.infrastructure.rest.RequestException;
-import io.openright.infrastructure.server.ResourceApi;
+import io.openright.infrastructure.rest.ResourceApi;
+import io.openright.parental.domain.users.ApplicationUser;
 import org.json.JSONObject;
 
 import java.time.Instant;
@@ -18,14 +18,14 @@ public class ApplicationResource implements ResourceApi {
     }
 
     @Override
-    public JSONObject listJSON() {
+    public JSONObject listResources() {
         List<JSONObject> applications = applicationRepository.list()
                 .stream().map(Application::toJSON).collect(Collectors.toList());
         return new JSONObject().put("applications", applications);
     }
 
     @Override
-    public JSONObject getJSON(String id) {
+    public JSONObject getResource(String id) {
         return applicationRepository.retrieve(Long.valueOf(id))
                 .orElseThrow(RequestException.notFound(Application.class, id))
                 .toJSON();

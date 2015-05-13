@@ -1,6 +1,6 @@
 package io.openright.parental.domain.users;
 
-import io.openright.infrastructure.server.Controller;
+import io.openright.infrastructure.rest.Controller;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 

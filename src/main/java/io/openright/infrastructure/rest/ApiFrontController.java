@@ -1,6 +1,4 @@
-package io.openright.infrastructure.server;
-
-import io.openright.infrastructure.rest.RequestException;
+package io.openright.infrastructure.rest;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

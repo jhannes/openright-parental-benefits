@@ -3,3 +3,5 @@
 /target
 /*.properties
 /logging-parental-benefits.xml
+/dependency-reduced-pom.xml
+/logs

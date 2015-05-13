@@ -1,48 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta charset="UTF-8">
-    <title>Logg inn | Foreldrepenger</title>
+  <meta charset="UTF-8">
+  <title>Logg inn | Foreldrepenger</title>
 </head>
 <body>
-    <h1>Logg inn</h1>
+<h1>Logg inn</h1>
 
-    <form id="loginForm">
-        <h2>Logg inn som enkeltperson</h2>
+<form id="loginForm">
+  <h2>Logg inn som enkeltperson</h2>
 
-        <ul>
-            <li>
-                <button data-person-id="12345678901">Kari Normann</button>
-            </li>
-            <li>
-                <button data-person-id="98765432101">Ola Normann</button>
-            </li>
-            <li>
-                <button data-person-id="98765432101">Ola Svenske</button>
-            </li>
-        </ul>
+  <ul>
+    <li>
+      <button data-person-id="12345678901">Kari Normann</button>
+    </li>
+    <li>
+      <button data-person-id="98765432101">Ola Normann</button>
+    </li>
+    <li>
+      <button data-person-id="98765432101">Ola Svenske</button>
+    </li>
+  </ul>
 
-        <h2>Logg inn som saksbehandler</h2>
+  <h2>Logg inn som saksbehandler</h2>
 
-        <ul>
-            <li>
-                <button data-person-id="99345678901">Saksbehandler 1</button>
-            </li>
-            <li>
-                <button data-person-id="99445678901">Saksbehandler 2</button>
-            </li>
-        </ul>
-    </form>
+  <ul>
+    <li>
+      <button data-person-id="99345678901">Saksbehandler 1</button>
+    </li>
+    <li>
+      <button data-person-id="99445678901">Saksbehandler 2</button>
+    </li>
+  </ul>
+</form>
 </body>
 <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
 <script src="../scripts/parental.js"></script>
 <script>
-$(function() {
-    $("#loginForm button").click(function(e) {
-        e.preventDefault();
-        serverAPI.postJSON("login", { personId: $(this).data("person-id").toString() })
-            .then(function() { window.location = getParameterByName("targetURL"); });
+  $(function () {
+    $("#loginForm button").click(function (e) {
+      e.preventDefault();
+      serverAPI.postJSON("login", {personId: $(this).data("person-id").toString()})
+              .then(function () {
+                window.location = getParameterByName("targetURL");
+              });
     });
-});
+  });
 </script>
 </html>

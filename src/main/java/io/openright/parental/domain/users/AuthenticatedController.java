@@ -1,7 +1,7 @@
 package io.openright.parental.domain.users;
 
+import io.openright.infrastructure.rest.Controller;
 import io.openright.infrastructure.rest.RequestException;
-import io.openright.infrastructure.server.Controller;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

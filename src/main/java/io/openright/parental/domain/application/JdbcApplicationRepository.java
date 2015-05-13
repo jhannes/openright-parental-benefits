@@ -7,6 +7,7 @@ import io.openright.parental.domain.users.ApplicationUserRole;
 import io.openright.parental.server.ParentalBenefitsConfig;
 
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ public class JdbcApplicationRepository implements ApplicationRepository {
             row.put("applicant_id", application.getApplicantId());
             row.put("created_at", application.getCreatedAt());
             row.put("updated_at", application.getUpdatedAt());
+            row.put("status", application.getStatus());
             row.put("form", application.getApplicationForm());
         }));
     }
@@ -46,7 +48,11 @@ public class JdbcApplicationRepository implements ApplicationRepository {
 
     @Override
     public void update(Long id, Application application) {
-        getTable().where("id", id).updateValues(row -> row.put("form", application.getApplicationForm()));
+        application.setUpdatedAt(Instant.now());
+        getTable().where("id", id).updateValues(row -> {
+            row.put("status", application.getStatus());
+            row.put("form", application.getApplicationForm());
+        });
     }
 
     private Application toApplication(Database.Row row) throws SQLException {
@@ -56,6 +62,7 @@ public class JdbcApplicationRepository implements ApplicationRepository {
                 row.getInstant("updated_at"),
                 row.getJSON("form"));
         application.setId(row.getLong("id"));
+        application.setStatus(row.getString("status"));
         return application;
     }
 

@@ -27,7 +27,7 @@ public class JdbcTable implements Selectable {
         this(database, tableName, new LinkedHashMap<>());
     }
 
-    public JdbcTable(Database database, String tableName, LinkedHashMap<String, Object> parameterMap) {
+    private JdbcTable(Database database, String tableName, LinkedHashMap<String, Object> parameterMap) {
         this.database = database;
         this.tableName = tableName;
         this.parameterMap = parameterMap;
@@ -36,7 +36,7 @@ public class JdbcTable implements Selectable {
     public long insertValues(Inserter inserter) {
         HashMap<String, Object> row = new HashMap<>();
         inserter.values(row);
-        return database.executeDbOperation(insertQuery(row.keySet()), row.values(), stmt -> {
+        return database.executeDbOperation(insertQuery(row.keySet()), new ArrayList<>(row.values()), stmt -> {
             ResultSet rs = stmt.executeQuery();
             rs.next();
             return rs.getLong("id");
@@ -71,15 +71,15 @@ public class JdbcTable implements Selectable {
 
     @Override
     public <T> List<T> list(Database.RowMapper<T> mapper) {
-        return database.queryForList(getQuery(), parameterMap.values(), mapper);
+        return database.queryForList(getQuery(), getParameters(), mapper);
     }
 
     public <T> Optional<T> single(Database.RowMapper<T> mapper) {
-        return database.queryForSingle(getQuery(), parameterMap.values(), mapper);
+        return database.queryForSingle(getQuery(), getParameters(), mapper);
     }
 
     public void delete() {
-        database.executeDbOperation(deleteQuery(), parameterMap.values(), stmt -> {
+        database.executeDbOperation(deleteQuery(), getParameters(), stmt -> {
             stmt.executeUpdate();
             return null;
         });
@@ -136,6 +136,10 @@ public class JdbcTable implements Selectable {
         table.innerJoins.add("INNER JOIN " + tableName + " on " + tableName + "." + id
                 + " = " + this.tableName + "." + myReference);
         return table;
+    }
+
+    private List<Object> getParameters() {
+        return new ArrayList<>(parameterMap.values());
     }
 
     private List<String> repeat(String string, int count) {

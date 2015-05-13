@@ -17,7 +17,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +38,7 @@ public class Database {
         }
     }
 
-    public static class Row {
+    public class Row {
 
         private final ResultSet rs;
         private final Map<String, Integer> columnMap = new HashMap<>();
@@ -87,8 +86,7 @@ public class Database {
         }
 
         public JSONObject getJSON(String columnName) throws SQLException {
-            PGobject object = (PGobject) rs.getObject(columnName);
-            return new JSONObject(new JSONTokener(object.getValue()));
+            return Database.this.getJSON(rs, columnName);
         }
 
         public Instant getInstant(String columnName) throws SQLException {
@@ -116,7 +114,7 @@ public class Database {
         return queryForList(query, Collections.singletonList(parameter), mapper);
     }
 
-    public <T> List<T> queryForList(String query, Collection<Object> parameters, RowMapper<T> mapper) {
+    public <T> List<T> queryForList(String query, List<Object> parameters, RowMapper<T> mapper) {
         return executeDbOperation(query, parameters, stmt -> {
             try (ResultSet rs = stmt.executeQuery()) {
                 Row row = new Row(rs);
@@ -129,7 +127,7 @@ public class Database {
         });
     }
 
-    public <T> Optional<T> queryForSingle(String query, Collection<Object> parameters, RowMapper<T> mapper) {
+    public <T> Optional<T> queryForSingle(String query, List<Object> parameters, RowMapper<T> mapper) {
         return executeDbOperation(query, parameters, stmt -> {
             try (ResultSet rs = stmt.executeQuery()) {
                 return mapSingleRow(rs, mapper);
@@ -149,32 +147,45 @@ public class Database {
     }
 
 
-    public <T> T executeDbOperation(String query, Collection<Object> parameters, StatementCallback<T> statementCallback) {
+    public <T> T executeDbOperation(String query, List<Object> parameters, StatementCallback<T> statementCallback) {
         return doWithConnection(conn -> {
-            log.info("Executing: {} with params {}", query, parameters);
+            long startTime = System.currentTimeMillis();
             try (PreparedStatement statement = conn.prepareStatement(query)) {
                 setParameters(statement, parameters);
                 return statementCallback.run(statement);
             } catch (SQLException e) {
                 throw ExceptionUtil.soften(e);
+            } finally {
+                long duration = System.currentTimeMillis() - startTime;
+                log.info("Executing in {}ms: {} with params {}", duration, query, parameters);
             }
         });
     }
 
-    private void setParameters(PreparedStatement statement, Collection<Object> parameters) throws SQLException {
-        int index = 1;
-        for (Object object : parameters) {
-            if (object instanceof JSONObject) {
-                PGobject o = new PGobject();
-                o.setType("json");
-                o.setValue(object.toString());
-                statement.setObject(index++, o);
-            } else if (object instanceof Instant) {
-                statement.setTimestamp(index++, new Timestamp(((Instant) object).toEpochMilli()));
-            } else {
-                statement.setObject(index++, object);
-            }
+    private void setParameters(PreparedStatement statement, List<Object> parameters) throws SQLException {
+        for (int i = 0; i < parameters.size(); i++) {
+            setParameter(statement, parameters.get(i), i + 1);
         }
+    }
+
+
+    protected void setParameter(PreparedStatement statement, Object object, int parameterIndex) throws SQLException {
+        if (object instanceof JSONObject) {
+            PGobject o = new PGobject();
+            o.setType("json");
+            o.setValue(object.toString());
+            statement.setObject(parameterIndex, o);
+        } else if (object instanceof Instant) {
+            statement.setTimestamp(parameterIndex, new Timestamp(((Instant) object).toEpochMilli()));
+        } else {
+            statement.setObject(parameterIndex, object);
+        }
+    }
+
+    protected JSONObject getJSON(ResultSet rs, String columnName) throws SQLException {
+        PGobject object = (PGobject) rs.getObject(columnName);
+        return new JSONObject(new JSONTokener(object.getValue()));
+
     }
 
     public <T> T doWithConnection(ConnectionCallback<T> object) {

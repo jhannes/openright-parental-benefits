@@ -5,6 +5,7 @@
 #personalInformation {
   background: #ccc;
 }
+
 #personalInformation h2 {
   text-transform: uppercase;
   font-size: 1em;
@@ -46,11 +47,11 @@ button {
 }
 
 .application-gender-male .gender-female {
-  display:none;
+  display: none;
 }
 
 .application-gender-female .gender-male {
-  display:none;
+  display: none;
 }
 
 select {
@@ -98,6 +99,7 @@ footer#submit {
   opacity: 0.5;
   padding: 2em;
 }
+
 .progressBlock:before {
   content: url("../images/spinner.gif");
 }

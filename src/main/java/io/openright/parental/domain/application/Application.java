@@ -16,11 +16,14 @@ public class Application {
     @Getter
     private final Instant createdAt;
 
-    @Getter
-    private final Instant updatedAt;
+    @Getter @Setter
+    private Instant updatedAt;
 
     @Getter
     private final String applicantId;
+
+    @Getter @Setter
+    private String status = "draft";
 
     @Getter
     private final JSONObject applicationForm;

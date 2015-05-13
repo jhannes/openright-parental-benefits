@@ -1,54 +1,56 @@
 <section id="applicationsSection">
-    <h2>Søknader</h2>
-    <table id="applications">
-        <thead>
-            <tr>
-                <td>Søker</td>
-                <td>Dato</td>
-                <td>Type</td>
-                <td>Status</td>
-                <td>Rediger</td>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+  <h2>Søknader</h2>
+  <table id="applications">
+    <thead>
+    <tr>
+      <td>Søker</td>
+      <td>Dato</td>
+      <td>Type</td>
+      <td>Status</td>
+      <td>Rediger</td>
+    </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 </section>
 
 <section id="newApplicationSection">
-    <h2>Ny søknad</h2>
-    <button id="createApplication">Send søknad om foreldrepenger</button>
+  <h2>Ny søknad</h2>
+  <button id="createApplication">Send søknad om foreldrepenger</button>
 </section>
 
 <script type="text/x-handlebars-template" id="applicationTemplate">
-    {{#each .}}
-    <tr>
-        <td>{{applicant}}</td>
-        <td>{{updatedAt}}</td>
-        <td>{{applicationType}}</td>
-        <td>{{status}}</td>
-        <td><button data-application-id="{{id}}">Rediger</button></td>
-    </tr>
-    {{/each}}
+  {{#each .}}
+  <tr>
+    <td>{{applicant}}</td>
+    <td>{{updatedAt}}</td>
+    <td>{{applicationType}}</td>
+    <td>{{status}}</td>
+    <td>
+      <button data-application-id="{{id}}">Rediger</button>
+    </td>
+  </tr>
+  {{/each}}
 </script>
 <script>
-$(function() {
-  var applicationTemplate = Handlebars.compile($("#applicationTemplate").html());
-  serverAPI.getJSON("applications").then(function(data) {
-    $("#applications").find("tbody").html(applicationTemplate(data.applications));
-  });
-  $("#applications").on("click", "button", function(e) {
-    e.preventDefault();
-    window.location.hash = "applications/edit/" + $(this).data("application-id");
-  });
-  $("#createApplication").click(function() {
-    serverAPI.postJSON("applications/", {}).then(function(data, textStatus, request) {
-      var location = request.getResponseHeader("Location");
-      var id = location.substring(location.lastIndexOf("/")+1);
-      console.log(id);
-      window.location.hash = "applications/edit/" + id;
-    }).fail(function() {
-      console.log("Failed to create stuff");
+  $(function () {
+    var applicationTemplate = Handlebars.compile($("#applicationTemplate").html());
+    serverAPI.getJSON("applications").then(function (data) {
+      $("#applications").find("tbody").html(applicationTemplate(data.applications));
+    });
+    $("#applications").on("click", "button", function (e) {
+      e.preventDefault();
+      window.location.hash = "applications/edit/" + $(this).data("application-id");
+    });
+    $("#createApplication").click(function () {
+      serverAPI.postJSON("applications/", {}).then(function (data, textStatus, request) {
+        var location = request.getResponseHeader("Location");
+        var id = location.substring(location.lastIndexOf("/") + 1);
+        console.log(id);
+        window.location.hash = "applications/edit/" + id;
+      }).fail(function () {
+        console.log("Failed to create stuff");
+      });
     });
   });
-});
 </script>

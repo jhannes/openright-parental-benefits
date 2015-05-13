@@ -1,11 +1,12 @@
 package io.openright.parental.server;
 
-import io.openright.parental.domain.users.AuthenticatedController;
-import io.openright.infrastructure.server.Controller;
-import io.openright.infrastructure.server.JsonResourceController;
+import io.openright.infrastructure.rest.ApiFrontController;
+import io.openright.infrastructure.rest.Controller;
+import io.openright.infrastructure.rest.JsonResourceController;
 import io.openright.parental.domain.application.ApplicationRepository;
 import io.openright.parental.domain.application.ApplicationResource;
 import io.openright.parental.domain.application.JdbcApplicationRepository;
+import io.openright.parental.domain.users.AuthenticatedController;
 import io.openright.parental.domain.users.LoginController;
 import lombok.SneakyThrows;
 
@@ -13,7 +14,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 
-public class ParentalBenefitsFrontController extends io.openright.infrastructure.server.ApiFrontController {
+public class ParentalBenefitsFrontController extends ApiFrontController {
 
     private ParentalBenefitsConfig config;
     private ApplicationRepository applicationRepository;
