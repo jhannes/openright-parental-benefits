@@ -80,7 +80,7 @@ public class AppConfigFile {
     }
 
     static Matcher parseDatabaseUrl(String databaseUrl) {
-        Pattern pattern = Pattern.compile("^(\\w+)://(\\w+):(\\w+)@(([-a-z0-9.]+):(\\d+)/(\\w+))$");
+        Pattern pattern = Pattern.compile("^([^:]+)://([^:]+):([^@]+)@(([-a-z0-9.]+):(\\d+)/(\\w+))$");
         Matcher matcher = pattern.matcher(databaseUrl);
         if (!matcher.matches()) {
             throw new RuntimeException("Unexpected database URL " + databaseUrl);
