@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -cp target/openright-parental-benefits-*-shaded.jar
+web: java $JAVA_OPTS -jar target/openright-parental-benefits-*-shaded.jar
