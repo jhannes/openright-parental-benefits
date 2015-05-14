@@ -13,20 +13,41 @@ import java.util.Optional;
 
 public class JdbcApplicationRepository implements ApplicationRepository {
     private final JdbcTable table;
+    private final JdbcTable revisionTable;
+    private final Database database;
 
     public JdbcApplicationRepository(ParentalBenefitsConfig config) {
-        this.table = new JdbcTable(config.getDatabase(), "Parental_Applications");
+        this.database = config.getDatabase();
+        this.table = new JdbcTable(database, "Parental_Applications");
+        this.revisionTable = new JdbcTable(database, "Parental_Application_Revisions");
     }
 
     @Override
     public void insert(Application application) {
-        application.setId(table.insertValues(row -> {
-            row.put("applicant_id", application.getApplicantId());
-            row.put("created_at", application.getCreatedAt());
-            row.put("updated_at", application.getUpdatedAt());
-            row.put("status", application.getStatus());
-            row.put("form", application.getApplicationForm());
-        }));
+        database.transactional(() -> {
+            long id = table.insertValues(row -> {
+                row.put("applicant_id", application.getApplicantId());
+                row.put("created_at", application.getCreatedAt());
+                row.put("updated_at", application.getUpdatedAt());
+                row.put("status", application.getStatus());
+            });
+            application.setId(id);
+            insertNewApplicationRevisions(application);
+        });
+    }
+
+    private void insertNewApplicationRevisions(Application application) {
+        for (ApplicationForm applicationForm : application.getApplicationHistory()) {
+            if (!applicationForm.isNewRow()) continue;
+            revisionTable.insertValues(row -> {
+                row.put("application_id", application.getId());
+                row.put("created_at", applicationForm.getCreatedAt());
+                row.put("user_id", applicationForm.getUserId());
+                row.put("form", applicationForm.getForm());
+                row.put("status", applicationForm.getStatus());
+            });
+            applicationForm.setNewRow(false);
+        }
     }
 
     @Override
@@ -36,7 +57,20 @@ public class JdbcApplicationRepository implements ApplicationRepository {
 
     @Override
     public Optional<Application> retrieve(Long id) {
-        return getTable().where("id", id).single(this::toApplication);
+        return getTable().where("id", id).single((row) -> {
+            Application application = toApplication(row);
+            application.setApplicationHistory(listApplicationHistory(application.getId()));
+            return application;
+        });
+    }
+
+    private List<ApplicationForm> listApplicationHistory(Long id) {
+        return revisionTable.where("application_id", id).orderBy("created_at")
+                .list(row -> new ApplicationForm(
+                        row.getString("user_id"),
+                        row.getString("status"),
+                        row.getJSON("form"),
+                        false));
     }
 
     private JdbcTable getTable() {
@@ -48,10 +82,13 @@ public class JdbcApplicationRepository implements ApplicationRepository {
 
     @Override
     public void update(Long id, Application application) {
-        application.setUpdatedAt(Instant.now());
-        getTable().where("id", id).updateValues(row -> {
-            row.put("status", application.getStatus());
-            row.put("form", application.getApplicationForm());
+        database.transactional(() -> {
+            application.setUpdatedAt(Instant.now());
+            getTable().where("id", id).updateValues(row -> {
+                row.put("updated_at", application.getUpdatedAt());
+                row.put("status", application.getStatus());
+            });
+            insertNewApplicationRevisions(application);
         });
     }
 
@@ -59,8 +96,7 @@ public class JdbcApplicationRepository implements ApplicationRepository {
         Application application = new Application(
                 row.getString("applicant_id"),
                 row.getInstant("created_at"),
-                row.getInstant("updated_at"),
-                row.getJSON("form"));
+                row.getInstant("updated_at"));
         application.setId(row.getLong("id"));
         application.setStatus(row.getString("status"));
         return application;

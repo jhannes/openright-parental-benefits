@@ -3,6 +3,7 @@ package io.openright.parental.domain.application;
 import io.openright.parental.domain.users.ApplicationUser;
 import io.openright.parental.domain.users.ApplicationUserRole;
 import io.openright.parental.server.ParentalBenefitsTestConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +15,7 @@ import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class JdbcApplicationRepositoryTest {
 
     private static final Random random = new Random();
@@ -23,16 +25,14 @@ public class JdbcApplicationRepositoryTest {
     private final ApplicationUser user = new ApplicationUser(samplePersonId(), null);
 
     @Before
-    public void clearUser() {
-        ApplicationUser.setCurrent(null);
+    public void runAsUser() {
+        ApplicationUser.setCurrent(user);
     }
 
     @Test
     public void shouldFindSavedApplication() throws Exception {
-        Application application = sampleApplication(user);
-        repository.insert(application);
+        Application application = insert(sampleApplication(user));
 
-        ApplicationUser.setCurrent(user);
         assertThat(repository.retrieve(application.getId()).get()).isEqualTo(application);
         assertThat(repository.retrieve(13243L)).isEmpty();
     }
@@ -47,33 +47,65 @@ public class JdbcApplicationRepositoryTest {
     }
 
     @Test
-    public void userOnlySeesOwnApplications() throws Exception {
-        ApplicationUser them = new ApplicationUser(samplePersonId(), null);
+    public void otherUserShouldNotSeeMyApplication() throws Exception {
+        ApplicationUser otherUser = new ApplicationUser(samplePersonId(), null);
 
-        Application mine = insert(sampleApplication(user));
-        Application theirs = insert(sampleApplication(them));
+        Application application = insert(sampleApplication(user));
 
-        ApplicationUser.setCurrent(user);
-        assertThat(repository.list())
-                .contains(mine)
-                .doesNotContain(theirs);
+        ApplicationUser.setCurrent(otherUser);
+        assertThat(repository.list()).doesNotContain(application);
+        assertThat(repository.retrieve(application.getId())).isEmpty();
     }
 
     @Test
     public void shouldUpdateApplication() throws Exception {
-        ApplicationUser.setCurrent(user);
         Application application = sampleApplication(user);
-        Instant updatedAt = Instant.now().minusSeconds(100);
-        application.setUpdatedAt(updatedAt);
         insert(application);
+        Instant originalUpdatedAt = application.getUpdatedAt();
 
         application.setStatus("approved");
+        Thread.sleep(10);
+        repository.update(application.getId(), application);
+        assertThat(application.getUpdatedAt()).isGreaterThan(originalUpdatedAt);
+
+        assertThat(repository.retrieve(application.getId()).get()).isEqualTo(application);
+    }
+
+    @Test
+    public void shouldAddRevision() throws Exception {
+        Application application = sampleApplication(user);
+        assertThat(application.getApplicationForm().keySet()).isEmpty();
+        application.addRevision("draft", new JSONObject().put("amount", 321));
+        application.addRevision("approved", new JSONObject().put("amount", 123));
+        assertThat(application.getStatus()).isEqualTo("approved");
+        assertThat(application.getApplicationForm().getInt("amount")).isEqualTo(123);
+    }
+
+    @Test
+    public void shouldAddNewRevisions() throws Exception {
+        Application application = sampleApplication(user);
+        application.addRevision("draft", new JSONObject().put("title", "originalTitle"));
+        Thread.sleep(10);
+        application.addRevision("draft", new JSONObject().put("title", "updatedTitle"));
+        insert(application);
+
+        Thread.sleep(10);
+        application.addRevision("submit", new JSONObject().put("title", "submittedTitle"));
         repository.update(application.getId(), application);
 
-        Application saved = repository.retrieve(application.getId()).get();
-        assertThat(saved.getStatus())
-                .isEqualTo(application.getStatus());
-        assertThat(saved.getCreatedAt()).isGreaterThan(updatedAt);
+        ApplicationUser.setCurrent(caseWorker);
+        application = repository.retrieve(application.getId()).get();
+        Thread.sleep(10);
+        application.addRevision("updated", new JSONObject().put("title", "updatedTitle"));
+        repository.update(application.getId(), application);
+
+        application = repository.retrieve(application.getId()).get();
+        assertThat(application.getStatus()).isEqualTo("updated");
+        assertThat(application.getApplicationForm().getString("title")).isEqualTo("updatedTitle");
+        assertThat(application.getApplicationHistory()).extracting("status")
+                .containsExactly("draft", "draft", "submit", "updated");
+        assertThat(application.getApplicationHistory()).extracting("userId")
+                .containsExactly(user.getPersonId(), user.getPersonId(), user.getPersonId(), caseWorker.getPersonId());
     }
 
     private static String samplePersonId() {
@@ -103,8 +135,7 @@ public class JdbcApplicationRepositoryTest {
     }
 
     private Application sampleApplication(ApplicationUser user) {
-        JSONObject applicationForm = new JSONObject().put("application", new JSONObject().put("name", "some name"));
-        return new Application(user.getPersonId(), Instant.now(), Instant.now(), applicationForm);
+        return new Application(user.getPersonId());
     }
 
     private Application insert(Application application) {

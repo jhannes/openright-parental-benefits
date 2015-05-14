@@ -3,8 +3,7 @@ create table Parental_Applications (
   applicant_id varchar(20) not null,
   status varchar(20) not null,
   created_at timestamp not null,
-  updated_at timestamp not null,
-  form json not null
+  updated_at timestamp not null
 );
 
 create index applications_created_at ON Parental_Applications(created_at);

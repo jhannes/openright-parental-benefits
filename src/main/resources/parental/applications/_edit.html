@@ -437,9 +437,6 @@
     body.on("click", "#saveApplication", function (e) {
       e.preventDefault();
       serverAPI.putJSON("applications/", id, $("#applicationForm").serializeObject())
-              .then(function () {
-                console.log("ok");
-              })
               .fail(function () {
                 alert("error");
               });

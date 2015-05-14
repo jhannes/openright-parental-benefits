@@ -1,11 +1,14 @@
 package io.openright.parental.domain.application;
 
+import io.openright.parental.domain.users.ApplicationUser;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.json.JSONObject;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @ToString
@@ -25,14 +28,21 @@ public class Application {
     @Getter @Setter
     private String status = "draft";
 
-    @Getter
-    private final JSONObject applicationForm;
+    @Getter @Setter
+    private List<ApplicationForm> applicationHistory = new ArrayList<>();
 
-    public Application(String applicantId, Instant createdAt, Instant updatedAt, JSONObject applicationForm) {
+    Application(String applicantId, Instant createdAt, Instant updatedAt) {
         this.applicantId = applicantId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.applicationForm = applicationForm;
+    }
+
+    public Application(String applicantId) {
+        this(applicantId, Instant.now());
+    }
+
+    private Application(String applicantId, Instant createdAt) {
+        this(applicantId, createdAt, createdAt);
     }
 
     public JSONObject toJSON() {
@@ -41,7 +51,7 @@ public class Application {
                 .put("applicant", applicantId)
                 .put("createdAt", createdAt)
                 .put("updatedAt", updatedAt)
-                .put("application", applicationForm);
+                .put("application", getApplicationForm());
     }
 
     @Override
@@ -49,8 +59,8 @@ public class Application {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Application that = (Application) o;
-        return Objects.equals(applicationForm.toString(), that.applicationForm.toString()) &&
-                Objects.equals(applicantId, that.applicantId) &&
+        return Objects.equals(applicantId, that.applicantId) &&
+                Objects.equals(status, that.status) &&
                 Objects.equals(createdAt, that.createdAt) &&
                 Objects.equals(updatedAt, that.updatedAt) &&
                 Objects.equals(id, that.id);
@@ -59,5 +69,21 @@ public class Application {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void addRevision(String status, JSONObject applicationForm) {
+        setStatus(status);
+        applicationHistory.add(new ApplicationForm(ApplicationUser.getCurrent().getPersonId(), status, applicationForm, true));
+    }
+
+    public List<ApplicationForm> getApplicationHistory() {
+        return applicationHistory;
+    }
+
+    public JSONObject getApplicationForm() {
+        if (applicationHistory == null || applicationHistory.isEmpty()) {
+            return new JSONObject();
+        }
+        return applicationHistory.get(applicationHistory.size()-1).getForm();
     }
 }

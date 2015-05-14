@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class Database {
 
@@ -186,6 +187,36 @@ public class Database {
         PGobject object = (PGobject) rs.getObject(columnName);
         return new JSONObject(new JSONTokener(object.getValue()));
 
+    }
+
+    public <T> T transactional(Supplier<T> supplier) {
+        if (threadConnection.get() != null) {
+            return supplier.get();
+        }
+
+        try (Connection conn = dataSource.getConnection()) {
+            conn.setAutoCommit(false);
+            T result = supplier.get();
+            conn.commit();
+            return result;
+        } catch (SQLException e) {
+            throw ExceptionUtil.soften(e);
+        }
+    }
+
+    public void transactional(Runnable runnable) {
+        if (threadConnection.get() != null) {
+            runnable.run();
+            return;
+        }
+
+        try (Connection conn = dataSource.getConnection()) {
+            conn.setAutoCommit(false);
+            runnable.run();
+            conn.commit();
+        } catch (SQLException e) {
+            throw ExceptionUtil.soften(e);
+        }
     }
 
     public <T> T doWithConnection(ConnectionCallback<T> object) {
