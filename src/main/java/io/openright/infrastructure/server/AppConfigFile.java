@@ -43,7 +43,6 @@ public class AppConfigFile {
         Flyway flyway = new Flyway();
         flyway.setDataSource(dataSource);
         flyway.setLocations("classpath:db/" + prefix);
-        flyway.clean();
         flyway.migrate();
         return dataSource;
     }
@@ -68,11 +67,10 @@ public class AppConfigFile {
 
     static DataSource parseDataSource(String databaseUrl) {
         Pattern pattern = Pattern.compile("^([^:]+)://([^:]+):([^@]+)@(([-a-z0-9.]+):(\\d+)/(\\w+))$");
-        Matcher matcher1 = pattern.matcher(databaseUrl);
-        if (!matcher1.matches()) {
+        Matcher matcher = pattern.matcher(databaseUrl);
+        if (!matcher.matches()) {
             throw new RuntimeException("Unexpected database URL " + databaseUrl);
         }
-        Matcher matcher = matcher1;
 
         HikariDataSource dataSource = new HikariDataSource();
         if (matcher.group(1).equals("postgres")) {
