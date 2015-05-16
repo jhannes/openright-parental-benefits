@@ -365,6 +365,7 @@
 
 </main>
 
+<footer id="notificationArea"></footer>
 <footer id="submit">
   <button id="saveApplication">Lagre søknad</button>
   <button>Fuilfør søknad</button>
@@ -428,7 +429,7 @@
       }
     });
 
-    body.on("change", ".startSharedPeriod", function (e) {
+    body.on("change", ".startSharedPeriod", function () {
       if ($(this).val()) {
         $(this).closest(".periodDateRange").find(".endSharedPeriod").attr("min",
                 new Date($(this).val()).addDays(1).toISODate());
@@ -443,6 +444,14 @@
               });
     });
 
+    $('#notificationArea').hover(function() {
+      $(this).stop(true).fadeIn();
+    }, function() {
+      $(this).stop(true).delay(5000).fadeOut(2000);
+    });
+    $('#notificationArea').click(function() {
+      $(this).fadeOut(350);
+    });
 
     var sharedLeavePeriod = Handlebars.compile($("#sharedLeavePeriodPartial").html());
     Handlebars.registerPartial("sharedLeave", $("#sharedLeavePeriodPartial").html());
@@ -473,6 +482,10 @@
       $(".optionalToggle[value=true]:checked").each(function () {
         $(this).closest("div").find(".optionalInformation").show();
       });
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+      var message = $("<div class='error'><span class='icon fa'></span> <h2>Error:</h2> " + errorThrown + "</div>");
+      $("#notificationArea").stop(true).hide().empty().append(message)
+              .slideDown(300).delay(5000).fadeOut(2500);
     });
   });
 </script>

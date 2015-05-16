@@ -2,6 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Foreldrepenger</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 </head>
 <body>
     <section id="main">
@@ -15,15 +16,6 @@
     <script type="text/x-handlebars-template" id="loading-template">
         <div>Loading...</div>
     </script>
-
-    <script type="text/x-handlebars-template" id="notification-template">
-        <div class="notify {{type}}">
-            <h1>{{title}}</h1>
-            <span class="alerticon fa fa-3x"></span>
-            <p>{{message}}</p>
-        </div>
-    </script>
-
 
 </body>
 <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
@@ -39,12 +31,6 @@ $(function() {
         window.location.hash = "applications";
     }
     displayCurrentLocation();
-
-    $('#notifications').on('click', '.notify', function() {
-      $(this).fadeOut(350, function() {
-        $(this).remove();
-      });
-    });
 });
 
 var currentId = function() {
@@ -54,10 +40,9 @@ var currentId = function() {
   } else {
     return null;
   }
-}
+};
 
 var displayCurrentLocation = function() {
-  $("#notifications .notify").fadeOut().empty();
   $("#content").html(loadingTemplate());
 
   var parts = window.location.hash.substring(1).split(/\//);
@@ -74,19 +59,5 @@ var displayCurrentLocation = function() {
     $("nav a[href='#" + parts[0] + "']").closest("li").addClass("active");
   });
 }
-
-
-  var notificationTemplate = Handlebars.compile($("#notification-template")
-      .html());
-  var notify = function(type, title, message) {
-    var notification = notificationTemplate({
-      type : type || 'error',
-      title : title,
-      message : message
-    });
-    $("#notifications").prepend(notification);
-    var elem = $("#notifications .notify:first");
-    elem.hide().slideDown(1000);
-  }
 </script>
 </html>

@@ -12,7 +12,7 @@
 }
 
 #personalInformation div {
-  padding: 0em 1em;
+  padding: 0 1em;
   display: inline-block;
   vertical-align: top;
   line-height: 0.8em;
@@ -36,13 +36,12 @@ input[type=number] {
 
 button {
   background: #333388;
-  border-color: #333388;
   border: 1px solid transparent;
   border-radius: 4px;
   color: white;
   padding: 0.5em 1em;
   font-weight: bold;
-  vertical-align: center;
+  vertical-align: central;
   text-align: center;
 }
 
@@ -65,7 +64,7 @@ select {
 
 .subform-container {
   background-color: silver;
-  padding: 0.2 1em;
+  padding: 0.2em 1em;
   margin: 1em;
 }
 
@@ -77,12 +76,42 @@ main {
   margin-bottom: 3em;
 }
 
+footer#notificationArea {
+  display: none;
+  position: fixed;
+  height: 2.5em;
+  line-height: 2.5em;
+  bottom: 2.5em;
+  width: 100%;
+  z-index: 100;
+}
+footer#notificationArea div {
+  margin: 0 2em;
+  padding: 0 2em;
+  height: 2.5em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+footer#notificationArea div.error {
+  background: pink;
+  border: red solid 1px;
+}
+footer#notificationArea div.error .icon:before { content:"\f06a"; }
+
+
+footer#notificationArea h2 {
+  display: inline;
+  font-weight: bold;
+
+}
+
 footer#submit {
   background: lightblue;
   height: 2.5em;
   line-height: 2.5em;
   position: fixed;
-  bottom: 0px;
+  bottom: 0;
   width: 100%;
   text-align: center;
 }
