@@ -364,6 +364,7 @@
 
 
 </main>
+
 <footer id="submit">
   <button id="saveApplication">Lagre søknad</button>
   <button>Fuilfør søknad</button>
@@ -467,8 +468,10 @@
         var e = $(this);
         e.find("option[value='" + e.data("current-value") + "']").attr("selected", "selected");
       });
-      $(".optionalToggle").each(function () {
-        $(this).closest("div").find(".optionalInformation").show($(this).val() === "true");
+
+      $(".optionalInformation").hide();
+      $(".optionalToggle[value=true]:checked").each(function () {
+        $(this).closest("div").find(".optionalInformation").show();
       });
     });
   });
