@@ -133,3 +133,23 @@ footer#submit {
   content: url("../images/spinner.gif");
 }
 
+/* TODO: Show when screen is bigger */
+#applicationForm section .details {
+  display: none;
+}
+
+#applicationForm h1 {
+  cursor: pointer;
+}
+
+.explanation {
+  cursor: pointer;
+  font: normal normal normal 14px/1 FontAwesome;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translate(0, 0);
+}
+
+.explanation:before {
+  content: "\f05a";
+}

@@ -29,16 +29,6 @@
   <script id="applicationFormTemplate" type="text/x-handlebars-template">
 
     <form id="applicationForm">
-      <section>
-        <div>
-          <label>Kjønn (For testformål):
-            <select name="application[gender]" id="applicationGender" data-current-value="{{gender}}">
-              <option value="application-gender-female">Kvinne</option>
-              <option value="application-gender-male">Mann</option>
-            </select>
-          </label>
-        </div>
-      </section>
 
       <section id="personalInformation">
         <div>
@@ -89,42 +79,44 @@
       <section id="residency">
         <h1>Oppholdsted</h1>
 
-        <h2>Oppholder du deg i Norge?</h2>
-        <label><input type="radio" required name="application[domesticResidency]" value="true"
-                      data-current-value="{{domesticResidency}}">Ja</label>
-        <label><input type="radio" required name="application[domesticResidency]" value="false"
-                      data-current-value="{{domesticResidency}}">Nei</label>
+        <div class="details">
+          <h2>Oppholder du deg i Norge?</h2>
+          <label><input type="radio" required name="application[domesticResidency]" value="true"
+                        data-current-value="{{domesticResidency}}">Ja</label>
+          <label><input type="radio" required name="application[domesticResidency]" value="false"
+                        data-current-value="{{domesticResidency}}">Nei</label>
 
-        <div>
-          <h2>Har du oppholdt deg sammenhengende i Norge de siste 12 månedene? <a class="explanation"></a></h2>
-          <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][pastStay]"
-                        value="false"
-                        data-current-value="{{nonDomestic.pastStay}}">Ja</label>
-          <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][pastStay]"
-                        value="true"
-                        data-current-value="{{nonDomestic.pastStay}}">Nei</label>
+          <div>
+            <h2>Har du oppholdt deg sammenhengende i Norge de siste 12 månedene? <a class="explanation"></a></h2>
+            <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][pastStay]"
+                          value="false"
+                          data-current-value="{{nonDomestic.pastStay}}">Ja</label>
+            <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][pastStay]"
+                          value="true"
+                          data-current-value="{{nonDomestic.pastStay}}">Nei</label>
 
-          <div class="optionalInformation">
-            <label for="country-past-location">Hvilket land har du opphold deg i?</label>
-            <textarea id="country-past-location" name="application[nonDomestic][pastLocation]">{{nonDomestic.pastLocation}}</textarea>
+            <div class="optionalInformation">
+              <label for="country-past-location">Hvilket land har du opphold deg i?</label>
+              <textarea id="country-past-location" name="application[nonDomestic][pastLocation]">{{nonDomestic.pastLocation}}</textarea>
+            </div>
           </div>
-        </div>
 
 
-        <div>
-          <h2>Kommer du til å oppholde deg sammenhengende i Norge de neste 12 månedene eller mer? <a
-                  class="explanation"></a></h2>
-          <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][plannedStay]"
-                        value="false"
-                        data-current-value="{{nonDomestic.plannedStay}}">Ja</label>
-          <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][plannedStay]"
-                        value="true"
-                        data-current-value="{{nonDomestic.plannedStay}}">Nei</label>
+          <div>
+            <h2>Kommer du til å oppholde deg sammenhengende i Norge de neste 12 månedene eller mer? <a
+                    class="explanation"></a></h2>
+            <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][plannedStay]"
+                          value="false"
+                          data-current-value="{{nonDomestic.plannedStay}}">Ja</label>
+            <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][plannedStay]"
+                          value="true"
+                          data-current-value="{{nonDomestic.plannedStay}}">Nei</label>
 
-          <div class="optionalInformation">
-            <label for="country-future-location">Hvilket land skal du oppholde deg i?</label>
-                        <textarea id="country-future-location" name="application[nonDomestic][plannedLocation]"
-                                >{{nonDomestic.plannedLocation}}</textarea>
+            <div class="optionalInformation">
+              <label for="country-future-location">Hvilket land skal du oppholde deg i?</label>
+                          <textarea id="country-future-location" name="application[nonDomestic][plannedLocation]"
+                                  >{{nonDomestic.plannedLocation}}</textarea>
+            </div>
           </div>
         </div>
       </section>
@@ -132,10 +124,10 @@
       <section id="income">
         <h1>Arbeid og/eller annen inntekt</h1>
 
-        <div>
-
+        <div class="details">
           <h2>Har du vært i arbeid de siste 10 månedene før du starter uttaket av feriepengene? <a
                   class="explanation"></a></h2>
+
           <label><input type="radio" required class="optionalToggle" name="application[workedLast10Months]" value="true"
                         data-current-value="{{workedLast10Months}}">Ja</label>
           <label><input type="radio" required class="optionalToggle" name="application[workedLast10Months]"
@@ -215,118 +207,120 @@
       <section id="permissionPeriod">
         <h1>Permisjonsperiode</h1>
 
-        <div class="gender-female">
-          <h2>Når har du termin</h2>
+        <div class="details">
+          <div class="gender-female">
+            <h2>Når har du termin</h2>
 
-          <p><input type="date" required name="application[dueDate]" id="dueDate" value="{{dueDate}}" min="2015-05-10"/>
+            <p><input type="date" required name="application[dueDate]" id="dueDate" value="{{dueDate}}" min="2015-05-10"/>
+            </p>
+
+
+            <h2>Hvor mange barn venter du?</h2>
+
+            <p><input width="1" type="number" min="1" name="application[expectedChildren]"
+                      value="{{expectedChildren}}"/></p>
+          </div>
+
+          <h2>Hvilken dekningsgrad ønsker du? <a class="explanation"
+                                                 title="Foreldrene må velge lik dekningsgrad. Denne vil gjelde for hele stønadsperioden og kan ikke endres. Dekningsgrad på 100% gir en høyere samlet utbetaling enn 80%"></a>
+          </h2>
+
+          <p>
+            <select name="application[coveragePercentage]" data-current-value="{{coveragePercentage}}">
+              <option value="80">80% dekningsgrad i 59 uker</option>
+              <option value="100">100% dekningsgrad i 46 uker</option>
+            </select>
           </p>
 
+          <h2>Når vil du starte uttaket av foreldrepenger?</h2>
 
-          <h2>Hvor mange barn venter du?</h2>
+          <p><input type="date" name="application[startDate]" id="leaveStartDate" value="{{startDate}}"/></p>
 
-          <p><input width="1" type="number" min="1" name="application[expectedChildren]"
-                    value="{{expectedChildren}}"/></p>
-        </div>
+          <div id="leaveStartInfo"></div>
 
-        <h2>Hvilken dekningsgrad ønsker du? <a class="explanation"
-                                               data-helptext="Foreldrene må velge lik dekningsgrad. Denne vil gjelde for hele stønadsperioden og kan ikke endres. Dekningsgrad på 100% gir en høyere samlet utbetaling enn 80%"></a>
-        </h2>
+          <div class="gender-female">
+            <div>
+              <h2>Skal du ta ut hele mødrekvoten (10 uker) umiddelbart etter fødsel?</h2>
+              <label><input type="radio" required class="optionalToggle"
+                            name="application[leavePeriod][changeMaternityDefault]" value="false"
+                            data-current-value="{{leavePeriod.changeMaternityDefault}}">Ja</label>
+              <label><input type="radio" required class="optionalToggle"
+                            name="application[leavePeriod][changeMaternityDefault]" value="true"
+                            data-current-value="{{leavePeriod.changeMaternityDefault}}">Nei</label>
 
-        <p>
-          <select name="application[coveragePercentage]" data-current-value="{{coveragePercentage}}">
-            <option value="80">80% dekningsgrad i 59 uker</option>
-            <option value="100">100% dekningsgrad i 46 uker</option>
-          </select>
-        </p>
+              <div class="optionalInformation">
+                <p>De neste seks ukene fram til 25. juni må tas rett etter fødselen</p>
 
-        <h2>Når vil du starte uttaket av foreldrepenger?</h2>
+                <h2>Når ønsker du å starte øvrige fire ukene av mødrekvoten?</h2>
 
-        <p><input type="date" name="application[startDate]" id="leaveStartDate" value="{{startDate}}"/></p>
-
-        <div id="leaveStartInfo"></div>
-
-        <div class="gender-female">
-          <div>
-            <h2>Skal du ta ut hele mødrekvoten (10 uker) umiddelbart etter fødsel?</h2>
-            <label><input type="radio" required class="optionalToggle"
-                          name="application[leavePeriod][changeMaternityDefault]" value="false"
-                          data-current-value="{{leavePeriod.changeMaternityDefault}}">Ja</label>
-            <label><input type="radio" required class="optionalToggle"
-                          name="application[leavePeriod][changeMaternityDefault]" value="true"
-                          data-current-value="{{leavePeriod.changeMaternityDefault}}">Nei</label>
-
-            <div class="optionalInformation">
-              <p>De neste seks ukene fram til 25. juni må tas rett etter fødselen</p>
-
-              <h2>Når ønsker du å starte øvrige fire ukene av mødrekvoten?</h2>
-
-              <p><input type="date" id="startMaternityPeriod" name="application[leavePeriod][maternity][][start]"/></p>
-            </div>
-          </div>
-
-          <div>
-            <h2>Skal du ta ut hele fellesperioden umiddelbart etter mødrekvoten?</h2>
-            <label><input type="radio" required class="optionalToggle"
-                          name="application[leavePeriod][changeSharedLeaveDefault]" value="false"
-                          data-current-value="{{leavePeriod.changeSharedLeaveDefault}}">Ja</label>
-            <label><input type="radio" required class="optionalToggle"
-                          name="application[leavePeriod][changeSharedLeaveDefault]" value="true"
-                          data-current-value="{{leavePeriod.changeSharedLeaveDefault}}">Nei</label>
-
-            <div class="optionalInformation">
-              <h2>Hvilke perioder ønsker du å ta ut fra felleskvoten?</h2>
-
-              <div id="sharedLeavePeriods">
-                {{#each leavePeriod.shared}}
-                {{> sharedLeave}}
-                {{/each}}
+                <p><input type="date" id="startMaternityPeriod" name="application[leavePeriod][maternity][][start]"/></p>
               </div>
-              <button id="addSharedLeavePeriod">Legg til periode</button>
-            </div>
-          </div>
-
-          <div>
-            <h2>Søker du om overføring av fedrekvoten (10 uker) til deg?</h2>
-            <label><input type="radio" required class="optionalToggle"
-                          name="application[leavePeriod][convertPaternity][convertPaternityLeaveToMaternityLeave]"
-                          value="true"
-                          data-current-value="{{leavePeriod.convertPaternity.convertPaternityLeaveToMaternityLeave}}">Ja</label>
-            <label><input type="radio" required class="optionalToggle"
-                          name="application[leavePeriod][convertPaternity][convertPaternityLeaveToMaternityLeave]"
-                          value="false"
-                          data-current-value="{{leavePeriod.convertPaternity.convertPaternityLeaveToMaternityLeave}}">Nei</label>
-
-            <div class="optionalInformation">
-              <h2>Årsak til overføring av fedrekvote</h2>
-              <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="singleParent"
-                            data-current-value="{{leavePeriod.convertPaternity.reason}}">Aleneomsorg for
-                barnet/barna</label>
-              <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]"
-                            value="fatherNotEligible"
-                            data-current-value="{{leavePeriod.convertPaternity.reason}}">Far har ikke rett til
-                foreldrepenger</label>
-              <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]"
-                            value="fatherInstitutionalized"
-                            data-current-value="{{leavePeriod.convertPaternity.reason}}">Far er innlagt på
-                helseinstitusjon</label>
-              <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="fatherIllness"
-                            data-current-value="{{leavePeriod.convertPaternity.reason}}">Far er på grunn av sykdom helt
-                avhengig av hjelp for å ta seg av barnet/barna</label>
             </div>
 
+            <div>
+              <h2>Skal du ta ut hele fellesperioden umiddelbart etter mødrekvoten?</h2>
+              <label><input type="radio" required class="optionalToggle"
+                            name="application[leavePeriod][changeSharedLeaveDefault]" value="false"
+                            data-current-value="{{leavePeriod.changeSharedLeaveDefault}}">Ja</label>
+              <label><input type="radio" required class="optionalToggle"
+                            name="application[leavePeriod][changeSharedLeaveDefault]" value="true"
+                            data-current-value="{{leavePeriod.changeSharedLeaveDefault}}">Nei</label>
 
-            <div class="optionalInformation">
-              <h2>Hvilke perioder ønsker du å ta ut fedrekvoten?</h2>
+              <div class="optionalInformation">
+                <h2>Hvilke perioder ønsker du å ta ut fra felleskvoten?</h2>
 
-              <div>
-                <label>Fra og med</label>
-
-                <p><input type="date" value="2015-07-09" name="application[leavePeriod][paternity][][start]"/></p>
-                <label>Til og med</label>
-
-                <p><input type="date" name="application[leavePeriod][paternity][][end]"/></p>
+                <div id="sharedLeavePeriods">
+                  {{#each leavePeriod.shared}}
+                  {{> sharedLeave}}
+                  {{/each}}
+                </div>
+                <button id="addSharedLeavePeriod">Legg til periode</button>
               </div>
-              <button>Legg til periode</button>
+            </div>
+
+            <div>
+              <h2>Søker du om overføring av fedrekvoten (10 uker) til deg?</h2>
+              <label><input type="radio" required class="optionalToggle"
+                            name="application[leavePeriod][convertPaternity][convertPaternityLeaveToMaternityLeave]"
+                            value="true"
+                            data-current-value="{{leavePeriod.convertPaternity.convertPaternityLeaveToMaternityLeave}}">Ja</label>
+              <label><input type="radio" required class="optionalToggle"
+                            name="application[leavePeriod][convertPaternity][convertPaternityLeaveToMaternityLeave]"
+                            value="false"
+                            data-current-value="{{leavePeriod.convertPaternity.convertPaternityLeaveToMaternityLeave}}">Nei</label>
+
+              <div class="optionalInformation">
+                <h2>Årsak til overføring av fedrekvote</h2>
+                <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="singleParent"
+                              data-current-value="{{leavePeriod.convertPaternity.reason}}">Aleneomsorg for
+                  barnet/barna</label>
+                <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]"
+                              value="fatherNotEligible"
+                              data-current-value="{{leavePeriod.convertPaternity.reason}}">Far har ikke rett til
+                  foreldrepenger</label>
+                <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]"
+                              value="fatherInstitutionalized"
+                              data-current-value="{{leavePeriod.convertPaternity.reason}}">Far er innlagt på
+                  helseinstitusjon</label>
+                <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="fatherIllness"
+                              data-current-value="{{leavePeriod.convertPaternity.reason}}">Far er på grunn av sykdom helt
+                  avhengig av hjelp for å ta seg av barnet/barna</label>
+              </div>
+
+
+              <div class="optionalInformation">
+                <h2>Hvilke perioder ønsker du å ta ut fedrekvoten?</h2>
+
+                <div>
+                  <label>Fra og med</label>
+
+                  <p><input type="date" value="2015-07-09" name="application[leavePeriod][paternity][][start]"/></p>
+                  <label>Til og med</label>
+
+                  <p><input type="date" name="application[leavePeriod][paternity][][end]"/></p>
+                </div>
+                <button>Legg til periode</button>
+              </div>
             </div>
           </div>
         </div>
@@ -335,28 +329,33 @@
       <section id="otherParent">
         <h1>Den andre forelderen</h1>
 
-        <h2>Navn</h2>
+        <div class="details">
 
-        <p><input type="text" name="application[otherParent][name]" value="{{otherParent.name}}"/></p>
+          <h2>Navn</h2>
 
-        <h2>Fødselsnummer</h2>
+          <p><input type="text" name="application[otherParent][name]" value="{{otherParent.name}}"/></p>
 
-        <p><input type="text" pattern="[0-9]{12}" name="application[otherParent][personNumber]"
-                  value="{{otherParent.personNumber}}"/></p>
+          <h2>Fødselsnummer</h2>
 
-        <h2>Er den andre forelderen gjort kjent med hvilke perioder med foreldrepenger du har søkt om?</h2>
-        <label><input type="radio" name="application[otherParent][isInformed]" value="true"
-                      data-current-value="{{otherParent.isInformed}}">Ja</label>
-        <label><input type="radio" name="application[otherParent][isInformed]" value="false"
-                      data-current-value="{{otherParent.isInformed}}">Nei</label>
+          <p><input type="text" pattern="[0-9]{12}" name="application[otherParent][personNumber]"
+                    value="{{otherParent.personNumber}}"/></p>
+
+          <h2>Er den andre forelderen gjort kjent med hvilke perioder med foreldrepenger du har søkt om?</h2>
+          <label><input type="radio" name="application[otherParent][isInformed]" value="true"
+                        data-current-value="{{otherParent.isInformed}}">Ja</label>
+          <label><input type="radio" name="application[otherParent][isInformed]" value="false"
+                        data-current-value="{{otherParent.isInformed}}">Nei</label>
+        </div>
       </section>
 
       <section id="additionalInformation">
         <h1>Eventuelle tilleggsopplysninger</h1>
 
-        <h2>Er det noe som ikke er gjort rede for i skjemaet som du mener NAV burde være klar over?</h2>
+        <div class="details">
+          <h2>Er det noe som ikke er gjort rede for i skjemaet som du mener NAV burde være klar over?</h2>
 
-        <p><textarea cols=60 rows=6 name="application[otherInformation]">{{otherInformation}}</textarea></p>
+          <p><textarea cols=60 rows=6 name="application[otherInformation]">{{otherInformation}}</textarea></p>
+        </div>
       </section>
 
     </form>
@@ -403,12 +402,20 @@
       $("#leaveStartDate").attr("min", new Date(date).addWeeks(-12).toISODate());
       $("#leaveStartDate").attr("max", new Date(date).addWeeks(-3).toISODate());
 
+      $("#motherQuotaEndDate").attr("min", new Date(date).addWeeks(6).toISODate());
+      $("#motherQuotaEndDate").attr("max", new Date(date).addWeeks(7).toISODate());
+      $("#motherQuotaEndDate").val(new Date(date).addWeeks(7).toISODate());
+
       var leaveStartInfo =
               Handlebars.compile("Du kan tidligst starte uttaket av foreldrepenger {{min}} (12 uker før termin) og senest {{max}} (3 uker før termin)");
       var min = new Date(date).addWeeks(-12).toString("m");
       var max = new Date(date).addWeeks(-3).toString("m");
       $("#leaveStartInfo").text(leaveStartInfo({min: min, max: max}));
     });
+
+    body.on("click", "#applicationForm h1", function() {
+      $(this).closest("section").find(".details").toggle();
+    })
 
     body.on("change", "#dueDate", function () {
       $("#startMaternityPeriod").val(plusWeeksIso($(this).val(), 6));
@@ -452,6 +459,8 @@
     $('#notificationArea').click(function() {
       $(this).fadeOut(350);
     });
+
+
 
     var sharedLeavePeriod = Handlebars.compile($("#sharedLeavePeriodPartial").html());
     Handlebars.registerPartial("sharedLeave", $("#sharedLeavePeriodPartial").html());
