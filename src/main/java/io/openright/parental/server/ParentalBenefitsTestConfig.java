@@ -9,7 +9,7 @@ public class ParentalBenefitsTestConfig extends ParentalBenefitsConfigFile {
 
     private static ParentalBenefitsTestConfig parentalBenefitsTestConfig = new ParentalBenefitsTestConfig();
 
-    private ParentalBenefitsTestConfig() {
+    public ParentalBenefitsTestConfig() {
         super(new File("test-parental-benefits.properties"));
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();

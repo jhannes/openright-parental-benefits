@@ -1,5 +1,6 @@
 package io.openright.infrastructure.rest;
 
+import lombok.NonNull;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -11,9 +12,10 @@ import java.io.IOException;
 import java.io.Writer;
 
 public class JsonResourceController implements Controller {
-    private ResourceApi resourceApi;
+    @NonNull
+    private final ResourceApi resourceApi;
 
-    public JsonResourceController(ResourceApi applicationApi) {
+    public JsonResourceController(@NonNull ResourceApi applicationApi) {
         this.resourceApi = applicationApi;
     }
 
@@ -31,19 +33,23 @@ public class JsonResourceController implements Controller {
     }
 
     private void getResource(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String[] parts = req.getPathInfo().split("/");
-        if (parts.length > 2) {
-            sendResponse(resp, resourceApi.getResource(parts[2]));
+        String id = getResourceId(req);
+        if (id != null) {
+            sendResponse(resp, resourceApi.getResource(id));
         } else {
             sendResponse(resp, resourceApi.listResources());
         }
     }
 
-    private void updateResource(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected String getResourceId(HttpServletRequest req) {
         String[] parts = req.getPathInfo().split("/");
+        return parts.length > 2 ? parts[2] : null;
+    }
+
+    private void updateResource(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (BufferedReader reader = req.getReader()) {
             JSONObject jsonObject = new JSONObject(new JSONTokener(reader));
-            resourceApi.updateResource(parts[2], jsonObject);
+            resourceApi.updateResource(getResourceId(req), jsonObject);
             resp.setStatus(HttpServletResponse.SC_OK);
         }
     }

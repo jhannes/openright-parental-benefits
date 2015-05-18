@@ -2,6 +2,7 @@ package io.openright.parental.domain.application;
 
 import io.openright.infrastructure.rest.RequestException;
 import io.openright.infrastructure.rest.ResourceApi;
+import io.openright.parental.domain.applicant.ApplicantGateway;
 import io.openright.parental.domain.users.ApplicationUser;
 import org.json.JSONObject;
 
@@ -10,10 +11,12 @@ import java.util.stream.Collectors;
 
 public class ApplicationResource implements ResourceApi {
 
-    private ApplicationRepository applicationRepository;
+    private final ApplicationRepository applicationRepository;
+    private final ApplicantGateway applicantGateway;
 
-    public ApplicationResource(ApplicationRepository applicationRepository) {
+    public ApplicationResource(ApplicationRepository applicationRepository, ApplicantGateway applicantGateway) {
         this.applicationRepository = applicationRepository;
+        this.applicantGateway = applicantGateway;
     }
 
     @Override
@@ -25,9 +28,10 @@ public class ApplicationResource implements ResourceApi {
 
     @Override
     public JSONObject getResource(String id) {
-        return applicationRepository.retrieve(Long.valueOf(id))
-                .orElseThrow(RequestException.notFound(Application.class, id))
-                .toJSON();
+        Application application = applicationRepository.retrieve(Long.valueOf(id))
+                .orElseThrow(RequestException.notFound(Application.class, id));
+        return application.toJSON()
+                .put("applicant", applicantGateway.retrieve(application.getApplicantId()).get().toJSON());
     }
 
     @Override

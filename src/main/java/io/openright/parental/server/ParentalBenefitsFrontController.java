@@ -3,6 +3,8 @@ package io.openright.parental.server;
 import io.openright.infrastructure.rest.ApiFrontController;
 import io.openright.infrastructure.rest.Controller;
 import io.openright.infrastructure.rest.JsonResourceController;
+import io.openright.parental.domain.applicant.ApplicantGateway;
+import io.openright.parental.domain.applicant.RestApplicantGateway;
 import io.openright.parental.domain.application.ApplicationRepository;
 import io.openright.parental.domain.application.ApplicationResource;
 import io.openright.parental.domain.application.JdbcApplicationRepository;
@@ -18,12 +20,14 @@ public class ParentalBenefitsFrontController extends ApiFrontController {
 
     private ParentalBenefitsConfig config;
     private ApplicationRepository applicationRepository;
+    private ApplicantGateway applicantGateway;
 
     @Override
     @SneakyThrows(NamingException.class)
     public void init() throws ServletException {
         this.config = (ParentalBenefitsConfig)new InitialContext().lookup("parental/config");
         this.applicationRepository = new JdbcApplicationRepository(config);
+        this.applicantGateway = new RestApplicantGateway(config);
     }
 
     @Override
@@ -38,7 +42,7 @@ public class ParentalBenefitsFrontController extends ApiFrontController {
 
     private Controller createApplicationController() {
         return new AuthenticatedController(
-                new JsonResourceController(new ApplicationResource(applicationRepository)));
+                new JsonResourceController(new ApplicationResource(applicationRepository, applicantGateway)));
     }
 
 }

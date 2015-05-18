@@ -10,17 +10,15 @@
 <form id="loginForm">
   <h2>Logg inn som enkeltperson</h2>
 
-  <ul>
-    <li>
-      <button data-person-id="12345678901">Kari Normann</button>
-    </li>
-    <li>
-      <button data-person-id="98765432101">Ola Normann</button>
-    </li>
-    <li>
-      <button data-person-id="98765432101">Ola Svenske</button>
-    </li>
-  </ul>
+  <input id="personId" list="applicants">
+  <datalist id="applicants">
+    <option>06015707439</option>
+    <option>23127946732</option>
+    <option>17048316526</option>
+    <option>29017376771</option>
+  </datalist>
+
+  <button>Logg inn</button>
 
   <h2>Logg inn som saksbehandler</h2>
 
@@ -38,9 +36,9 @@
 <script src="../scripts/parental.js"></script>
 <script>
   $(function () {
-    $("#loginForm button").click(function (e) {
+    $("#loginForm").submit(function (e) {
       e.preventDefault();
-      serverAPI.postJSON("login", {personId: $(this).data("person-id").toString()})
+      serverAPI.postJSON("login", {personId: $("#personId").val()})
               .then(function () {
                 window.location = getParameterByName("targetURL");
               });

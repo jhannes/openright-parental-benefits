@@ -1,7 +1,18 @@
 package io.openright.infrastructure.util;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
+import java.util.Optional;
 
 public class IOUtil {
     public static File extractResourceFile(String filename) {
@@ -21,12 +32,35 @@ public class IOUtil {
         }
     }
 
-    public static String toString(URL url) {
-        try (InputStream content = (InputStream) url.getContent()) {
-            return toString(content);
+    public static Optional<String> toString(URI uri) {
+        try {
+            return toString(uri.toURL());
         } catch (IOException e) {
             throw ExceptionUtil.soften(e);
         }
+    }
+
+    public static Optional<String> toString(URL url) {
+        try {
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            if (conn.getResponseCode() == 204) {
+                return Optional.empty();
+            }
+            try (Reader content = getReader(conn)) {
+                return Optional.of(toString(content));
+            }
+        } catch (IOException e) {
+            throw ExceptionUtil.soften(e);
+        }
+    }
+
+    private static Reader getReader(HttpURLConnection conn) throws IOException {
+        String contentType = conn.getHeaderField("Content-Type");
+        if (contentType != null && contentType.contains("; charset=")) {
+            String charset = contentType.substring(contentType.indexOf("; charset=") + "; charset=".length());
+            return new InputStreamReader(conn.getInputStream(), charset);
+        }
+        return new InputStreamReader(conn.getInputStream());
     }
 
     public static String toString(InputStream content) {
@@ -83,4 +117,5 @@ public class IOUtil {
             throw ExceptionUtil.soften(e);
         }
     }
+
 }

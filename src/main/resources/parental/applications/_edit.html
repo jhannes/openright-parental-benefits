@@ -9,9 +9,37 @@
 
 <header>
   <h1>Søknad om foreldrepenger i forbindelse med fødsel</h1>
-
-  <h2>Hei Kari Normann</h2>
 </header>
+
+<script id="applicantTemplate" type="text/x-handlebars-template">
+  <section id="applicant">
+    <h2>Hei {{name}}</h2>
+  </section>
+  <section id="personalInformation">
+
+    <div>
+      <h2>Addresse</h2>
+      <p>{{address.streetAddress}}</p>
+      <p>{{address.postalCode}} {{address.postalArea}}</p>
+    </div>
+
+    <div>
+      <h2>Telefon</h2>
+      <p>{{contactPhone}}</p>
+      <h2>E-post</h2>
+      <p>{{email}}</p>
+    </div>
+
+    <div>
+      <h2>Kontonummer</h2>
+      <p>{{accountNumber}}</p>
+    </div>
+
+    <div>
+      <button>Endre</button>
+    </div>
+  </section>
+</script>
 
 <main>
   <script id="leavePeriodTemplate" type="text/x-handlebars-template">
@@ -26,29 +54,6 @@
 
     <form id="applicationForm">
 
-      <section id="personalInformation">
-        <div>
-          <h2>Addresse</h2>
-          <p>Gateveien 1</p>
-          <p>0123 Oslo</p>
-        </div>
-
-        <div>
-          <h2>Telefon</h2>
-          <p>999 00 999</p>
-          <h2>E-post</h2>
-          <p>kari.norman@gmail.com</p>
-        </div>
-
-        <div>
-          <h2>Kontonummer</h2>
-          <p>1234 56 78901</p>
-        </div>
-
-        <div>
-          <button>Endre</button>
-        </div>
-      </section>
 
       <section id="applicationCategory">
         <h2>Hva søker du om?</h2>
@@ -411,9 +416,8 @@
       leaveCategory.find(".startDate")
               .attr("min", new Date(dueDate).addWeeks(-12).toISODate())
               .attr("max", startDate.toISODate());
-      $("#parentalLeave").empty();
-      addPeriod($("#parentalLeave"),
-              new Date($("#maternityLeave .endDate:last").val()).addDays(1));
+      addPeriod($("#parentalLeave").empty(),
+              new Date(leaveCategory.find(".endDate:last").val()).addDays(1));
     });
 
     body.on("click", "#applicationForm h1", function() {
@@ -473,7 +477,7 @@
       var leaveCategory = $("#parentalLeave");
       leaveCategory.data("allowed-days", parseInt($(this).val())*7);
       leaveCategory.empty();
-      var startDate = new Date($("#maternityLeave .endDate:last").val()).addDays(1);
+      var startDate = new Date($("#maternityLeave").find(".endDate:last").val()).addDays(1);
       addPeriod(leaveCategory, startDate);
     });
 
@@ -493,6 +497,7 @@
       $(this).stop(true).delay(5000).fadeOut(2000);
     });
 
+    var applicantTemplate = Handlebars.compile($("#applicantTemplate").html());
     var applicationFormTemplate = Handlebars.compile($("#applicationFormTemplate").html());
 
     var id = currentId();
@@ -500,7 +505,9 @@
     serverAPI.getJSON("applications/" + id).then(function (data) {
       var application = data.application;
       application.expectedChildren = application.expectedChildren || 1;
-      $("main").html(applicationFormTemplate(application));
+      $("main").empty()
+              .append(applicantTemplate(data.applicant))
+              .append(applicationFormTemplate(application));
 
       var sharedQuota = $("#sharedQuota");
       for (var i=0; i<=parseInt(application.coveragePercentage || 46)-20; i++) {
@@ -520,16 +527,17 @@
         var e = $(this);
         e.find("option[value='" + e.data("current-value") + "']").attr("selected", "selected");
       });
-      populateLeaveCategory($("#maternityLeave"), application.maternityLeave);
-      $("#maternityLeave .startDate:first")
+      var maternityLeave = $("#maternityLeave");
+      populateLeaveCategory(maternityLeave, application.maternityLeave);
+      maternityLeave.find(".startDate:first")
               .attr("min", new Date(application.dueDate).addWeeks(-12).toISODate())
               .attr("max", new Date(application.dueDate).addWeeks(-3).toISODate());
 
       var leaveCategory = $("#parentalLeave");
       leaveCategory.data("allowed-days", parseInt(sharedQuota.val())*7);
       populateLeaveCategory(leaveCategory, application.parentalLeave);
-      $("#parentalLeave .startDate:first")
-              .attr("min", new Date($("#maternityLeave .endDate:last").val()).addDays(1).toISODate());
+      leaveCategory.find(".startDate:first")
+              .attr("min", new Date(maternityLeave.find(".endDate:last").val()).addDays(1).toISODate());
 
       $(".leaveCategory .leavePeriod:not(:first-child)").each(function() {
         var pastEnd = $(this).prev().find(".endDate").val();

@@ -3,11 +3,13 @@ package io.openright.parental.server;
 import io.openright.infrastructure.db.Database;
 import io.openright.infrastructure.server.AppConfigFile;
 import io.openright.infrastructure.util.ExceptionUtil;
+import lombok.SneakyThrows;
 import org.eclipse.jetty.plus.jndi.EnvEntry;
 
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.io.File;
+import java.net.URI;
 
 public class ParentalBenefitsConfigFile extends AppConfigFile implements ParentalBenefitsConfig {
     private Database database;
@@ -42,5 +44,11 @@ public class ParentalBenefitsConfigFile extends AppConfigFile implements Parenta
             return Integer.parseInt(System.getenv("PORT"));
         }
         return Integer.parseInt(getProperty("parental.http.port", "8080"));
+    }
+
+    @Override
+    @SneakyThrows
+    public URI getApplicantEndpointUrl() {
+        return new URI(getRequiredProperty("parental.endpoint.applicant"));
     }
 }
