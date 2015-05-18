@@ -153,3 +153,13 @@ footer#submit {
 .explanation:before {
   content: "\f05a";
 }
+
+.leavePeriod div {
+  display: inline-block;
+}
+
+.leavePeriod input {
+  display: block;
+  width: 10em;
+  margin-right: 0.5em;
+}

@@ -14,18 +14,14 @@
 </header>
 
 <main>
-  <script id="sharedLeavePeriodPartial" type="text/x-handlebars-template">
-    <div class="periodDateRange">
-      <label>Fra og med</label>
-
-      <p><input type="date" class="startSharedPeriod"
-                name="application[leavePeriod][shared][][start]" value="{{start}}"/></p>
-      <label>Til og med</label>
-
-      <p><input type="date" class="endSharedPeriod" name="application[leavePeriod][shared][][end]" value="{{end}}"
-                min="{{start}}"/></p>
+  <script id="leavePeriodTemplate" type="text/x-handlebars-template">
+    <div class="leavePeriod {{type}}">
+      <div><label>Fra og med<input type="date" required name="application[{{type}}][][startDate]" class="startDate" /></label></div>
+      <div><label>Til og med<input type="date" required name="application[{{type}}][][endDate]" class="endDate" /></label></div>
+      <div class="dayCount"></div>
     </div>
   </script>
+
   <script id="applicationFormTemplate" type="text/x-handlebars-template">
 
     <form id="applicationForm">
@@ -207,7 +203,7 @@
       <section id="permissionPeriod">
         <h1>Permisjonsperiode</h1>
 
-        <div class="details">
+        <div >
           <div class="gender-female">
             <h2>Når har du termin</h2>
 
@@ -226,70 +222,47 @@
           </h2>
 
           <p>
-            <select name="application[coveragePercentage]" data-current-value="{{coveragePercentage}}">
-              <option value="80">80% dekningsgrad i 59 uker</option>
-              <option value="100">100% dekningsgrad i 46 uker</option>
+            <select name="application[coveragePercentage]" id="coveragePercentage" data-current-value="{{coveragePercentage}}">
+              <option value="59">80% dekningsgrad i 59 uker</option>
+              <option value="46" selected>100% dekningsgrad i 46 uker</option>
             </select>
           </p>
 
-          <h2>Når vil du starte uttaket av foreldrepenger?</h2>
+          <div id="leavePlan">
 
-          <p><input type="date" name="application[startDate]" id="leaveStartDate" value="{{startDate}}"/></p>
+            <h2>Mors kvote (10 uker)</h2>
 
-          <div id="leaveStartInfo"></div>
-
-          <div class="gender-female">
-            <div>
-              <h2>Skal du ta ut hele mødrekvoten (10 uker) umiddelbart etter fødsel?</h2>
-              <label><input type="radio" required class="optionalToggle"
-                            name="application[leavePeriod][changeMaternityDefault]" value="false"
-                            data-current-value="{{leavePeriod.changeMaternityDefault}}">Ja</label>
-              <label><input type="radio" required class="optionalToggle"
-                            name="application[leavePeriod][changeMaternityDefault]" value="true"
-                            data-current-value="{{leavePeriod.changeMaternityDefault}}">Nei</label>
-
-              <div class="optionalInformation">
-                <p>De neste seks ukene fram til 25. juni må tas rett etter fødselen</p>
-
-                <h2>Når ønsker du å starte øvrige fire ukene av mødrekvoten?</h2>
-
-                <p><input type="date" id="startMaternityPeriod" name="application[leavePeriod][maternity][][start]"/></p>
-              </div>
+            <div id="maternityLeave" class="leaveCategory" data-leave-type="maternityLeave" data-allowed-days="70">
             </div>
 
-            <div>
-              <h2>Skal du ta ut hele fellesperioden umiddelbart etter mødrekvoten?</h2>
-              <label><input type="radio" required class="optionalToggle"
-                            name="application[leavePeriod][changeSharedLeaveDefault]" value="false"
-                            data-current-value="{{leavePeriod.changeSharedLeaveDefault}}">Ja</label>
-              <label><input type="radio" required class="optionalToggle"
-                            name="application[leavePeriod][changeSharedLeaveDefault]" value="true"
-                            data-current-value="{{leavePeriod.changeSharedLeaveDefault}}">Nei</label>
+            <h2>Felleskvote</h2>
+
+            <label for="sharedQuota">Hvor mange uker av felleskvoten skal mor ta ut?</label>
+            <select id="sharedQuota" name="application[sharedQuota]" required data-current-value="{{sharedQuota}}">
+              <option>(Velg)</option>
+            </select>
+
+            <div id="parentalLeave" class="leaveCategory" data-leave-type="parentalLeave" >
+            </div>
+
+            <h2>Fars kvote (10 uker)</h2>
+
+            <p>Søker du om overføring av fedrekvoten (10 uker) til deg?</p>
+
+            <label><input type="radio" required class="optionalToggle"
+                          name="application[paternityLeave][convertPaternity][convertPaternityLeaveToMaternityLeave]"
+                          value="true"
+                          data-current-value="{{paternityLeave.convertPaternity.convertPaternityLeaveToMaternityLeave}}">Ja</label>
+            <label><input type="radio" required class="optionalToggle"
+                          name="application[paternityLeave][convertPaternity][convertPaternityLeaveToMaternityLeave]"
+                          value="false"
+                          data-current-value="{{paternityLeave.convertPaternity.convertPaternityLeaveToMaternityLeave}}">Nei</label>
 
               <div class="optionalInformation">
-                <h2>Hvilke perioder ønsker du å ta ut fra felleskvoten?</h2>
 
-                <div id="sharedLeavePeriods">
-                  {{#each leavePeriod.shared}}
-                  {{> sharedLeave}}
-                  {{/each}}
+                <div id="paternityLeave" class="leaveCategory" data-leave-type="paternityLeave" >
                 </div>
-                <button id="addSharedLeavePeriod">Legg til periode</button>
-              </div>
-            </div>
 
-            <div>
-              <h2>Søker du om overføring av fedrekvoten (10 uker) til deg?</h2>
-              <label><input type="radio" required class="optionalToggle"
-                            name="application[leavePeriod][convertPaternity][convertPaternityLeaveToMaternityLeave]"
-                            value="true"
-                            data-current-value="{{leavePeriod.convertPaternity.convertPaternityLeaveToMaternityLeave}}">Ja</label>
-              <label><input type="radio" required class="optionalToggle"
-                            name="application[leavePeriod][convertPaternity][convertPaternityLeaveToMaternityLeave]"
-                            value="false"
-                            data-current-value="{{leavePeriod.convertPaternity.convertPaternityLeaveToMaternityLeave}}">Nei</label>
-
-              <div class="optionalInformation">
                 <h2>Årsak til overføring av fedrekvote</h2>
                 <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="singleParent"
                               data-current-value="{{leavePeriod.convertPaternity.reason}}">Aleneomsorg for
@@ -306,22 +279,6 @@
                               data-current-value="{{leavePeriod.convertPaternity.reason}}">Far er på grunn av sykdom helt
                   avhengig av hjelp for å ta seg av barnet/barna</label>
               </div>
-
-
-              <div class="optionalInformation">
-                <h2>Hvilke perioder ønsker du å ta ut fedrekvoten?</h2>
-
-                <div>
-                  <label>Fra og med</label>
-
-                  <p><input type="date" value="2015-07-09" name="application[leavePeriod][paternity][][start]"/></p>
-                  <label>Til og med</label>
-
-                  <p><input type="date" name="application[leavePeriod][paternity][][end]"/></p>
-                </div>
-                <button>Legg til periode</button>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -376,17 +333,65 @@
   }
 
   Date.prototype.toISODate = function toISODate() {
-    return this.toISOString().substring(0, 10);
+    return this.toString("yyyy-MM-dd");
   };
 
 
   $(function () {
+    var leavePeriodTemplate = Handlebars.compile($("#leavePeriodTemplate").html());
+
+    function populateLeaveCategory(leaveCategory, leaveEntries) {
+      if (!leaveEntries) {
+        return;
+      }
+      for (var i=0; i<leaveEntries.length; i++) {
+        addPeriod(leaveCategory,
+                new Date(leaveEntries[i].startDate),
+                undefined,
+                new Date(leaveEntries[i].endDate));
+      }
+      calculateDateRanges(leaveCategory);
+    }
+
+    function addPeriod(leaveCategory, startDate, days, endDate) {
+      if (!endDate) {
+        days = days || parseInt(leaveCategory.data("allowed-days"));
+        endDate = new Date(startDate).addDays(days);
+      } else {
+        days = Math.round((endDate - startDate)/(1000*60*60*24));
+      }
+
+      leaveCategory.append(leavePeriodTemplate({type: leaveCategory.data("leave-type")}));
+      leaveCategory.find(".startDate:last")
+              .val(startDate.toISODate())
+              .attr("min", startDate.toISODate());
+      leaveCategory.find(".endDate:last")
+              .val(endDate.toISODate())
+              .attr("min", new Date(startDate).addDays(1).toISODate())
+              .attr("max", endDate.toISODate());
+      if (days) {
+        leaveCategory.find(".dayCount:last").text(days + " dager");
+      }
+    }
+
+    function updateLeavePeriod(leavePeriod, remainingDays) {
+      var startDate = Date.parse(leavePeriod.find(".startDate").val());
+      var endDate = Date.parse(leavePeriod.find(".endDate").val());
+      leavePeriod.find(".endDate").attr("max", new Date(startDate).addDays(remainingDays).toISODate());
+      var leaveDays = Math.round((endDate - startDate)/(1000*60*60*24));
+      leavePeriod.find(".dayCount").text(leaveDays + " dager");
+      return leaveDays;
+    }
+
+    function calculateDateRanges(leaveCategory) {
+      var remainingDays = parseInt(leaveCategory.data("allowed-days"));
+      leaveCategory.find(".leavePeriod").each(function() {
+        remainingDays -= updateLeavePeriod($(this), remainingDays);
+      });
+      return remainingDays;
+    }
+
     var body = $("body");
-    body.on("change", "#applicationGender", function () {
-      body.removeClass("application-gender-male");
-      body.removeClass("application-gender-female");
-      body.addClass($(this).val());
-    });
 
     body.on("change", ".optionalToggle", function () {
       if ($(this).val() === "true") {
@@ -397,50 +402,79 @@
     });
 
     body.on("change", "#dueDate", function () {
-      var date = Date.parse($(this).val());
-      $("#leaveStartDate").val(new Date(date).addWeeks(-3).toISODate());
-      $("#leaveStartDate").attr("min", new Date(date).addWeeks(-12).toISODate());
-      $("#leaveStartDate").attr("max", new Date(date).addWeeks(-3).toISODate());
+      var leaveCategory = $("#maternityLeave");
+      var dueDate = Date.parse($(this).val());
+      var startDate = new Date(dueDate).addWeeks(-3);
 
-      $("#motherQuotaEndDate").attr("min", new Date(date).addWeeks(6).toISODate());
-      $("#motherQuotaEndDate").attr("max", new Date(date).addWeeks(7).toISODate());
-      $("#motherQuotaEndDate").val(new Date(date).addWeeks(7).toISODate());
-
-      var leaveStartInfo =
-              Handlebars.compile("Du kan tidligst starte uttaket av foreldrepenger {{min}} (12 uker før termin) og senest {{max}} (3 uker før termin)");
-      var min = new Date(date).addWeeks(-12).toString("m");
-      var max = new Date(date).addWeeks(-3).toString("m");
-      $("#leaveStartInfo").text(leaveStartInfo({min: min, max: max}));
+      leaveCategory.empty();
+      addPeriod(leaveCategory, startDate);
+      leaveCategory.find(".startDate")
+              .attr("min", new Date(dueDate).addWeeks(-12).toISODate())
+              .attr("max", startDate.toISODate());
+      $("#parentalLeave").empty();
+      addPeriod($("#parentalLeave"),
+              new Date($("#maternityLeave .endDate:last").val()).addDays(1));
     });
 
     body.on("click", "#applicationForm h1", function() {
       $(this).closest("section").find(".details").toggle();
-    })
-
-    body.on("change", "#dueDate", function () {
-      $("#startMaternityPeriod").val(plusWeeksIso($(this).val(), 6));
-      $("#startMaternityPeriod").attr("min", plusWeeksIso($(this).val(), 6));
     });
 
-    body.on("change", "#startMaternityPeriod", function () {
-      $(".startSharedPeriod:first").val(plusWeeksIso($(this).val(), 4));
-      $(".startSharedPeriod").attr("min", plusWeeksIso($(this).val(), 4));
+    body.on("change", ".leaveCategory .startDate", function() {
+      var leaveCategory = $(this).closest(".leaveCategory");
+
+      var date = Date.parse($(this).val());
+      $(this).closest(".leavePeriod").nextAll().remove();
+      $(this).closest(".leavePeriod").find(".endDate").val(null);
+
+      var remainingDays = parseInt(leaveCategory.data("allowed-days"));
+      if (!remainingDays) return;
+
+      $(this).closest(".leavePeriod").prevAll().each(function() {
+        remainingDays -= updateLeavePeriod($(this), remainingDays);
+      });
+
+      $(this).closest(".leavePeriod").find(".endDate")
+              .attr("min", date.toISODate())
+              .attr("max", new Date(date).addDays(remainingDays).toISODate())
+              .val(new Date(date).addDays(remainingDays).toISODate());
+      $(this).closest(".leavePeriod").find(".dayCount").text(remainingDays + " dager");
     });
 
-    body.on("click", "#addSharedLeavePeriod", function (e) {
-      e.preventDefault();
-      if ($(".endSharedPeriod:last").val()) {
-        var d = new Date($(".endSharedPeriod:last").val());
-        $("#sharedLeavePeriods").append(sharedLeavePeriod());
-        $(".startSharedPeriod:last").attr("min", d.addDays(1).toISODate());
+    body.on("change", ".leaveCategory .endDate", function() {
+      var leaveCategory = $(this).closest(".leaveCategory");
+
+      $(this).closest(".leavePeriod").nextAll().remove();
+      var endDate = Date.parse($(this).val());
+
+      var remainingDays = calculateDateRanges(leaveCategory);
+      if (remainingDays > 0) {
+        addPeriod(leaveCategory, new Date(endDate).addDays(1), remainingDays);
       }
     });
 
-    body.on("change", ".startSharedPeriod", function () {
-      if ($(this).val()) {
-        $(this).closest(".periodDateRange").find(".endSharedPeriod").attr("min",
-                new Date($(this).val()).addDays(1).toISODate());
+    body.on("change", "#maternityLeave .startDate, #maternityLeave .endDate", function() {
+      var leaveCategory = $("#parentalLeave");
+      leaveCategory.empty();
+
+      var startDate = new Date($("#maternityLeave .endDate:last").val()).addDays(1);
+      addPeriod(leaveCategory, startDate);
+    });
+
+    body.on("change", "#coveragePercentage", function() {
+      var sharedQuota = $("#sharedQuota");
+      sharedQuota.empty().append($("<option>(Velg)</option>"));
+      for (var i=0; i<=parseInt($(this).val())-20; i++) {
+        sharedQuota.append($("<option value='" + i + "'>" + i + " uker</option>"));
       }
+    });
+
+    body.on("change", "#sharedQuota", function() {
+      var leaveCategory = $("#parentalLeave");
+      leaveCategory.data("allowed-days", parseInt($(this).val())*7);
+      leaveCategory.empty();
+      var startDate = new Date($("#maternityLeave .endDate:last").val()).addDays(1);
+      addPeriod(leaveCategory, startDate);
     });
 
     body.on("click", "#saveApplication", function (e) {
@@ -451,27 +485,27 @@
               });
     });
 
-    $('#notificationArea').hover(function() {
+    $('#notificationArea').click(function() {
+      $(this).fadeOut(350);
+    }).hover(function() {
       $(this).stop(true).fadeIn();
     }, function() {
       $(this).stop(true).delay(5000).fadeOut(2000);
     });
-    $('#notificationArea').click(function() {
-      $(this).fadeOut(350);
-    });
-
-
-
-    var sharedLeavePeriod = Handlebars.compile($("#sharedLeavePeriodPartial").html());
-    Handlebars.registerPartial("sharedLeave", $("#sharedLeavePeriodPartial").html());
 
     var applicationFormTemplate = Handlebars.compile($("#applicationFormTemplate").html());
 
     var id = currentId();
+
     serverAPI.getJSON("applications/" + id).then(function (data) {
       var application = data.application;
       application.expectedChildren = application.expectedChildren || 1;
       $("main").html(applicationFormTemplate(application));
+
+      var sharedQuota = $("#sharedQuota");
+      for (var i=0; i<=parseInt(application.coveragePercentage || 46)-20; i++) {
+        sharedQuota.append($("<option value='" + i + "'>" + i + " uker</option>"));
+      }
 
       $("input[type=checkbox][data-current-value]").each(function () {
         var e = $(this);
@@ -486,6 +520,22 @@
         var e = $(this);
         e.find("option[value='" + e.data("current-value") + "']").attr("selected", "selected");
       });
+      populateLeaveCategory($("#maternityLeave"), application.maternityLeave);
+      $("#maternityLeave .startDate:first")
+              .attr("min", new Date(application.dueDate).addWeeks(-12).toISODate())
+              .attr("max", new Date(application.dueDate).addWeeks(-3).toISODate());
+
+      var leaveCategory = $("#parentalLeave");
+      leaveCategory.data("allowed-days", parseInt(sharedQuota.val())*7);
+      populateLeaveCategory(leaveCategory, application.parentalLeave);
+      $("#parentalLeave .startDate:first")
+              .attr("min", new Date($("#maternityLeave .endDate:last").val()).addDays(1).toISODate());
+
+      $(".leaveCategory .leavePeriod:not(:first-child)").each(function() {
+        var pastEnd = $(this).prev().find(".endDate").val();
+        $(this).find(".startDate").attr("min", new Date(pastEnd).addDays(1).toISODate());
+      });
+
 
       $(".optionalInformation").hide();
       $(".optionalToggle[value=true]:checked").each(function () {
