@@ -49,9 +49,9 @@ public class ParentalBenefitsDevServer extends ParentalBenefitsServer {
     }
 
     private void loadSeedData() {
-        applicantService.insert(SampleData.sampleApplicant("06015707439"));
-        applicantService.insert(SampleData.sampleApplicant("23127946732"));
-        applicantService.insert(SampleData.sampleApplicant("17048316526"));
-        applicantService.insert(SampleData.sampleApplicant("29017376771"));
+        applicantService.insert(SampleData.sampleApplicant("06015707439", "0314"));
+        applicantService.insert(SampleData.sampleApplicant("23127946732", "0314"));
+        applicantService.insert(SampleData.sampleApplicant("17048316526", "0316"));
+        applicantService.insert(SampleData.sampleApplicant("29017376771", "0231"));
     }
 }

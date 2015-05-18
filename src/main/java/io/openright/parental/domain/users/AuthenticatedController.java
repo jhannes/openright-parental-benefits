@@ -2,6 +2,7 @@ package io.openright.parental.domain.users;
 
 import io.openright.infrastructure.rest.Controller;
 import io.openright.infrastructure.rest.RequestException;
+import org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,11 +26,23 @@ public class AuthenticatedController implements Controller {
         }
     }
 
-    private ApplicationUser getUser(HttpServletRequest req) {
-        String personId = (String) req.getSession().getAttribute("personId");
-        if (personId == null) {
+    private static ApplicationUser getUser(HttpServletRequest req) {
+        ApplicationUser applicationUser = (ApplicationUser) req.getSession().getAttribute("user");
+        if (applicationUser == null) {
             throw new RequestException(401, "Unauthorized");
         }
-        return new ApplicationUser(personId, null);
+        return applicationUser;
+    }
+
+    public static void setUser(HttpServletRequest req, JSONObject jsonObject) {
+        req.getSession(true).setAttribute("user", toUser(jsonObject));
+    }
+
+    private static ApplicationUser toUser(JSONObject jsonObject) {
+        if (jsonObject.has("caseWorker")) {
+            return new ApplicationUser(jsonObject.getString("caseWorker"), ApplicationUserRole.CASE_WORKER);
+        } else {
+            return new ApplicationUser(jsonObject.getString("personId"), null);
+        }
     }
 }

@@ -7,38 +7,47 @@
 <body>
 <h1>Logg inn</h1>
 
-<form id="loginForm">
+<form id="applicantLoginForm">
   <h2>Logg inn som enkeltperson</h2>
 
   <input id="personId" list="applicants">
   <datalist id="applicants">
-    <option>06015707439</option>
-    <option>23127946732</option>
-    <option>17048316526</option>
-    <option>29017376771</option>
+    <option value="06015707439">06015707439 (Nordstrand)</option>
+    <option value="23127946732">23127946732 (Nordstrand)</option>
+    <option value="17048316526">17048316526 (Oslo sentrum)</option>
+    <option value="29017376771">29017376771 (Skedsmo)</option>
   </datalist>
 
   <button>Logg inn</button>
+</form>
 
   <h2>Logg inn som saksbehandler</h2>
 
-  <ul>
-    <li>
-      <button data-person-id="99345678901">Saksbehandler 1</button>
-    </li>
-    <li>
-      <button data-person-id="99445678901">Saksbehandler 2</button>
-    </li>
-  </ul>
+
+<form id="caseWorkerLoginForm">
+  <input id="caseWorkerId" list="caseWorkers">
+  <datalist id="caseWorkers">
+    <option value="sbh_01">sbh_01 (Nordstrand)</option>
+    <option value="sbh_02">sbh_02 (Oslo Sentrum)</option>
+    <option value="sbh_03">sbh_03 (Skedsmo)</option>
+  </datalist>
+  <button>Logg inn</button>
 </form>
 </body>
 <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
 <script src="../scripts/parental.js"></script>
 <script>
   $(function () {
-    $("#loginForm").submit(function (e) {
+    $("#applicantLoginForm").submit(function (e) {
       e.preventDefault();
       serverAPI.postJSON("login", {personId: $("#personId").val()})
+              .then(function () {
+                window.location = getParameterByName("targetURL");
+              });
+    });
+    $("#caseWorkerLoginForm").submit(function (e) {
+      e.preventDefault();
+      serverAPI.postJSON("login", {caseWorker: $("#caseWorkerId").val()})
               .then(function () {
                 window.location = getParameterByName("targetURL");
               });

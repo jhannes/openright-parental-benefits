@@ -30,6 +30,7 @@ public class RestApplicantGateway implements ApplicantGateway {
         applicant.setStreetAdress(json.getString("streetAddress"));
         applicant.setPostalCode(json.getString("postalCode"));
         applicant.setPostalArea(json.getString("postalArea"));
+        applicant.setNavOffice(json.getString("navOffice"));
         return applicant;
     }
 }

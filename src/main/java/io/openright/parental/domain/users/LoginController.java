@@ -18,7 +18,7 @@ public class LoginController implements Controller {
             try (BufferedReader reader = req.getReader()) {
                 jsonObject = new JSONObject(new JSONTokener(reader));
             }
-            req.getSession(true).setAttribute("personId", jsonObject.getString("personId"));
+            AuthenticatedController.setUser(req, jsonObject);
             resp.setStatus(200);
         } else if (req.getMethod().equals("DELETE")) {
             req.getSession(true).setAttribute("personId", null);
