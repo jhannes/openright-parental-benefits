@@ -1,0 +1,38 @@
+<form id="applicationForm">
+  <section id="commonInformation">
+    <h2>Vil du fylle inn søknaden?</h2>
+
+    <div class="radioGroup">
+      <label><input type="radio" required name="application[fillApplication]" value="true"
+                    data-current-value="{{fillApplication}}">Ja</label>
+      <label><input type="radio" required name="application[fillApplication]" value="false"
+                    data-current-value="{{fillApplication}}">Nei</label>
+    </div>
+
+    <div>
+      <h2>Har du tilleggsinformasjon? <a class="explanation"></a></h2>
+      <div class="radioGroup">
+        <label><input type="radio" required class="optionalToggle" name="application[additionalInfo]"
+                      value="true"
+                      data-current-value="{{additionalInfo}}">Ja</label>
+        <label><input type="radio" required class="optionalToggle" name="application[additionalInfo]"
+                      value="false"
+                      data-current-value="{{additionalInfo}}">Nei</label>
+
+        <div class="optionalInformation">
+          <label for="country-past-location">Hvilken tilleggsinformasjon har du?</label>
+          <textarea id="country-past-location" name="application[additionalInfoText]">{{additionalInfoText}}</textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="dateInformation">
+    <h2>Når vil du starte?</h2>
+
+    <p><input type="date" required name="application[startDate]" id="startDate" value="{{startDate}}" min="2015-05-10"/></p>
+
+    <div id="dateRange" class="leaveCategory" data-leave-type="informationPeriod" data-allowed-days="30">
+    </div>
+  </section>
+</form>
