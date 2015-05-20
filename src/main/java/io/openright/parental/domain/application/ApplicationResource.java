@@ -2,6 +2,7 @@ package io.openright.parental.domain.application;
 
 import io.openright.infrastructure.rest.RequestException;
 import io.openright.infrastructure.rest.ResourceApi;
+import io.openright.parental.domain.applicant.Applicant;
 import io.openright.parental.domain.applicant.ApplicantGateway;
 import io.openright.parental.domain.users.ApplicationUser;
 import org.json.JSONObject;
@@ -36,7 +37,8 @@ public class ApplicationResource implements ResourceApi {
 
     @Override
     public String createResource(JSONObject jsonObject) {
-        Application application = new Application(ApplicationUser.getCurrent().getPersonId());
+        Application application = new Application(getApplicant(),
+                jsonObject.getString("applicationType"));
         applicationRepository.insert(application);
         return application.getId().toString();
     }
@@ -51,4 +53,8 @@ public class ApplicationResource implements ResourceApi {
         applicationRepository.update(Long.valueOf(id), application);
     }
 
+    private Applicant getApplicant() {
+        return this.applicantGateway.retrieve(ApplicationUser.getCurrent().getPersonId())
+                .orElseThrow(() -> new RuntimeException("Invalid user"));
+    }
 }

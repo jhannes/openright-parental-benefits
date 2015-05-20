@@ -27,7 +27,7 @@ public class SampleData {
                 + sampleNumeric(5);
     }
 
-    private static String sampleNumeric(int count) {
+    public static String sampleNumeric(int count) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < count; i++) {
             result.append(random.nextInt(10));
@@ -44,14 +44,11 @@ public class SampleData {
         return sampleApplicant(samplePersonId(), random("0314", "0315", "0231"));
     }
 
-    public static Applicant sampleApplicant(String id, String navOffice) {
-        Applicant applicant = new Applicant();
-        applicant.setId(id);
-        applicant.setName(sampleName());
-        applicant.setStreetAdress(random("Storgata 1", "Kirkegata 1", "Kirkeveien 1"));
+    public static Applicant sampleApplicant(String id, String officeId) {
+        Applicant applicant = new Applicant(id, sampleName(), officeId);
+        applicant.setStreetAddress(random("Storgata 1", "Kirkegata 1", "Kirkeveien 1"));
         applicant.setPostalCode(random("0101", "0102", "0301"));
         applicant.setPostalArea("Øslø");
-        applicant.setNavOffice(navOffice);
         return applicant;
     }
 }

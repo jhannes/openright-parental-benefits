@@ -6,7 +6,7 @@ function getParameterByName(name) {
 }
 
 
-function ajax(serverUrl) {
+function ajax(apiUrl, templateUrl) {
   function loginHandler(jqXHR) {
     if (jqXHR.status === 401) {
       window.location = "login/?targetURL=" + encodeURIComponent(window.location);
@@ -31,28 +31,33 @@ function ajax(serverUrl) {
   }
 
   function postJSON(localUrl, object) {
-    return ajax('POST', serverUrl + localUrl, object);
+    return ajax('POST', apiUrl + localUrl, object);
   }
 
   function putJSON(localUrl, id, object) {
-    return ajax('PUT', serverUrl + localUrl + id, object);
+    return ajax('PUT', apiUrl + localUrl + id, object);
   }
 
   function deleteJSON(localUrl, object) {
-    return ajax('DELETE', serverUrl + localUrl, object);
+    return ajax('DELETE', apiUrl + localUrl, object);
   }
 
   function getJSON(localUrl) {
-    return $.get(serverUrl + localUrl).fail(loginHandler);
+    return $.get(apiUrl + localUrl).fail(loginHandler);
+  }
+
+  function getHTML(localUrl) {
+    return $.get(templateUrl + localUrl);
   }
 
   return {
     postJSON: postJSON,
     putJSON: putJSON,
     deleteJSON: deleteJSON,
-    getJSON: getJSON
+    getJSON: getJSON,
+    getHTML: getHTML
   };
 }
 
 
-var serverAPI = ajax('/parental/api/');
+var serverAPI = ajax('/parental/api/', '/parental/');

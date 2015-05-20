@@ -3,6 +3,7 @@
   <table id="applications">
     <thead>
     <tr>
+      <td>NAV kontor</td>
       <td>Søker</td>
       <td>Dato</td>
       <td>Type</td>
@@ -16,12 +17,14 @@
 
 <section id="newApplicationSection">
   <h2>Ny søknad</h2>
-  <button id="createApplication">Send søknad om foreldrepenger</button>
+  <!-- TODO: Populate this list dynamically based on user -->
+  <button class="createApplication" data-application-type="maternity-benefits-2014">Søk om foreldrepenger for mor</button>
 </section>
 
 <script type="text/x-handlebars-template" id="applicationTemplate">
   {{#each .}}
   <tr>
+    <td>{{office}}</td>
     <td>{{applicant}}</td>
     <td>{{updatedAt}}</td>
     <td>{{applicationType}}</td>
@@ -42,8 +45,9 @@
       e.preventDefault();
       window.location.hash = "applications/edit/" + $(this).data("application-id");
     });
-    $("#createApplication").click(function () {
-      serverAPI.postJSON("applications/", {}).then(function (data, textStatus, request) {
+    $(".createApplication").click(function () {
+      var application = {applicationType: $(this).data("application-type")};
+      serverAPI.postJSON("applications/", application).then(function (data, textStatus, request) {
         var location = request.getResponseHeader("Location");
         var id = location.substring(location.lastIndexOf("/") + 1);
         window.location.hash = "applications/edit/" + id;

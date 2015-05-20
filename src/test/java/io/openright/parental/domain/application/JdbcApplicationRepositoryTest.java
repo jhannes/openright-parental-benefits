@@ -1,5 +1,6 @@
 package io.openright.parental.domain.application;
 
+import io.openright.parental.domain.applicant.Applicant;
 import io.openright.parental.domain.users.ApplicationUser;
 import io.openright.parental.domain.users.ApplicationUserRole;
 import io.openright.parental.server.ParentalBenefitsTestConfig;
@@ -23,7 +24,8 @@ public class JdbcApplicationRepositoryTest {
     private final ParentalBenefitsTestConfig testConfig = ParentalBenefitsTestConfig.instance();
     private final ApplicationRepository repository = new JdbcApplicationRepository(testConfig);
 
-    private final ApplicationUser user = new ApplicationUser(samplePersonId(), null);
+    private final Applicant applicant = SampleData.sampleApplicant();
+    private final ApplicationUser user = new ApplicationUser(applicant.getId(), null);
     private final ApplicationUser caseWorker = new ApplicationUser(samplePersonId(), ApplicationUserRole.CASE_WORKER);
 
     @Before
@@ -33,16 +35,18 @@ public class JdbcApplicationRepositoryTest {
 
     @Test
     public void shouldFindSavedApplication() throws Exception {
-        Application application = insert(sampleApplication(user));
+        Application application = insert(sampleApplication(applicant));
 
         assertThat(repository.retrieve(application.getId()).get()).isEqualTo(application);
+        assertThat(repository.retrieve(application.getId()).get())
+                .isEqualToComparingFieldByField(application);
         assertThat(repository.retrieve(13243L)).isEmpty();
     }
 
     @Test
     public void caseWorkerSeesCompletedApplications() throws Exception {
-        Application draftApplication = insert(sampleApplication(user, "draft"));
-        Application completedApplication = insert(sampleApplication(user, "submit"));
+        Application draftApplication = insert(sampleApplication(applicant, "draft"));
+        Application completedApplication = insert(sampleApplication(applicant, "submit"));
 
         ApplicationUser.setCurrent(caseWorker);
         assertThat(repository.list())
@@ -54,7 +58,7 @@ public class JdbcApplicationRepositoryTest {
     public void otherUserShouldNotSeeMyApplication() throws Exception {
         ApplicationUser otherUser = new ApplicationUser(samplePersonId(), null);
 
-        Application application = insert(sampleApplication(user));
+        Application application = insert(sampleApplication(applicant));
 
         ApplicationUser.setCurrent(otherUser);
         assertThat(repository.list()).doesNotContain(application);
@@ -63,7 +67,7 @@ public class JdbcApplicationRepositoryTest {
 
     @Test
     public void shouldUpdateApplication() throws Exception {
-        Application application = sampleApplication(user);
+        Application application = sampleApplication(applicant);
         insert(application);
         Instant originalUpdatedAt = application.getUpdatedAt();
 
@@ -77,7 +81,7 @@ public class JdbcApplicationRepositoryTest {
 
     @Test
     public void shouldAddRevision() throws Exception {
-        Application application = sampleApplication(user);
+        Application application = sampleApplication(applicant);
         assertThat(application.getApplicationForm().keySet()).isEmpty();
         application.addRevision("draft", new JSONObject().put("amount", 321));
         application.addRevision("approved", new JSONObject().put("amount", 123));
@@ -87,7 +91,7 @@ public class JdbcApplicationRepositoryTest {
 
     @Test
     public void shouldAddNewRevisions() throws Exception {
-        Application application = sampleApplication(user);
+        Application application = sampleApplication(applicant);
         application.addRevision("draft", new JSONObject().put("title", "originalTitle"));
         Thread.sleep(10);
         application.addRevision("draft", new JSONObject().put("title", "updatedTitle"));
@@ -138,12 +142,14 @@ public class JdbcApplicationRepositoryTest {
         return random.nextLong()%max;
     }
 
-    private Application sampleApplication(ApplicationUser user) {
-        return sampleApplication(user, SampleData.random("draft", "submit", "updated", "approved"));
+    private Application sampleApplication(Applicant applicant) {
+        return sampleApplication(applicant, SampleData.random("draft", "submit", "updated", "approved"));
     }
 
-    private Application sampleApplication(ApplicationUser user, String status) {
-        Application application = new Application(user.getPersonId());
+    private Application sampleApplication(Applicant applicant, String status) {
+        String applicationType = SampleData.random("maternity-benefits-single", "maternity-benefits", "paternity-benefits-single", "paternity-benefits");
+        String office = SampleData.sampleNumeric(4);
+        Application application = new Application(applicant, applicationType);
         application.setStatus(status);
         return application;
     }

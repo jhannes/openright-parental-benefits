@@ -24,13 +24,11 @@ public class RestApplicantGateway implements ApplicantGateway {
     }
 
     private Applicant toApplicant(JSONObject json) {
-        Applicant applicant = new Applicant();
-        applicant.setId(json.getString("id"));
-        applicant.setName(json.getString("name"));
-        applicant.setStreetAdress(json.getString("streetAddress"));
+        Applicant applicant = new Applicant(json.getString("id"),
+                json.getString("name"), json.getString("navOffice"));
+        applicant.setStreetAddress(json.getString("streetAddress"));
         applicant.setPostalCode(json.getString("postalCode"));
         applicant.setPostalArea(json.getString("postalArea"));
-        applicant.setNavOffice(json.getString("navOffice"));
         return applicant;
     }
 }

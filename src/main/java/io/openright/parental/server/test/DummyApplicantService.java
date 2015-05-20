@@ -29,13 +29,13 @@ public class DummyApplicantService implements ResourceApi {
         return new JSONObject()
                 .put("id", applicant.getId())
                 .put("name", applicant.getName())
-                .put("streetAddress", applicant.getStreetAdress())
+                .put("streetAddress", applicant.getStreetAddress())
                 .put("postalCode", applicant.getPostalCode())
                 .put("postalArea", applicant.getPostalArea())
                 .put("contactPhone", applicant.getContactPhone())
                 .put("email", applicant.getEmail())
                 .put("accountNumber", applicant.getAccountNumber())
-                .put("navOffice", applicant.getNavOffice());
+                .put("navOffice", applicant.getOfficeId());
     }
 
     @Override

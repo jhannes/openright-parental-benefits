@@ -27,9 +27,11 @@ public class JdbcApplicationRepository implements ApplicationRepository {
         database.transactional(() -> {
             long id = table.insertValues(row -> {
                 row.put("applicant_id", application.getApplicantId());
+                row.put("application_type", application.getApplicationType());
+                row.put("status", application.getStatus());
+                row.put("office", application.getOffice());
                 row.put("created_at", application.getCreatedAt());
                 row.put("updated_at", application.getUpdatedAt());
-                row.put("status", application.getStatus());
             });
             application.setId(id);
             insertNewApplicationRevisions(application);
@@ -96,6 +98,8 @@ public class JdbcApplicationRepository implements ApplicationRepository {
     private Application toApplication(Database.Row row) throws SQLException {
         Application application = new Application(
                 row.getString("applicant_id"),
+                row.getString("application_type"),
+                row.getString("office"),
                 row.getInstant("created_at"),
                 row.getInstant("updated_at"));
         application.setId(row.getLong("id"));

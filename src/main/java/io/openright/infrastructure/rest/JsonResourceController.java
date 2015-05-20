@@ -1,6 +1,7 @@
 package io.openright.infrastructure.rest;
 
 import lombok.NonNull;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -21,6 +22,14 @@ public class JsonResourceController implements Controller {
 
     @Override
     public void handle(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        try {
+            doHandle(req, resp);
+        } catch (JSONException e) {
+            throw new RequestException(400, e.getMessage());
+        }
+    }
+
+    private void doHandle(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if (req.getMethod().equals("POST")) {
             createResource(req, resp);
         } else if (req.getMethod().equals("PUT")) {
