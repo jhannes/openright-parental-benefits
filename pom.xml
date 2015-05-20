@@ -90,7 +90,7 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>io.openright.parental.server.ParentalBenefitsServer
+                                    <mainClass>io.openright.parental.server.test.ParentalBenefitsDevServer
                                     </mainClass>
                                 </transformer>
                                 <transformer

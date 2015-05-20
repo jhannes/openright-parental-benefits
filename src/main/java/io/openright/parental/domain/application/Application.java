@@ -79,10 +79,6 @@ public class Application {
         applicationHistory.add(new ApplicationForm(ApplicationUser.getCurrent().getPersonId(), status, applicationForm, true));
     }
 
-    public List<ApplicationForm> getApplicationHistory() {
-        return applicationHistory;
-    }
-
     public JSONObject getApplicationForm() {
         if (applicationHistory == null || applicationHistory.isEmpty()) {
             return new JSONObject();

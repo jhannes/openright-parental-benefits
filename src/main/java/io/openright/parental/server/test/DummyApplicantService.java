@@ -1,7 +1,8 @@
-package io.openright.parental.domain.applicant;
+package io.openright.parental.server.test;
 
 import io.openright.infrastructure.rest.RequestException;
 import io.openright.infrastructure.rest.ResourceApi;
+import io.openright.parental.domain.applicant.Applicant;
 import org.json.JSONObject;
 
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package io.openright.parental;
+package io.openright.parental.server.test;
 
 import io.openright.parental.domain.applicant.Applicant;
 

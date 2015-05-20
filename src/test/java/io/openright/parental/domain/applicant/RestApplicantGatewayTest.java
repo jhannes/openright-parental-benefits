@@ -1,8 +1,9 @@
 package io.openright.parental.domain.applicant;
 
 import io.openright.infrastructure.rest.JsonResourceServlet;
-import io.openright.parental.SampleData;
 import io.openright.parental.server.ParentalBenefitsTestConfig;
+import io.openright.parental.server.test.DummyApplicantService;
+import io.openright.parental.server.test.SampleData;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;

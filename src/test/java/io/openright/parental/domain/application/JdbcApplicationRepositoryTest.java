@@ -1,9 +1,9 @@
 package io.openright.parental.domain.application;
 
-import io.openright.parental.SampleData;
 import io.openright.parental.domain.users.ApplicationUser;
 import io.openright.parental.domain.users.ApplicationUserRole;
 import io.openright.parental.server.ParentalBenefitsTestConfig;
+import io.openright.parental.server.test.SampleData;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.junit.Before;
