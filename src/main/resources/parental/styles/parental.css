@@ -53,15 +53,6 @@ button {
   display: none;
 }
 
-select {
-  width: 80%;
-  background: #333388;
-  color: white;
-  padding: 0.5em 1em;
-  border: 1px solid transparent;
-  border-radius: 4px;
-}
-
 .subform-container {
   background-color: silver;
   padding: 0.2em 1em;
@@ -99,6 +90,11 @@ footer#notificationArea div.error {
 }
 footer#notificationArea div.error .icon:before { content:"\f06a"; }
 
+footer#notificationArea div.warn {
+  background: #ffd591;
+  border: #ff9629 solid 1px;
+}
+footer#notificationArea div.warn .icon:before { content:"\f071"; }
 
 footer#notificationArea h2 {
   display: inline;
@@ -162,4 +158,8 @@ footer#submit {
   display: block;
   width: 10em;
   margin-right: 0.5em;
+}
+
+.invalid {
+  border: solid red 1px;
 }

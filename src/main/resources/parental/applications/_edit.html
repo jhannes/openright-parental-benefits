@@ -82,23 +82,27 @@
 
         <div class="details">
           <h2>Oppholder du deg i Norge?</h2>
-          <label><input type="radio" required name="application[domesticResidency]" value="true"
-                        data-current-value="{{domesticResidency}}">Ja</label>
-          <label><input type="radio" required name="application[domesticResidency]" value="false"
-                        data-current-value="{{domesticResidency}}">Nei</label>
+          <div class="radioGroup">
+            <label><input type="radio" required name="application[domesticResidency]" value="true"
+                          data-current-value="{{domesticResidency}}">Ja</label>
+            <label><input type="radio" required name="application[domesticResidency]" value="false"
+                          data-current-value="{{domesticResidency}}">Nei</label>
+          </div>
 
           <div>
             <h2>Har du oppholdt deg sammenhengende i Norge de siste 12 månedene? <a class="explanation"></a></h2>
-            <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][pastStay]"
-                          value="false"
-                          data-current-value="{{nonDomestic.pastStay}}">Ja</label>
-            <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][pastStay]"
-                          value="true"
-                          data-current-value="{{nonDomestic.pastStay}}">Nei</label>
+            <div class="radioGroup">
+              <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][pastStay]"
+                            value="false"
+                            data-current-value="{{nonDomestic.pastStay}}">Ja</label>
+              <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][pastStay]"
+                            value="true"
+                            data-current-value="{{nonDomestic.pastStay}}">Nei</label>
 
-            <div class="optionalInformation">
-              <label for="country-past-location">Hvilket land har du opphold deg i?</label>
-              <textarea id="country-past-location" name="application[nonDomestic][pastLocation]">{{nonDomestic.pastLocation}}</textarea>
+              <div class="optionalInformation">
+                <label for="country-past-location">Hvilket land har du opphold deg i?</label>
+                <textarea id="country-past-location" name="application[nonDomestic][pastLocation]">{{nonDomestic.pastLocation}}</textarea>
+              </div>
             </div>
           </div>
 
@@ -106,17 +110,19 @@
           <div>
             <h2>Kommer du til å oppholde deg sammenhengende i Norge de neste 12 månedene eller mer? <a
                     class="explanation"></a></h2>
-            <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][plannedStay]"
-                          value="false"
-                          data-current-value="{{nonDomestic.plannedStay}}">Ja</label>
-            <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][plannedStay]"
-                          value="true"
-                          data-current-value="{{nonDomestic.plannedStay}}">Nei</label>
+            <div class="radioGroup">
+              <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][plannedStay]"
+                            value="false"
+                            data-current-value="{{nonDomestic.plannedStay}}">Ja</label>
+              <label><input type="radio" required class="optionalToggle" name="application[nonDomestic][plannedStay]"
+                            value="true"
+                            data-current-value="{{nonDomestic.plannedStay}}">Nei</label>
 
-            <div class="optionalInformation">
-              <label for="country-future-location">Hvilket land skal du oppholde deg i?</label>
-                          <textarea id="country-future-location" name="application[nonDomestic][plannedLocation]"
-                                  >{{nonDomestic.plannedLocation}}</textarea>
+              <div class="optionalInformation">
+                <label for="country-future-location">Hvilket land skal du oppholde deg i?</label>
+                            <textarea id="country-future-location" name="application[nonDomestic][plannedLocation]"
+                                    >{{nonDomestic.plannedLocation}}</textarea>
+              </div>
             </div>
           </div>
         </div>
@@ -129,78 +135,82 @@
           <h2>Har du vært i arbeid de siste 10 månedene før du starter uttaket av feriepengene? <a
                   class="explanation"></a></h2>
 
-          <label><input type="radio" required class="optionalToggle" name="application[workedLast10Months]" value="true"
-                        data-current-value="{{workedLast10Months}}">Ja</label>
-          <label><input type="radio" required class="optionalToggle" name="application[workedLast10Months]"
-                        value="false"
-                        data-current-value="{{workedLast10Months}}">Nei</label>
+          <div class="radioGroup">
+            <label><input type="radio" required class="optionalToggle" name="application[workedLast10Months]" value="true"
+                          data-current-value="{{workedLast10Months}}">Ja</label>
+            <label><input type="radio" required class="optionalToggle" name="application[workedLast10Months]"
+                          value="false"
+                          data-current-value="{{workedLast10Months}}">Nei</label>
 
-          <div class="subform-container optionalInformation">
-            <h2>Arbeidsforhold 1</h2>
-            <label><input type="radio" name="application[income][][employerType]" value="employer">Arbeidstaker</label>
-            <label><input type="radio" name="application[income][][employerType]" value="selfEmployed">Selvstendig
-              næringsdrivende</label>
+            <div class="subform-container optionalInformation">
+              <h2>Arbeidsforhold 1</h2>
+              <label><input type="radio" name="application[income][][employerType]" value="employer">Arbeidstaker</label>
+              <label><input type="radio" name="application[income][][employerType]" value="selfEmployed">Selvstendig
+                næringsdrivende</label>
 
-            <div>
-              <label for="employer-name">Arbeidsgiver eller næringsvirksomhet</label>
+              <div>
+                <label for="employer-name">Arbeidsgiver eller næringsvirksomhet</label>
 
-              <p><input id="employer-name" type="text" name="application[income][][employerName]"/></p>
+                <p><input id="employer-name" type="text" name="application[income][][employerName]"/></p>
+              </div>
+
+              <div>
+                <label for="employment-percentage">Stilingsprosent</label>
+
+                <p><input id="employment-percentage" type="number" min="1" max="100" value="100"
+                          name="application[income][][employmentPercent]"/></p>
+              </div>
+
+              <div>
+                <h2>Arbeidsinntekt</h2>
+                <div class="radioGroup">
+                  <label><input type="radio" name="application[income][][paySchedule]" value="weekly">Ukentlig</label>
+                  <label><input type="radio" name="application[income][][paySchedule]" value="biweekly">Hver 14. dag</label>
+                  <label><input type="radio" name="application[income][][paySchedule]" value="monthly">Månedlig</label>
+                </div>
+              </div>
+
+              <div>
+                <label for="employment-salary">Siste arbeidsinntekt</label>
+
+                <p><input id="employment-salary" type="number" name="application[income][][salary]"/></p>
+              </div>
+
+              <div>
+                <label for="employment-start-date">Startdato</label>
+
+                <p><input id="employment-start-date" type="date" required name="application[income][][startDate]"/></p>
+              </div>
+
+              <div>
+                <label for="employment-end-date">Sluttdato (kun hvis arbeidsforholdet er avsluttet)</label>
+
+                <p><input id="employment-end-date" type="date" name="application[income][][endDate]"/></p>
+              </div>
+
+              <p>PS! Husk at arbeidsgiver må sende inn inntektopplysninger</p>
             </div>
 
-            <div>
-              <label for="employment-percentage">Stilingsprosent</label>
-
-              <p><input id="employment-percentage" type="number" min="1" max="100" value="100"
-                        name="application[income][][employmentPercent]"/></p>
+            <div class="optionalInformation">
+              <button>Legg til arbeidsforhold</button>
             </div>
 
-            <div>
-              <h2>Arbeidsinntekt</h2>
-              <label><input type="radio" name="application[income][][paySchedule]" value="weekly">Ukentlig</label>
-              <label><input type="radio" name="application[income][][paySchedule]" value="biweekly">Hver 14. dag</label>
-              <label><input type="radio" name="application[income][][paySchedule]" value="monthly">Månedlig</label>
+            <div class="optionalInformation">
+              <h2>Har du hatt andre inntektskilder de siste 10 månedene før du starter uttaket av ferienepengene?</h2>
+              <label><input type="checkbox" name="application[otherIncome][]" value="benefits"
+                            data-current-value="{{otherIncome}}">Syke-, pleie- og omsorgspenger, arbeidsavklaringspenger,
+                svangerskap- eller foreldrepenger</label>
+              <label><input type="checkbox" name="application[otherIncome][]" value="unemployment"
+                            data-current-value="{{otherIncome}}">Dagpenger under arbeidsløshet</label>
+              <label><input type="checkbox" name="application[otherIncome][]" value="studentIncome"
+                            data-current-value="{{otherIncome}}">Lønn under utdanning</label>
+              <label><input type="checkbox" name="application[otherIncome][]" value="afterPay"
+                            data-current-value="{{otherIncome}}">Etterlønn fra arbeidsgiver</label>
+              <label><input type="checkbox" name="application[otherIncome][]" value="militaryService"
+                            data-current-value="{{otherIncome}}">Militær- eller siviltjeneste</label>
+              <label><input type="checkbox" name="application[otherIncome][]" value="waitPay"
+                            data-current-value="{{otherIncome}}">Ventelønn eller vartpenger</label>
             </div>
-
-            <div>
-              <label for="employment-salary">Siste arbeidsinntekt</label>
-
-              <p><input id="employment-salary" type="number" name="application[income][][salary]"/></p>
-            </div>
-
-            <div>
-              <label for="employment-start-date">Startdato</label>
-
-              <p><input id="employment-start-date" type="date" required name="application[income][][startDate]"/></p>
-            </div>
-
-            <div>
-              <label for="employment-end-date">Sluttdato (kun hvis arbeidsforholdet er avsluttet)</label>
-
-              <p><input id="employment-end-date" type="date" required name="application[income][][endDate]"/></p>
-            </div>
-
-            <p>PS! Husk at arbeidsgiver må sende inn inntektopplysninger</p>
-          </div>
-
-          <div class="optionalInformation">
-            <button>Legg til arbeidsforhold</button>
-          </div>
-
-          <div class="optionalInformation">
-            <h2>Har du hatt andre inntektskilder de siste 10 månedene før du starter uttaket av ferienepengene?</h2>
-            <label><input type="checkbox" name="application[otherIncome][]" value="benefits"
-                          data-current-value="{{otherIncome}}">Syke-, pleie- og omsorgspenger, arbeidsavklaringspenger,
-              svangerskap- eller foreldrepenger</label>
-            <label><input type="checkbox" name="application[otherIncome][]" value="unemployment"
-                          data-current-value="{{otherIncome}}">Dagpenger under arbeidsløshet</label>
-            <label><input type="checkbox" name="application[otherIncome][]" value="studentIncome"
-                          data-current-value="{{otherIncome}}">Lønn under utdanning</label>
-            <label><input type="checkbox" name="application[otherIncome][]" value="afterPay"
-                          data-current-value="{{otherIncome}}">Etterlønn fra arbeidsgiver</label>
-            <label><input type="checkbox" name="application[otherIncome][]" value="militaryService"
-                          data-current-value="{{otherIncome}}">Militær- eller siviltjeneste</label>
-            <label><input type="checkbox" name="application[otherIncome][]" value="waitPay"
-                          data-current-value="{{otherIncome}}">Ventelønn eller vartpenger</label>
           </div>
         </div>
       </section>
@@ -208,7 +218,7 @@
       <section id="permissionPeriod">
         <h1>Permisjonsperiode</h1>
 
-        <div >
+        <div class="details">
           <div class="gender-female">
             <h2>Når har du termin</h2>
 
@@ -219,6 +229,7 @@
             <h2>Hvor mange barn venter du?</h2>
 
             <p><input width="1" type="number" min="1" name="application[expectedChildren]"
+                      required
                       value="{{expectedChildren}}"/></p>
           </div>
 
@@ -229,7 +240,7 @@
           <p>
             <select name="application[coveragePercentage]" id="coveragePercentage" data-current-value="{{coveragePercentage}}">
               <option value="59">80% dekningsgrad i 59 uker</option>
-              <option value="46" selected>100% dekningsgrad i 46 uker</option>
+              <option value="49" selected>100% dekningsgrad i 49 uker</option>
             </select>
           </p>
 
@@ -254,14 +265,16 @@
 
             <p>Søker du om overføring av fedrekvoten (10 uker) til deg?</p>
 
-            <label><input type="radio" required class="optionalToggle"
-                          name="application[paternityLeave][convertPaternity][convertPaternityLeaveToMaternityLeave]"
-                          value="true"
-                          data-current-value="{{paternityLeave.convertPaternity.convertPaternityLeaveToMaternityLeave}}">Ja</label>
-            <label><input type="radio" required class="optionalToggle"
-                          name="application[paternityLeave][convertPaternity][convertPaternityLeaveToMaternityLeave]"
-                          value="false"
-                          data-current-value="{{paternityLeave.convertPaternity.convertPaternityLeaveToMaternityLeave}}">Nei</label>
+            <div class="radioGroup">
+
+              <label><input type="radio" required class="optionalToggle"
+                            name="application[paternityLeave][convertPaternity][convertPaternityLeaveToMaternityLeave]"
+                            value="true"
+                            data-current-value="{{paternityLeave.convertPaternity.convertPaternityLeaveToMaternityLeave}}">Ja</label>
+              <label><input type="radio" required class="optionalToggle"
+                            name="application[paternityLeave][convertPaternity][convertPaternityLeaveToMaternityLeave]"
+                            value="false"
+                            data-current-value="{{paternityLeave.convertPaternity.convertPaternityLeaveToMaternityLeave}}">Nei</label>
 
               <div class="optionalInformation">
 
@@ -269,21 +282,24 @@
                 </div>
 
                 <h2>Årsak til overføring av fedrekvote</h2>
-                <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="singleParent"
-                              data-current-value="{{leavePeriod.convertPaternity.reason}}">Aleneomsorg for
-                  barnet/barna</label>
-                <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]"
-                              value="fatherNotEligible"
-                              data-current-value="{{leavePeriod.convertPaternity.reason}}">Far har ikke rett til
-                  foreldrepenger</label>
-                <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]"
-                              value="fatherInstitutionalized"
-                              data-current-value="{{leavePeriod.convertPaternity.reason}}">Far er innlagt på
-                  helseinstitusjon</label>
-                <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="fatherIllness"
-                              data-current-value="{{leavePeriod.convertPaternity.reason}}">Far er på grunn av sykdom helt
-                  avhengig av hjelp for å ta seg av barnet/barna</label>
+                <div class="radioGroup">
+                  <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="singleParent"
+                                data-current-value="{{leavePeriod.convertPaternity.reason}}">Aleneomsorg for
+                    barnet/barna</label>
+                  <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]"
+                                value="fatherNotEligible"
+                                data-current-value="{{leavePeriod.convertPaternity.reason}}">Far har ikke rett til
+                    foreldrepenger</label>
+                  <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]"
+                                value="fatherInstitutionalized"
+                                data-current-value="{{leavePeriod.convertPaternity.reason}}">Far er innlagt på
+                    helseinstitusjon</label>
+                  <label><input type="radio" name="application[leavePeriod][convertPaternity][reason]" value="fatherIllness"
+                                data-current-value="{{leavePeriod.convertPaternity.reason}}">Far er på grunn av sykdom helt
+                    avhengig av hjelp for å ta seg av barnet/barna</label>
+                </div>
               </div>
+            </div>
           </div>
         </div>
       </section>
@@ -303,10 +319,12 @@
                     value="{{otherParent.personNumber}}"/></p>
 
           <h2>Er den andre forelderen gjort kjent med hvilke perioder med foreldrepenger du har søkt om?</h2>
-          <label><input type="radio" name="application[otherParent][isInformed]" value="true"
-                        data-current-value="{{otherParent.isInformed}}">Ja</label>
-          <label><input type="radio" name="application[otherParent][isInformed]" value="false"
-                        data-current-value="{{otherParent.isInformed}}">Nei</label>
+          <div class="radioGroup">
+            <label><input type="radio" name="application[otherParent][isInformed]" value="true"
+                          data-current-value="{{otherParent.isInformed}}">Ja</label>
+            <label><input type="radio" name="application[otherParent][isInformed]" value="false"
+                          data-current-value="{{otherParent.isInformed}}">Nei</label>
+          </div>
         </div>
       </section>
 
@@ -319,7 +337,6 @@
           <p><textarea cols=60 rows=6 name="application[otherInformation]">{{otherInformation}}</textarea></p>
         </div>
       </section>
-
     </form>
   </script>
 
@@ -329,7 +346,7 @@
 <footer id="notificationArea"></footer>
 <footer id="submit">
   <button id="saveApplication">Lagre søknad</button>
-  <button>Fuilfør søknad</button>
+  <button id="submitApplication">Fullfør søknad</button>
 </footer>
 
 <script>
@@ -497,6 +514,29 @@
       $(this).stop(true).delay(5000).fadeOut(2000);
     });
 
+    body.on("change", "input[type=radio]", function() {
+      $(this).closest(".radioGroup").removeClass("invalid");
+    });
+    body.on("change", "input", function() {
+      $(this).toggleClass("invalid", !this.validity.valid);
+    });
+
+    body.on("click", "#submitApplication", function(e) {
+      e.preventDefault();
+      if (!$("#applicationForm")[0].checkValidity()) {
+        console.log("problem with form");
+        var message = $("<div class='warn'><span class='icon fa'></span> <h2>Feil:</h2> Fyll inn alle feltene</div>");
+        $("#notificationArea").stop(true).hide().empty().append(message)
+                .slideDown(300).delay(5000).fadeOut(2500);
+
+        $(":invalid").closest(".details").show();
+        $("input[type=radio]:invalid").closest(".radioGroup").addClass("invalid");
+        $("input:invalid").addClass("invalid");
+      } else {
+        alert("Form is valid");
+      }
+    });
+
     var applicantTemplate = Handlebars.compile($("#applicantTemplate").html());
     var applicationFormTemplate = Handlebars.compile($("#applicationFormTemplate").html());
 
@@ -510,7 +550,7 @@
               .append(applicationFormTemplate(application));
 
       var sharedQuota = $("#sharedQuota");
-      for (var i=0; i<=parseInt(application.coveragePercentage || 46)-20; i++) {
+      for (var i=0; i<=parseInt(application.coveragePercentage || 49)-20; i++) {
         sharedQuota.append($("<option value='" + i + "'>" + i + " uker</option>"));
       }
 
