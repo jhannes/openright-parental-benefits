@@ -533,7 +533,14 @@
         $("input[type=radio]:invalid").closest(".radioGroup").addClass("invalid");
         $("input:invalid").addClass("invalid");
       } else {
-        alert("Form is valid");
+        var object = $("#applicationForm").serializeObject();
+        object.status = "submit";
+        serverAPI.putJSON("applications/", id, object)
+                .then(function() {
+                  window.location.hash = "applications";
+                }).fail(function () {
+                  alert("error");
+                });
       }
     });
 

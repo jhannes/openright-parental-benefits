@@ -46,7 +46,8 @@ public class ApplicationResource implements ResourceApi {
         JSONObject form = jsonObject.optJSONObject("application");
         Application application = applicationRepository.retrieve(Long.valueOf(id))
                 .orElseThrow(RequestException.notFound(Application.class, id));
-        application.addRevision("draft", form);
+        String status = jsonObject.has("status") ? jsonObject.getString("status") : "draft";
+        application.addRevision(status, form);
         applicationRepository.update(Long.valueOf(id), application);
     }
 
