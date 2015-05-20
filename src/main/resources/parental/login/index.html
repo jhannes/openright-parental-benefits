@@ -25,13 +25,9 @@
 
 
 <form id="caseWorkerLoginForm">
-  <input id="caseWorkerId" list="caseWorkers">
-  <datalist id="caseWorkers">
-    <option value="sbh_01">sbh_01 (Nordstrand)</option>
-    <option value="sbh_02">sbh_02 (Oslo Sentrum)</option>
-    <option value="sbh_03">sbh_03 (Skedsmo)</option>
-  </datalist>
-  <button>Logg inn</button>
+  <button data-user-name="sbh_01" data-office-id="0314">sbh_01 (Nordstrand)</button>
+  <button data-user-name="sbh_02" data-office-id="0315">sbh_02 (Oslo Sentrum)</button>
+  <button data-user-name="sbh_03" data-office-id="0231">sbh_03 (Skedsmo)</button>
 </form>
 </body>
 <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
@@ -45,9 +41,9 @@
                 window.location = getParameterByName("targetURL");
               });
     });
-    $("#caseWorkerLoginForm").submit(function (e) {
+    $("#caseWorkerLoginForm button").click(function (e) {
       e.preventDefault();
-      serverAPI.postJSON("login", {caseWorker: $("#caseWorkerId").val()})
+      serverAPI.postJSON("login", {caseWorker: $(this).data("user-name"), office: $(this).data("office-id")})
               .then(function () {
                 window.location = getParameterByName("targetURL");
               });

@@ -25,8 +25,9 @@ public class JdbcApplicationRepositoryTest {
     private final ApplicationRepository repository = new JdbcApplicationRepository(testConfig);
 
     private final Applicant applicant = SampleData.sampleApplicant();
-    private final ApplicationUser user = new ApplicationUser(applicant.getId(), null);
-    private final ApplicationUser caseWorker = new ApplicationUser(samplePersonId(), ApplicationUserRole.CASE_WORKER);
+    private final ApplicationUser user = new ApplicationUser(applicant.getId(), null, null);
+    private final ApplicationUser caseWorker = new ApplicationUser(samplePersonId(),
+            applicant.getOfficeId(), ApplicationUserRole.CASE_WORKER);
 
     @Before
     public void runAsUser() {
@@ -55,8 +56,19 @@ public class JdbcApplicationRepositoryTest {
     }
 
     @Test
+    public void caseWorkerDoesntSeeApplicationsFromOtherOffice() throws Exception {
+        Application completedApplication = insert(sampleApplication(applicant, "submit"));
+
+        ApplicationUser foreignCaseWorker = new ApplicationUser(samplePersonId(), "0101", ApplicationUserRole.CASE_WORKER);
+        ApplicationUser.setCurrent(foreignCaseWorker);
+
+        assertThat(repository.list()).doesNotContain(completedApplication);
+        assertThat(repository.retrieve(completedApplication.getId())).isEmpty();
+    }
+
+    @Test
     public void otherUserShouldNotSeeMyApplication() throws Exception {
-        ApplicationUser otherUser = new ApplicationUser(samplePersonId(), null);
+        ApplicationUser otherUser = new ApplicationUser(samplePersonId(), null, null);
 
         Application application = insert(sampleApplication(applicant));
 

@@ -7,13 +7,14 @@ public class ApplicationUser {
     private static ThreadLocal<ApplicationUser> current = new ThreadLocal<>();
 
     @Getter
-    private final String personId;
+    private final String personId, office;
 
     @Getter
     private final ApplicationUserRole userRole;
 
-    public ApplicationUser(String personId, ApplicationUserRole userRole) {
+    public ApplicationUser(String personId, String office, ApplicationUserRole userRole) {
         this.personId = personId;
+        this.office = office;
         this.userRole = userRole;
     }
 

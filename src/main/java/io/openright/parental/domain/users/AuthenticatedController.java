@@ -40,9 +40,11 @@ public class AuthenticatedController implements Controller {
 
     private static ApplicationUser toUser(JSONObject jsonObject) {
         if (jsonObject.has("caseWorker")) {
-            return new ApplicationUser(jsonObject.getString("caseWorker"), ApplicationUserRole.CASE_WORKER);
+            return new ApplicationUser(jsonObject.getString("caseWorker"),
+                    jsonObject.getString("office"),
+                    ApplicationUserRole.CASE_WORKER);
         } else {
-            return new ApplicationUser(jsonObject.getString("personId"), null);
+            return new ApplicationUser(jsonObject.getString("personId"), null, null);
         }
     }
 }

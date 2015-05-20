@@ -77,7 +77,8 @@ public class JdbcApplicationRepository implements ApplicationRepository {
 
     private JdbcTable getTable() {
         if (ApplicationUser.getCurrent().getUserRole() == ApplicationUserRole.CASE_WORKER) {
-            return table.whereCondition("status <> ?", "draft");
+            return table.whereCondition("status <> ?", "draft")
+                    .where("office", ApplicationUser.getCurrent().getOffice());
         } else {
             return table.where("applicant_id", ApplicationUser.getCurrent().getPersonId());
         }
