@@ -28,6 +28,8 @@ public class Application {
     @Getter @Setter
     private String status = "draft";
 
+    // TODO: applicationType and navOffice
+
     @Getter @Setter
     private List<ApplicationForm> applicationHistory = new ArrayList<>();
 
@@ -51,6 +53,7 @@ public class Application {
                 .put("applicant", applicantId)
                 .put("createdAt", createdAt)
                 .put("updatedAt", updatedAt)
+                .put("status", status)
                 .put("application", getApplicationForm());
     }
 

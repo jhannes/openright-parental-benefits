@@ -155,6 +155,7 @@ public class Database {
                 setParameters(statement, parameters);
                 return statementCallback.run(statement);
             } catch (SQLException e) {
+                log.info("Error while executing {}", query);
                 throw ExceptionUtil.soften(e);
             } finally {
                 long duration = System.currentTimeMillis() - startTime;

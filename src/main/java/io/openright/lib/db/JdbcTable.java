@@ -6,31 +6,42 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class JdbcTable implements Selectable {
+
     public interface Inserter {
         void values(Map<String, Object> row);
     }
 
-    private final LinkedHashMap<String, Object> parameterMap;
     private final Database database;
     private final String tableName;
-    private List<String> orderBy = new ArrayList<>();
-    private List<String> innerJoins = new ArrayList<>();
+    private final List<String> orderBy;
+    private final List<String> innerJoins;
+    private final List<String> whereClauses;
+    private final List<Object> parameters;
 
-    public JdbcTable(Database database, String tableName) {
-        this(database, tableName, new LinkedHashMap<>());
+    private JdbcTable(JdbcTable jdbcTable) {
+        this.database = jdbcTable.database;
+        this.tableName = jdbcTable.tableName;
+
+        this.orderBy = new ArrayList<>(jdbcTable.orderBy);
+        this.whereClauses = new ArrayList<>(jdbcTable.whereClauses);
+        this.innerJoins = new ArrayList<>(jdbcTable.innerJoins);
+        this.parameters = new ArrayList<>(jdbcTable.parameters);
     }
 
-    private JdbcTable(Database database, String tableName, LinkedHashMap<String, Object> parameterMap) {
+    public JdbcTable(Database database, String tableName) {
         this.database = database;
         this.tableName = tableName;
-        this.parameterMap = parameterMap;
+
+        this.orderBy = new ArrayList<>();
+        this.whereClauses = new ArrayList<>();
+        this.innerJoins = new ArrayList<>();
+        this.parameters = new ArrayList<>();
     }
 
     public long insertValues(Inserter inserter) {
@@ -56,7 +67,7 @@ public class JdbcTable implements Selectable {
 
         List<Object> values = new ArrayList<>();
         values.addAll(row.values());
-        values.addAll(parameterMap.values());
+        values.addAll(getParameters());
         database.executeDbOperation(updateQuery(row.keySet()), values, stmt -> {
             stmt.executeUpdate();
             return null;
@@ -102,13 +113,11 @@ public class JdbcTable implements Selectable {
     }
 
     private String getWhereClause() {
-        if (parameterMap.keySet().isEmpty()) {
+        if (whereClauses.isEmpty()) {
             return "";
+        } else {
+            return " where " + String.join(" and ", whereClauses);
         }
-
-        return " where " + parameterMap.keySet().stream()
-                .map(s -> s + " = ?")
-                .collect(Collectors.joining(" and "));
     }
 
     /**
@@ -119,27 +128,35 @@ public class JdbcTable implements Selectable {
      */
     @Override
     public JdbcTable where(String field, Object value) {
-        JdbcTable newTable = new JdbcTable(database, tableName, parameterMap);
-        newTable.parameterMap.put(field, value);
+        JdbcTable newTable = new JdbcTable(this);
+        newTable.whereClauses.add(field + " = ?");
+        newTable.parameters.add(value);
+        return newTable;
+    }
+
+    public JdbcTable whereCondition(String condition, Object value) {
+        JdbcTable newTable = new JdbcTable(this);
+        newTable.whereClauses.add(condition);
+        newTable.parameters.add(value);
         return newTable;
     }
 
     @Override
     public Selectable orderBy(String string) {
-        JdbcTable table = new JdbcTable(database, tableName, parameterMap);
+        JdbcTable table = new JdbcTable(this);
         table.orderBy.add(string);
         return table;
     }
 
     public Selectable join(String tableName, String myReference, String id) {
-        JdbcTable table = new JdbcTable(database, this.tableName, parameterMap);
+        JdbcTable table = new JdbcTable(this);
         table.innerJoins.add("INNER JOIN " + tableName + " on " + tableName + "." + id
                 + " = " + this.tableName + "." + myReference);
         return table;
     }
 
     private List<Object> getParameters() {
-        return new ArrayList<>(parameterMap.values());
+        return parameters;
     }
 
     private List<String> repeat(String string, int count) {

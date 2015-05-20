@@ -1,5 +1,6 @@
 package io.openright.parental.domain.application;
 
+import io.openright.parental.SampleData;
 import io.openright.parental.domain.users.ApplicationUser;
 import io.openright.parental.domain.users.ApplicationUserRole;
 import io.openright.parental.server.ParentalBenefitsTestConfig;
@@ -21,8 +22,9 @@ public class JdbcApplicationRepositoryTest {
     private static final Random random = new Random();
     private final ParentalBenefitsTestConfig testConfig = ParentalBenefitsTestConfig.instance();
     private final ApplicationRepository repository = new JdbcApplicationRepository(testConfig);
-    private final ApplicationUser caseWorker = new ApplicationUser(samplePersonId(), ApplicationUserRole.CASE_WORKER);
+
     private final ApplicationUser user = new ApplicationUser(samplePersonId(), null);
+    private final ApplicationUser caseWorker = new ApplicationUser(samplePersonId(), ApplicationUserRole.CASE_WORKER);
 
     @Before
     public void runAsUser() {
@@ -38,12 +40,14 @@ public class JdbcApplicationRepositoryTest {
     }
 
     @Test
-    public void caseWorkerSeesAllApplications() throws Exception {
-        Application application1 = insert(sampleApplication(user));
-        Application application2 = insert(sampleApplication(user));
+    public void caseWorkerSeesCompletedApplications() throws Exception {
+        Application draftApplication = insert(sampleApplication(user, "draft"));
+        Application completedApplication = insert(sampleApplication(user, "submit"));
 
         ApplicationUser.setCurrent(caseWorker);
-        assertThat(repository.list()).contains(application1, application2);
+        assertThat(repository.list())
+                .doesNotContain(draftApplication)
+                .contains(completedApplication);
     }
 
     @Test
@@ -135,7 +139,13 @@ public class JdbcApplicationRepositoryTest {
     }
 
     private Application sampleApplication(ApplicationUser user) {
-        return new Application(user.getPersonId());
+        return sampleApplication(user, SampleData.random("draft", "submit", "updated", "approved"));
+    }
+
+    private Application sampleApplication(ApplicationUser user, String status) {
+        Application application = new Application(user.getPersonId());
+        application.setStatus(status);
+        return application;
     }
 
     private Application insert(Application application) {

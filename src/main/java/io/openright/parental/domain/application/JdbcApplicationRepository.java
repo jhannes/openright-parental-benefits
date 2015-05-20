@@ -74,10 +74,11 @@ public class JdbcApplicationRepository implements ApplicationRepository {
     }
 
     private JdbcTable getTable() {
-        if (ApplicationUser.getCurrent().getUserRole() != ApplicationUserRole.CASE_WORKER) {
+        if (ApplicationUser.getCurrent().getUserRole() == ApplicationUserRole.CASE_WORKER) {
+            return table.whereCondition("status <> ?", "draft");
+        } else {
             return table.where("applicant_id", ApplicationUser.getCurrent().getPersonId());
         }
-        return table;
     }
 
     @Override
