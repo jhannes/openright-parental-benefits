@@ -1,7 +1,6 @@
 package io.openright.parental.domain.application;
 
 import io.openright.infrastructure.util.ExceptionUtil;
-import io.openright.infrastructure.util.IOUtil;
 import io.openright.parental.server.ParentalBenefitsTestConfig;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -11,7 +10,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -21,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ApplicationSmokeTest {
 
     private static final ParentalBenefitsTestConfig config = ParentalBenefitsTestConfig.instance();
-    private static final RemoteWebDriver browser = createChromeDriver();
+    private static final RemoteWebDriver browser = createRemoteDriver();
 
 
     @BeforeClass
@@ -73,7 +71,7 @@ public class ApplicationSmokeTest {
         browser.findElement(By.id("personId")).submit();
     }
 
-    public static RemoteWebDriver createChromeDriver() {
+    public static RemoteWebDriver createRemoteDriver() {
         try {
             URL url = new URL("http://" + config.getSauceLabsAuthentication() + "@ondemand.saucelabs.com:80/wd/hub");
             return new RemoteWebDriver(url, DesiredCapabilities.chrome());
@@ -82,25 +80,4 @@ public class ApplicationSmokeTest {
         }
     }
 
-    private static File getChromeDriver() {
-        File driverFile = new File("target/chromedriver.exe");
-        if (!driverFile.exists()) {
-            downloadDriver(driverFile);
-        }
-        return driverFile;
-    }
-
-    private static void downloadDriver(File driverFile) {
-        try {
-            URL chromeDriverUrl = new URL("http://chromedriver.storage.googleapis.com/");
-            String chromeDriverVersion = IOUtil.toString(new URL(chromeDriverUrl, "LATEST_RELEASE"))
-                    .orElseThrow(() -> new RuntimeException("Can't read " + chromeDriverUrl));
-
-            URL latestDriverVersion = new URL(chromeDriverUrl, chromeDriverVersion + "/chromedriver_win32.zip");
-            File zipFile = IOUtil.copy(latestDriverVersion, new File("target/"));
-            IOUtil.extractZipEntry(zipFile, driverFile);
-        } catch (MalformedURLException e) {
-            throw ExceptionUtil.soften(e);
-        }
-    }
 }
