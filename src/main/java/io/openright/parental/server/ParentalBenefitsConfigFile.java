@@ -31,9 +31,9 @@ public class ParentalBenefitsConfigFile extends AppConfigFile implements Parenta
     }
 
     @Override
-    public Database getDatabase() {
+    public synchronized Database getDatabase() {
         if (database == null) {
-            return new Database("jdbc/parentalBenefitsDb");
+            database = new Database("jdbc/parentalBenefitsDb");
         }
         return database;
     }
