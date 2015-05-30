@@ -67,7 +67,7 @@ main {
   margin-bottom: 3em;
 }
 
-footer#notificationArea {
+#notificationArea {
   display: none;
   position: fixed;
   height: 2.5em;
@@ -76,7 +76,7 @@ footer#notificationArea {
   width: 100%;
   z-index: 100;
 }
-footer#notificationArea div {
+#notificationArea div {
   margin: 0 2em;
   padding: 0 2em;
   height: 2.5em;
@@ -84,19 +84,19 @@ footer#notificationArea div {
   text-overflow: ellipsis;
   cursor: pointer;
 }
-footer#notificationArea div.error {
+#notificationArea div.error {
   background: pink;
   border: red solid 1px;
 }
-footer#notificationArea div.error .icon:before { content:"\f06a"; }
+#notificationArea div.error .icon:before { content:"\f06a"; }
 
-footer#notificationArea div.warn {
+#notificationArea div.warn {
   background: #ffd591;
   border: #ff9629 solid 1px;
 }
-footer#notificationArea div.warn .icon:before { content:"\f071"; }
+#notificationArea div.warn .icon:before { content:"\f071"; }
 
-footer#notificationArea h2 {
+#notificationArea h2 {
   display: inline;
   font-weight: bold;
 
@@ -134,8 +134,20 @@ footer#submit {
   display: none;
 }
 
-#applicationForm h1 {
+#applicationForm .expander {
+  display: block;
+  background: #333388;
+  color: white;
+  padding: 0.5em;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
   cursor: pointer;
+  max-width: 500px;
+}
+
+#applicationForm .details {
+  padding-left: 1em;
 }
 
 .explanation {

@@ -28,11 +28,13 @@
   </section>
 
   <section id="dateInformation">
-    <h2>Når vil du starte?</h2>
+    <h2>Når ønsker du å starte?</h2>
 
-    <p><input type="date" required name="application[startDate]" id="startDate" value="{{startDate}}" min="2015-05-10"/></p>
+    <p><input type="date" required name="application[startDate]" id="dueDate"
+              value="{{startDate}}" min="2015-05-10"
+            /></p>
 
-    <div id="dateRange" class="leaveCategory" data-leave-type="informationPeriod" data-allowed-days="30">
+    <div id="maternityLeave" class="leaveCategory" data-leave-type="maternityLeave" data-allowed-days="30">
     </div>
   </section>
 </form>

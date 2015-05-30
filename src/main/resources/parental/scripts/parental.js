@@ -47,7 +47,7 @@ function ajax(apiUrl, templateUrl) {
   }
 
   function getHTML(localUrl) {
-    return $.get(templateUrl + localUrl);
+    return $.ajax({url: templateUrl + localUrl, cache: false});
   }
 
   return {

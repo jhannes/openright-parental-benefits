@@ -1,28 +1,10 @@
 <form id="applicationForm">
   <section id="applicationCategory">
-    <h2>Hva søker du om?</h2>
-    <select name="application[applicationType]" id="applicationType" data-current-value="{{applicationType}}">
-      <option class="gender-female" value="application-maternity-benefits">Foreldrepenger og mødrekvote til mor
-      </option>
-      <option class="gender-female" value="application-maternity-benefits-single">Foreldrepenger til mor med
-        aleneomsorg
-      </option>
-      <option class="gender-female" value="application-co-maternity-benefits">Foreldrepenger til medmor</option>
-      <option class="gender-female" value="application-co-maternity-benefits-single">Foreldrepenger til medmor med
-        aleneomsorg
-      </option>
-      <option class="gender-female" value="application-co-maternity-leave">Fedrekvote til medmor</option>
-      <option class="gender-male" value="application-paternity-benefits">Foreldrepenger og fedrekvote til far
-      </option>
-      <option class="gender-male" value="application-paternity-benefits-single">Foreldrepenger og fedrekvote til far
-        med aleneomsorg
-      </option>
-      <option value="application-one-time-benefits">Engangsstønad</option>
-    </select>
+    <h1>Søknad om Foreldrepenger og mødrekvote til mor</h1>
   </section>
 
   <section id="residency">
-    <h1>Oppholdsted</h1>
+    <h1 class="expander" class="expander">Oppholdsted</h1>
 
     <div class="details">
       <h2>Oppholder du deg i Norge?</h2>
@@ -73,7 +55,7 @@
   </section>
 
   <section id="income">
-    <h1>Arbeid og/eller annen inntekt</h1>
+    <h1 class="expander">Arbeid og/eller annen inntekt</h1>
 
     <div class="details">
       <h2>Har du vært i arbeid de siste 10 månedene før du starter uttaket av feriepengene? <a
@@ -86,57 +68,12 @@
                       value="false"
                       data-current-value="{{workedLast10Months}}">Nei</label>
 
-        <div class="subform-container optionalInformation">
-          <h2>Arbeidsforhold 1</h2>
-          <label><input type="radio" name="application[income][][employerType]" value="employer">Arbeidstaker</label>
-          <label><input type="radio" name="application[income][][employerType]" value="selfEmployed">Selvstendig
-            næringsdrivende</label>
-
-          <div>
-            <label for="employer-name">Arbeidsgiver eller næringsvirksomhet</label>
-
-            <p><input id="employer-name" type="text" name="application[income][][employerName]"/></p>
-          </div>
-
-          <div>
-            <label for="employment-percentage">Stilingsprosent</label>
-
-            <p><input id="employment-percentage" type="number" min="1" max="100" value="100"
-                      name="application[income][][employmentPercent]"/></p>
-          </div>
-
-          <div>
-            <h2>Arbeidsinntekt</h2>
-            <div class="radioGroup">
-              <label><input type="radio" name="application[income][][paySchedule]" value="weekly">Ukentlig</label>
-              <label><input type="radio" name="application[income][][paySchedule]" value="biweekly">Hver 14. dag</label>
-              <label><input type="radio" name="application[income][][paySchedule]" value="monthly">Månedlig</label>
-            </div>
-          </div>
-
-          <div>
-            <label for="employment-salary">Siste arbeidsinntekt</label>
-
-            <p><input id="employment-salary" type="number" name="application[income][][salary]"/></p>
-          </div>
-
-          <div>
-            <label for="employment-start-date">Startdato</label>
-
-            <p><input id="employment-start-date" type="date" required name="application[income][][startDate]"/></p>
-          </div>
-
-          <div>
-            <label for="employment-end-date">Sluttdato (kun hvis arbeidsforholdet er avsluttet)</label>
-
-            <p><input id="employment-end-date" type="date" name="application[income][][endDate]"/></p>
-          </div>
-
-          <p>PS! Husk at arbeidsgiver må sende inn inntektopplysninger</p>
-        </div>
+        <div id="employmentForm" class="optionalInformation"></div>
 
         <div class="optionalInformation">
-          <button>Legg til arbeidsforhold</button>
+          <button id="addEmployer">Legg til arbeidsforhold</button>
+
+          <div id="employments"></div>
         </div>
 
         <div class="optionalInformation">
@@ -160,7 +97,7 @@
   </section>
 
   <section id="permissionPeriod">
-    <h1>Permisjonsperiode</h1>
+    <h1 class="expander">Permisjonsperiode</h1>
 
     <div class="details">
       <div class="gender-female">
@@ -249,7 +186,7 @@
   </section>
 
   <section id="otherParent">
-    <h1>Den andre forelderen</h1>
+    <h1 class="expander">Den andre forelderen</h1>
 
     <div class="details">
 
@@ -273,7 +210,7 @@
   </section>
 
   <section id="additionalInformation">
-    <h1>Eventuelle tilleggsopplysninger</h1>
+    <h1 class="expander">Eventuelle tilleggsopplysninger</h1>
 
     <div class="details">
       <h2>Er det noe som ikke er gjort rede for i skjemaet som du mener NAV burde være klar over?</h2>

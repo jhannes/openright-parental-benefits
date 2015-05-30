@@ -8,42 +8,9 @@
 <body class="application-gender-female">
 
 <header>
-  <!-- TODO: This is wrong -->
-  <h1>Søknad om foreldrepenger i forbindelse med fødsel</h1>
+  <h1>Send søknad</h1>
 </header>
 
-<!-- this is not really needed -->
-<script id="applicantTemplate" type="text/x-handlebars-template">
-  <section id="applicant">
-    <h2>Hei {{name}}</h2>
-  </section>
-  <section id="personalInformation">
-
-    <div>
-      <h2>Addresse</h2>
-      <p>{{address.streetAddress}}</p>
-      <p>{{address.postalCode}} {{address.postalArea}}</p>
-    </div>
-
-    <div>
-      <h2>Telefon</h2>
-      <p>{{contactPhone}}</p>
-      <h2>E-post</h2>
-      <p>{{email}}</p>
-    </div>
-
-    <div>
-      <h2>Kontonummer</h2>
-      <p>{{accountNumber}}</p>
-    </div>
-
-    <div>
-      <button>Endre</button>
-    </div>
-  </section>
-</script>
-
-<main>
   <script id="leavePeriodTemplate" type="text/x-handlebars-template">
     <div class="leavePeriod {{type}}">
       <div><label>Fra og med<input type="date" required name="application[{{type}}][][startDate]" class="startDate" /></label></div>
@@ -52,11 +19,90 @@
     </div>
   </script>
 
+  <script id="incomePeriodTemplate" type="text/x-handlebars-template">
+    <div>
+      <span><input type="hidden" name="application[income][][employmentPercent]" value="{{employmentPercent}}" />
+        {{employmentPercent}}%
+      </span>
+      <span>
+        <input type="hidden" name="application[income][][employerName]" value="{{employerName}}" />
+        <input type="hidden" name="application[income][][employerType]" value="{{employerType}}" />
+        {{employerName}}
+      </span>
+      <span>
+        <input type="hidden" name="application[income][][startDate]" value="{{startDate}}" />
+        <input type="hidden" name="application[income][][endDate]" value="{{endDate}}" />
+        {{startDate}} - {{endDate}}
+      </span>
+      <span>
+        <input type="hidden" name="application[income][][salary]" value="{{salary}}" />
+        <input type="hidden" name="application[income][][paySchedule]" value="{{paySchedule}}" />
+        {{salary}}
+      </span>
+      <button class="deleteEntry">Slett</button>
+    </div>
+  </script>
 
 
+  <script id="incomeTemplate" type="text/x-handlebars-template">
+    <div class="subform-container">
+      <h2>Arbeidsforhold</h2>
+      <div class="radioGroup">
+        <label><input type="radio" required name="application[income][][employerType]" value="employer">Arbeidstaker</label>
+        <label><input type="radio" required name="application[income][][employerType]" value="selfEmployed">Selvstendig
+          næringsdrivende</label>
+      </div>
+
+      <div>
+        <label for="employer-name">Arbeidsgiver eller næringsvirksomhet</label>
+
+        <p><input id="employer-name" type="text" required name="application[income][][employerName]"/></p>
+      </div>
+
+      <div>
+        <label for="employment-percentage">Stilingsprosent</label>
+
+        <p><input id="employment-percentage" required type="number" min="1" max="100" value="100"
+                  name="application[income][][employmentPercent]"/></p>
+      </div>
+
+      <div>
+        <h2>Arbeidsinntekt</h2>
+        <div class="radioGroup">
+          <label><input type="radio" required name="application[income][][paySchedule]" value="weekly">Ukentlig</label>
+          <label><input type="radio" required name="application[income][][paySchedule]" value="biweekly">Hver 14. dag</label>
+          <label><input type="radio" required name="application[income][][paySchedule]" value="monthly">Månedlig</label>
+        </div>
+      </div>
+
+      <div>
+        <label for="employment-salary">Siste arbeidsinntekt</label>
+        <p><input id="employment-salary" type="number" required name="application[income][][salary]"
+                min="0"/></p>
+      </div>
+
+      <div>
+        <label for="employment-start-date">Startdato</label>
+        <p><input id="employment-start-date" type="date" required name="application[income][][startDate]" /></p>
+      </div>
+
+      <div>
+        <label for="employment-end-date">Sluttdato (kun hvis arbeidsforholdet er avsluttet)</label>
+        <p><input id="employment-end-date" type="date" name="application[income][][endDate]"/></p>
+      </div>
+
+      <p>PS! Husk at arbeidsgiver må sende inn inntektopplysninger</p>
+
+      <button class="completeEntry">Legg til</button>
+      <button class="deleteEntry">Slett</button>
+    </div>
+  </script>
+
+
+<main>
 </main>
 
-<footer id="notificationArea"></footer>
+<section id="notificationArea"></section>
 <footer id="submit">
   <button id="saveApplication">Lagre søknad</button>
   <button id="submitApplication">Fullfør søknad</button>
@@ -74,6 +120,8 @@
 
   $(function () {
     var leavePeriodTemplate = Handlebars.compile($("#leavePeriodTemplate").html());
+    var incomePeriodTemplate = Handlebars.compile($("#incomePeriodTemplate").html());
+    var incomeTemplate = Handlebars.compile($("#incomeTemplate").html());
 
     function populateLeaveCategory(leaveCategory, leaveEntries) {
       if (!leaveEntries) {
@@ -126,9 +174,9 @@
       return remainingDays;
     }
 
-    var body = $("body");
+    var main = $("main");
 
-    body.on("change", ".optionalToggle", function () {
+    main.on("change", ".optionalToggle", function () {
       if ($(this).val() === "true") {
         $(this).closest("div").find(".optionalInformation").show(500);
       } else {
@@ -136,7 +184,7 @@
       }
     });
 
-    body.on("change", "#dueDate", function () {
+    main.on("change", "#dueDate", function () {
       var leaveCategory = $("#maternityLeave");
       var dueDate = Date.parse($(this).val());
       var startDate = new Date(dueDate).addWeeks(-3);
@@ -150,11 +198,12 @@
               new Date(leaveCategory.find(".endDate:last").val()).addDays(1));
     });
 
-    body.on("click", "#applicationForm h1", function() {
+    main.on("click", "#applicationForm .expander", function(e) {
+      e.preventDefault();
       $(this).closest("section").find(".details").toggle();
     });
 
-    body.on("change", ".leaveCategory .startDate", function() {
+    main.on("change", ".leaveCategory .startDate", function() {
       var leaveCategory = $(this).closest(".leaveCategory");
 
       var date = Date.parse($(this).val());
@@ -175,7 +224,7 @@
       $(this).closest(".leavePeriod").find(".dayCount").text(remainingDays + " dager");
     });
 
-    body.on("change", ".leaveCategory .endDate", function() {
+    main.on("change", ".leaveCategory .endDate", function() {
       var leaveCategory = $(this).closest(".leaveCategory");
 
       $(this).closest(".leavePeriod").nextAll().remove();
@@ -187,7 +236,7 @@
       }
     });
 
-    body.on("change", "#maternityLeave .startDate, #maternityLeave .endDate", function() {
+    main.on("change", "#maternityLeave .startDate, #maternityLeave .endDate", function() {
       var leaveCategory = $("#parentalLeave");
       leaveCategory.empty();
 
@@ -195,7 +244,7 @@
       addPeriod(leaveCategory, startDate);
     });
 
-    body.on("change", "#coveragePercentage", function() {
+    main.on("change", "#coveragePercentage", function() {
       var sharedQuota = $("#sharedQuota");
       sharedQuota.empty().append($("<option>(Velg)</option>"));
       for (var i=0; i<=parseInt($(this).val())-20; i++) {
@@ -203,7 +252,7 @@
       }
     });
 
-    body.on("change", "#sharedQuota", function() {
+    main.on("change", "#sharedQuota", function() {
       var leaveCategory = $("#parentalLeave");
       leaveCategory.data("allowed-days", parseInt($(this).val())*7);
       leaveCategory.empty();
@@ -211,8 +260,57 @@
       addPeriod(leaveCategory, startDate);
     });
 
-    body.on("click", "#saveApplication", function (e) {
+    main.on("change", "[name='application[workedLast10Months]']", function() {
+      if ($("[name='application[workedLast10Months]']:checked").val() === "true") {
+        $("#employmentForm").html(incomeTemplate());
+      } else {
+        $("#employmentForm").empty();
+      }
+    });
+
+    main.on("click", ".completeEntry", function(e) {
       e.preventDefault();
+      if ($("#employmentForm input:invalid").length) {
+        $("#employmentForm input[type=radio]:invalid").closest(".radioGroup").addClass("invalid");
+        $("#employmentForm input:invalid").addClass("invalid");
+        var message = $("<div class='warn'><span class='icon fa'></span> <h2>Feil:</h2> Fyll inn alle feltene</div>");
+        $("#notificationArea").stop(true).hide().empty().append(message)
+                .slideDown(300).delay(5000).fadeOut(2500);
+      } else {
+        var form = $("#applicationForm").serializeObject();
+        console.log(form.application.income[0]);
+        $("#employments").append(incomePeriodTemplate(form.application.income[0]));
+        $("#employmentForm").empty();
+      }
+    });
+
+    main.on("click", "#addEmployer", function(e) {
+      e.preventDefault();
+
+      if ($("#employmentForm input:invalid").length) {
+        $("#employmentForm input[type=radio]:invalid").closest(".radioGroup").addClass("invalid");
+        $("#employmentForm input:invalid").addClass("invalid");
+        var message = $("<div class='warn'><span class='icon fa'></span> <h2>Feil:</h2> Fyll inn alle feltene</div>");
+        $("#notificationArea").stop(true).hide().empty().append(message)
+                .slideDown(300).delay(5000).fadeOut(2500);
+      } else if ($("#employmentForm input").length) {
+        var form = $("#applicationForm").serializeObject();
+        console.log(form.application.income[0]);
+        $("#employments").append(incomePeriodTemplate(form.application.income[0]));
+        $("#employmentForm").html(incomeTemplate());
+      } else {
+        $("#employmentForm").html(incomeTemplate());
+      }
+    });
+
+    main.on("click", ".deleteEntry", function(e) {
+      e.preventDefault();
+      this.closest("div").remove();
+    });
+
+    $("#saveApplication").click(function (e) {
+      e.preventDefault();
+      $(".invalid").removeClass("invalid");
       serverAPI.putJSON("applications/", id, $("#applicationForm").serializeObject())
               .fail(function () {
                 alert("error");
@@ -227,14 +325,14 @@
       $(this).stop(true).delay(5000).fadeOut(2000);
     });
 
-    body.on("change", "input[type=radio]", function() {
+    main.on("change", "input[type=radio]", function() {
       $(this).closest(".radioGroup").removeClass("invalid");
     });
-    body.on("change", "input", function() {
+    main.on("change", "input", function() {
       $(this).toggleClass("invalid", !this.validity.valid);
     });
 
-    body.on("click", "#submitApplication", function(e) {
+    $("#submitApplication").click(function(e) {
       e.preventDefault();
       if (!$("#applicationForm")[0].checkValidity()) {
         var message = $("<div class='warn'><span class='icon fa'></span> <h2>Feil:</h2> Fyll inn alle feltene</div>");
@@ -256,8 +354,6 @@
       }
     });
 
-    var applicantTemplate = Handlebars.compile($("#applicantTemplate").html());
-
     var id = currentId();
 
     serverAPI.getJSON("applications/" + id).then(function (data) {
@@ -265,9 +361,7 @@
         var applicationFormTemplate = Handlebars.compile(html);
         var application = data.application;
         application.expectedChildren = application.expectedChildren || 1;
-        $("main").empty()
-                .append(applicantTemplate(data.applicant))
-                .append(applicationFormTemplate(application));
+        $("main").empty().append(applicationFormTemplate(application));
 
         var sharedQuota = $("#sharedQuota");
         for (var i=0; i<=parseInt(application.coveragePercentage || 49)-20; i++) {
@@ -308,6 +402,13 @@
           var pastEnd = $(this).prev().find(".endDate").val();
           $(this).find(".startDate").attr("min", new Date(pastEnd).addDays(1).toISODate());
         });
+
+        if (application.income) {
+          var employments = $("#employments");
+          for (var i=0; i<application.income.length; i++) {
+            employments.append(incomePeriodTemplate(application.income[i]));
+          }
+        }
       });
     }).fail(function(jqXHR, textStatus, errorThrown) {
       var message = $("<div class='error'><span class='icon fa'></span> <h2>Error:</h2> " + errorThrown + "</div>");
