@@ -104,7 +104,7 @@ public class AppConfigFile {
     public String getRequiredProperty(String propertyName) {
         String result = getProperty(propertyName);
         if (result == null) {
-            throw new RuntimeException("Missing property " + propertyName);
+            throw new RuntimeException("Missing property " + propertyName + " in " + configFile);
         }
         return result;
     }

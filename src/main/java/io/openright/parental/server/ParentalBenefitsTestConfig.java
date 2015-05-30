@@ -19,8 +19,16 @@ public class ParentalBenefitsTestConfig extends ParentalBenefitsConfigFile {
         return createTestDataSource("parental");
     }
 
+    @Override
+    public int getHttpPort() {
+        return 0;
+    }
+
     public static ParentalBenefitsTestConfig instance() {
         return parentalBenefitsTestConfig;
     }
 
+    public String getSauceLabsAuthentication() {
+        return getRequiredProperty("saucelab.authentication");
+    }
 }

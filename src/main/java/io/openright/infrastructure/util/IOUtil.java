@@ -1,6 +1,7 @@
 package io.openright.infrastructure.util;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +14,8 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.util.Optional;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class IOUtil {
     public static File extractResourceFile(String filename) {
@@ -73,7 +76,7 @@ public class IOUtil {
         return writer.toString();
     }
 
-    private static void copy(Reader in, Writer out) {
+    public static void copy(Reader in, Writer out) {
         try {
             char[] buf = new char[1024];
             int count;
@@ -98,6 +101,14 @@ public class IOUtil {
 
     }
 
+    public static void copy(File source, File target) {
+        try (FileInputStream input = new FileInputStream(source)) {
+            copy(input, target);
+        } catch (IOException e) {
+            throw ExceptionUtil.soften(e);
+        }
+    }
+
     public static void copy(InputStream content, File file) {
         try (FileOutputStream output = new FileOutputStream(file)) {
             copy(content, output);
@@ -118,4 +129,13 @@ public class IOUtil {
         }
     }
 
+    public static File extractZipEntry(File zippedFile, File entry) {
+        try (ZipFile zipFile = new ZipFile(zippedFile)) {
+            ZipEntry zipEntry = zipFile.getEntry(entry.getName());
+            IOUtil.copy(zipFile.getInputStream(zipEntry), entry);
+            return entry;
+        } catch (IOException e) {
+            throw ExceptionUtil.soften(e);
+        }
+    }
 }

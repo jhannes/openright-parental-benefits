@@ -56,14 +56,14 @@ public class ParentalBenefitsServer {
         new ParentalBenefitsServer(config).start();
     }
 
-    protected void start() throws Exception {
+    public void start() throws Exception {
         server.setHandler(createHandlers());
         new EnvEntry("parental/config", config);
         this.server.start();
-        log.info("Started {}", server.getURI().resolve("/"));
+        log.info("Started {}", getURI());
     }
 
     public URI getURI() {
-        return server.getURI();
+        return server.getURI().resolve("/");
     }
 }

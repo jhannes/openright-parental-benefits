@@ -38,6 +38,13 @@ public class ParentalBenefitsDevServer extends ParentalBenefitsServer {
         return contextHandler;
     }
 
+    @Override
+    public void start() throws Exception {
+        super.start();
+        System.setProperty("parental.endpoint.applicant",
+                getURI().resolve("/dummy/applicant/").toString());
+    }
+
     public static void main(String[] args) throws Exception {
         LogUtil.setupLogging("logging-parental-benefits.xml");
         ParentalBenefitsConfig config = new ParentalBenefitsConfigFile(IOUtil.extractResourceFile("parental-benefits.properties"));
@@ -45,8 +52,6 @@ public class ParentalBenefitsDevServer extends ParentalBenefitsServer {
         ParentalBenefitsDevServer devServer = new ParentalBenefitsDevServer(config);
         devServer.loadSeedData();
         devServer.start();
-
-        System.setProperty("parental.endpoint.applicant", devServer.getURI().resolve("/dummy/applicant/").toString());
     }
 
     private void loadSeedData() {
@@ -54,5 +59,9 @@ public class ParentalBenefitsDevServer extends ParentalBenefitsServer {
         applicantService.insert(SampleData.sampleApplicant("23127946732", "0314"));
         applicantService.insert(SampleData.sampleApplicant("17048316526", "0316"));
         applicantService.insert(SampleData.sampleApplicant("29017376771", "0231"));
+    }
+
+    public DummyApplicantService getApplicantService() {
+        return applicantService;
     }
 }
