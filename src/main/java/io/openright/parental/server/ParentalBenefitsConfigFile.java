@@ -3,7 +3,6 @@ package io.openright.parental.server;
 import io.openright.infrastructure.db.Database;
 import io.openright.infrastructure.server.AppConfigFile;
 import io.openright.infrastructure.util.ExceptionUtil;
-import lombok.SneakyThrows;
 import org.eclipse.jetty.plus.jndi.EnvEntry;
 
 import javax.naming.NamingException;
@@ -47,8 +46,8 @@ public class ParentalBenefitsConfigFile extends AppConfigFile implements Parenta
     }
 
     @Override
-    @SneakyThrows
     public URI getApplicantEndpointUrl() {
-        return new URI(getRequiredProperty("parental.endpoint.applicant"));
+        return getRequiredUri("parental.endpoint.applicant");
     }
+
 }

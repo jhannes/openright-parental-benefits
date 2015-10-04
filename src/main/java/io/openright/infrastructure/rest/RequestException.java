@@ -18,7 +18,6 @@ public class RequestException extends RuntimeException {
         return statusCode;
     }
 
-    @SuppressWarnings("ThrowableInstanceNeverThrown")
     public static Supplier<RequestException> notFound(Class<?> clazz, Object id) {
         return () -> new RequestException(204, "Can't find " + clazz.getName() + " with id " + id);
     }

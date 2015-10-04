@@ -1,6 +1,7 @@
 package io.openright.infrastructure.server;
 
 import com.zaxxer.hikari.HikariDataSource;
+import io.openright.infrastructure.util.ExceptionUtil;
 import org.flywaydb.core.Flyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,8 @@ import javax.sql.DataSource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Dictionary;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -141,6 +144,14 @@ public class AppConfigFile {
             properties.load(inputStream);
         } catch (IOException e) {
             throw new RuntimeException("Failed to load " + configFile, e);
+        }
+    }
+
+    protected URI getRequiredUri(String propertyName) {
+        try {
+            return new URI(getRequiredProperty(propertyName));
+        } catch (URISyntaxException e) {
+            throw ExceptionUtil.soften(e);
         }
     }
 }
